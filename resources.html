@@ -1,0 +1,3199 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자료실 - 북샘</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .mp3-unit-modal{background:#fff;border-radius:12px;width:92%;max-width:620px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+    .mp3-unit-header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #eee;font-size:15px;font-weight:800;color:var(--navy);flex-shrink:0;}
+    .mp3-unit-header button{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);padding:4px 8px;}
+    .mp3-unit-book{padding:10px 22px 12px;font-size:12px;color:var(--muted);border-bottom:1px solid #f0f0f0;flex-shrink:0;}
+    .mp3-unit-list{overflow-y:auto;flex:1;}
+    .mp3-lesson-header{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;background:#f5f5f5;font-size:14px;font-weight:600;color:#333;cursor:pointer;user-select:none;border-bottom:1px solid #e8e8e8;}
+    .mp3-lesson-header.open{background:#eee;}
+    .mp3-lesson-arrow{font-size:11px;color:#888;}
+    .mp3-tracks-body{background:#fff;}
+    .mp3-track-row{display:flex;align-items:center;gap:12px;padding:11px 22px 11px 32px;border-bottom:1px solid #f0f0f0;transition:background .15s;}
+    .mp3-track-row:last-child{border-bottom:none;}
+    .mp3-track-row.playing{background:#fff8e1;}
+    .mp3-track-btns{display:flex;gap:6px;flex-shrink:0;}
+    .mp3-btn-play,.mp3-btn-stop{width:30px;height:30px;border-radius:50%;border:1.5px solid #bbb;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#444;transition:border-color .15s,background .15s;flex-shrink:0;}
+    .mp3-btn-play:hover{border-color:var(--navy);color:var(--navy);}
+    .mp3-btn-stop:hover{border-color:#e53935;color:#e53935;}
+    .mp3-track-row.playing .mp3-btn-play{border-color:var(--navy);color:var(--navy);background:#e8edf4;}
+    .mp3-track-label{font-size:14px;color:#333;flex:1;}
+    .mp3-track-row.playing .mp3-track-label{font-weight:700;color:var(--navy);}
+    .mp3-unit-player{display:flex;flex-direction:column;gap:10px;padding:14px 22px 16px;border-top:2px solid #e8e8e8;background:#1a2e44;flex-shrink:0;border-radius:0 0 12px 12px;}
+    .mp3-player-row1{display:flex;align-items:center;}
+    .mp3-player-meta{display:flex;align-items:center;gap:10px;}
+    .mp3-np-dot{color:#4fc3f7;font-size:9px;animation:mp3blink 1.2s infinite;}
+    @keyframes mp3blink{0%,100%{opacity:1}50%{opacity:.2}}
+    .mp3-np-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3;}
+    .mp3-np-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+    .mp3-player-row2{display:flex;align-items:center;gap:10px;}
+    .mp3-np-cur,.mp3-np-tot{font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap;min-width:32px;}
+    .mp3-np-tot{text-align:right;}
+    .mp3-np-bar{flex:1;height:6px;background:rgba(255,255,255,.18);border-radius:3px;cursor:pointer;position:relative;transition:height .15s;}
+    .mp3-np-bar:hover{height:8px;}
+    .mp3-np-fill{height:100%;background:#4fc3f7;border-radius:3px;width:0%;transition:width .1s linear;}
+    .mp3-np-thumb{position:absolute;top:50%;transform:translateY(-50%);width:14px;height:14px;background:#fff;border-radius:50%;left:-6px;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:left .1s linear;pointer-events:none;}
+    .mp3-player-row3{display:flex;align-items:center;justify-content:space-between;}
+    .mp3-ctrl-btns{display:flex;align-items:center;gap:12px;}
+    .mp3-ctrl-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+    .mp3-ctrl-btn:hover{background:rgba(255,255,255,.25);}
+    .mp3-ctrl-pp{background:#fff;border:none;color:#1a2e44;width:40px;height:40px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .1s;}
+    .mp3-ctrl-pp:hover{transform:scale(1.08);}
+    .mp3-speed-wrap{display:flex;align-items:center;gap:5px;}
+    .mp3-speed-label{font-size:11px;color:rgba(255,255,255,.45);margin-right:2px;}
+    .mp3-speed-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);font-size:11px;font-weight:600;padding:3px 8px;border-radius:12px;cursor:pointer;transition:background .15s,color .15s;}
+    .mp3-speed-btn:hover{background:rgba(255,255,255,.2);color:#fff;}
+    .mp3-speed-btn.active{background:#4fc3f7;border-color:#4fc3f7;color:#1a2e44;}
+  </style>
+</head>
+<body>
+
+<!-- TOP UTILITY BAR -->
+<div class="util-topbar">
+  <div class="util-topbar-inner">
+    <div class="util-topbar-left">
+      <a href="index.html" class="topbar-home-btn" title="홈">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </a>
+      <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="topbar-ytutpr">Y튜터 <span class="topbar-arrow">↗</span></a>
+    </div>
+    <div class="util-links">
+      <a href="login.html" class="util-link topbar-login-btn">로그인</a>
+      <a href="login.html?tab=join" class="util-link topbar-join-btn">회원가입</a>
+      <a href="customer.html" class="util-link">고객센터</a>
+      <a href="mypage.html" class="util-link topbar-mypage-btn">마이페이지</a>
+    </div>
+  </div>
+</div>
+<div class="util-bar">
+  <div class="util-bar-inner">
+    <a href="index.html" class="util-logo">
+      <span class="logo-mark">YBM북스</span>
+
+      <span class="logo-badge">참고서</span>
+    </a>
+    <div class="search-series-group">
+    <div class="header-search">
+      <div class="search-wrap">
+        <input type="text" class="search-input" placeholder="자료명을 검색하세요">
+        <button class="search-btn" onclick="var q=this.closest('.search-wrap').querySelector('.search-input').value;location.href='books.html'+(q?'?q='+encodeURIComponent(q):'');"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      </div>
+    </div>
+    <button class="util-bar-series-btn" onclick="openSeriesPanel()">📚 시리즈 보기</button>
+    </div>
+    <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="util-bar-ytutpr">
+      <span class="ytutpr-label">Y튜터</span>
+      <span class="ytutpr-sub">강자 전용 사이트 ↗</span>
+    </a>
+  </div>
+</div>
+
+<!-- GNB -->
+<nav class="gnb-bar">
+  <div class="gnb-inner">
+    <a href="index.html" class="gnb-logo-link"><span class="logo-mark">YBM북스</span><span class="logo-badge">참고서</span></a>
+    <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="gnb-logo-shortcut">Y튜터 <span class="sc-arrow">↗</span></a>
+    <button class="gnb-all"><span class="hamburger">☰</span></button>
+    <div class="gnb-nav">
+      <div class="gnb-item" data-cat="elementary">
+        <a href="books.html?cat=elementary" class="gnb-link">초등</a>
+        <div class="gnb-dropdown">
+          <div class="dropdown-cat" style="background:var(--elem);">
+            <span class="dropdown-cat-icon">🎒</span>
+            <span class="dropdown-cat-label">초등</span>
+          </div>
+          <div class="dropdown-body">
+            <a href="books.html?cat=elementary&type=참고서" class="mega-group-title">참고서</a>
+            <a href="books.html?cat=elementary&type=참고서&subject=영어" class="mega-sub-link">영어</a>
+            <a href="books.html?cat=elementary&type=참고서&subject=수학" class="mega-sub-link">수학</a>
+            <a href="books.html?cat=elementary&type=교과서" class="mega-group-title">교과서</a>
+            <a href="books.html?cat=elementary&type=교과서" class="mega-sub-link">교과서</a>
+            <a href="books.html?cat=elementary&type=평가문제집" class="mega-sub-link">평가문제집/자습서</a>
+            <a href="books.html?cat=elementary&type=지도서" class="mega-sub-link">지도서</a>
+            <a href="books.html?cat=elementary&type=자료집" class="mega-sub-link">자료집</a>
+            <a href="books.html?cat=elementary&type=교구재" class="mega-sub-link">교구재</a>
+            <a href="books.html?cat=elementary&type=ELT" class="mega-group-title">ELT</a>
+            <a href="books.html?cat=elementary&type=일반" class="mega-group-title">일반 · 수험서</a>
+          </div>
+        </div>
+      </div>
+      <div class="gnb-item" data-cat="middle">
+        <a href="books.html?cat=middle" class="gnb-link">중학</a>
+        <div class="gnb-dropdown">
+          <div class="dropdown-cat" style="background:var(--mid);">
+            <span class="dropdown-cat-icon">📚</span>
+            <span class="dropdown-cat-label">중학</span>
+          </div>
+          <div class="dropdown-body">
+            <a href="books.html?cat=middle&type=참고서" class="mega-group-title">참고서</a>
+            <a href="books.html?cat=middle&type=참고서&subject=영어" class="mega-sub-link">영어</a>
+            <a href="books.html?cat=middle&type=참고서&subject=수학" class="mega-sub-link">수학</a>
+            <a href="books.html?cat=middle&type=교과서" class="mega-group-title">교과서</a>
+            <a href="books.html?cat=middle&type=교과서" class="mega-sub-link">교과서</a>
+            <a href="books.html?cat=middle&type=평가문제집" class="mega-sub-link">평가문제집/자습서</a>
+            <a href="books.html?cat=middle&type=지도서" class="mega-sub-link">지도서</a>
+            <a href="books.html?cat=middle&type=자료집" class="mega-sub-link">자료집</a>
+            <a href="books.html?cat=middle&type=교구재" class="mega-sub-link">교구재</a>
+            <a href="books.html?cat=middle&type=ELT" class="mega-group-title">ELT</a>
+            <a href="books.html?cat=middle&type=일반" class="mega-group-title">일반 · 수험서</a>
+          </div>
+        </div>
+      </div>
+      <div class="gnb-item" data-cat="high">
+        <a href="books.html?cat=high" class="gnb-link">고등</a>
+        <div class="gnb-dropdown">
+          <div class="dropdown-cat" style="background:var(--high);">
+            <span class="dropdown-cat-icon">🎓</span>
+            <span class="dropdown-cat-label">고등</span>
+          </div>
+          <div class="dropdown-body">
+            <a href="books.html?cat=high&type=참고서" class="mega-group-title">참고서</a>
+            <a href="books.html?cat=high&type=참고서&subject=영어" class="mega-sub-link">영어</a>
+            <a href="books.html?cat=high&type=참고서&subject=수학" class="mega-sub-link">수학</a>
+            <a href="books.html?cat=high&type=교과서" class="mega-group-title">교과서</a>
+            <a href="books.html?cat=high&type=교과서" class="mega-sub-link">교과서</a>
+            <a href="books.html?cat=high&type=평가문제집" class="mega-sub-link">평가문제집/자습서</a>
+            <a href="books.html?cat=high&type=지도서" class="mega-sub-link">지도서</a>
+            <a href="books.html?cat=high&type=자료집" class="mega-sub-link">자료집</a>
+            <a href="books.html?cat=high&type=교구재" class="mega-sub-link">교구재</a>
+            <a href="books.html?cat=high&type=ELT" class="mega-group-title">ELT</a>
+            <a href="books.html?cat=high&type=일반" class="mega-group-title">일반 · 수험서</a>
+          </div>
+        </div>
+      </div>
+      <div class="gnb-item" data-cat="resources">
+        <a href="resources.html" class="gnb-link">자료실</a>
+        <div class="gnb-dropdown">
+          <div class="dropdown-cat" style="background:var(--res);">
+            <span class="dropdown-cat-icon">📂</span>
+            <span class="dropdown-cat-label">자료실</span>
+          </div>
+          <div class="dropdown-body">
+            <a href="resources.html?tab=materials" class="mega-group-title">교재자료실</a>
+            <a href="resources.html?tab=study&stab=vocab" class="mega-group-title">스터디존</a>
+            <a href="resources.html?tab=study&stab=vocab" class="mega-sub-link mega-only">어휘출제마법사</a>
+            <a href="resources.html?tab=study&stab=grammar" class="mega-sub-link mega-only">문법예문뱅크</a>
+            <a href="resources.html?tab=study&stab=daily" class="mega-sub-link mega-only">데일리외국어</a>
+            <a href="resources.html?tab=study&stab=mp3" class="mega-sub-link mega-only">MP3 바로듣기</a>
+            <a href="resources.html?tab=howto" class="mega-group-title">교재활용법</a>
+            <a href="resources.html?tab=howto" class="mega-sub-link mega-only">교재소개 및 활용방법</a>
+            <a href="resources.html?tab=howto" class="mega-sub-link mega-only">큐레이션</a>
+          </div>
+        </div>
+      </div>
+      <div class="gnb-item" data-cat="events">
+        <a href="events.html" class="gnb-link">이벤트</a>
+        <div class="gnb-dropdown">
+          <div class="dropdown-cat" style="background:var(--red);">
+            <span class="dropdown-cat-icon">🎁</span>
+            <span class="dropdown-cat-label">이벤트</span>
+          </div>
+          <div class="dropdown-body">
+            <a href="events.html?status=ongoing" class="mega-group-title">진행중인 이벤트</a>
+            <a href="events.html?status=ended" class="mega-group-title">종료된 이벤트</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="gnb-toeic-btn">YBM북스-토익단행본 <span>↗</span></a>
+    </div>
+    <div class="gnb-util-right">
+      
+      <a href="login.html" class="gnb-util-link gnb-login-link">로그인</a>
+      <a href="login.html" class="gnb-util-link gnb-join-link">회원가입</a>
+      <a href="customer.html" class="gnb-util-link">고객센터</a>
+      <button class="gnb-search-btn" id="gnbSearchToggle" aria-label="검색">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero resources">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title">📂 자료실</h1>
+    <p class="page-hero-desc">교재 자료, 데일리 외국어, 교재 활용법을 무료로 이용하세요</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:28px;padding-bottom:80px;">
+  <div class="cs-layout">
+    <div class="cs-content">
+
+      <!-- 교재 자료실 -->
+      <div id="panel-materials">
+        <h2 class="cs-content-title">📋 교재 자료실</h2>
+        <!-- 교재명 검색 (필터 위) -->
+        <div class="mat-book-search-wrap" style="margin-bottom:16px;position:relative;">
+          <div class="mat-book-search-inner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="matBookSearch" placeholder="교재명을 입력하세요" autocomplete="off"
+              oninput="onMatBookSearchInput(this.value)"
+              onkeydown="onMatBookSearchKey(event)"
+              onfocus="showMatSuggest()"
+              onblur="setTimeout(hideMatSuggest,200)">
+            <button class="mat-bsearch-clear" id="matBookSearchClear" style="display:none" onclick="clearMatBookSearch()">✕</button>
+          </div>
+          <div id="matBookSuggest" class="mat-suggest-box" style="display:none;"></div>
+        </div>
+        <div class="hfilter-section" style="margin-bottom:20px;">
+          <div class="hfilter-pills">
+            <div class="hfilter-pill" id="mf-cat" onclick="mfToggle(this)">
+              <span class="hf-label">학년 선택</span><span class="pill-arrow">▼</span>
+              <div class="hfilter-dropdown" id="mfd-cat">
+                <div class="hfilter-opt" data-val="" onclick="mfSelect('cat','','학년 선택',event)">전체</div>
+                <div class="hfilter-opt" data-val="초등" onclick="mfSelect('cat','초등','초등',event)">초등</div>
+                <div class="hfilter-opt" data-val="중학" onclick="mfSelect('cat','중학','중학',event)">중학</div>
+                <div class="hfilter-opt" data-val="고등" onclick="mfSelect('cat','고등','고등',event)">고등</div>
+              </div>
+            </div>
+            <div class="hfilter-pill" id="mf-type" onclick="mfToggle(this)">
+              <span class="hf-label">자료 유형 선택</span><span class="pill-arrow">▼</span>
+              <div class="hfilter-dropdown" id="mfd-type">
+                <div class="hfilter-opt" data-val="" onclick="mfSelect('type','','자료 유형 선택',event)">전체</div>
+                <div class="hfilter-opt" data-val="정오표" onclick="mfSelect('type','정오표','정오표',event)">정오표</div>
+                <div class="hfilter-opt" data-val="정답지" onclick="mfSelect('type','정답지','정답 및 해석',event)">정답 및 해석</div>
+                <div class="hfilter-opt" data-val="MP3" onclick="mfSelect('type','MP3','MP3 바로 듣기',event)">MP3 바로 듣기</div>
+                <div class="hfilter-opt" data-val="MP3파일" onclick="mfSelect('type','MP3파일','MP3 파일',event)">MP3 파일</div>
+                <div class="hfilter-opt" data-val="PDF" onclick="mfSelect('type','PDF','본문 PDF',event)">본문 PDF</div>
+              </div>
+            </div>
+            <button class="hfilter-reset" onclick="mfReset()">✕ 초기화</button>
+          </div>
+        </div>
+        <!-- 정렬 + 검색 툴바 -->
+        <div class="mat-toolbar">
+          <div class="mat-sort-btns">
+            <button class="mat-sort-btn active" data-sort="date" onclick="setMatSort(this,'date')">↓ 출간일순</button>
+            <button class="mat-sort-btn" data-sort="popular" onclick="setMatSort(this,'popular')">↓ 인기순</button>
+            <button class="mat-sort-btn" data-sort="alpha" onclick="setMatSort(this,'alpha')">↓ 도서명순</button>
+          </div>
+          <input type="hidden" id="matSearchInput">
+        </div>
+        <!-- 테이블 헤더 -->
+        <div class="mat-table">
+          <div class="mat-table-head">
+            <div class="mat-col-check"><input type="checkbox" id="matCheckAll" onchange="toggleAllMatChecks(this)"></div>
+            <div class="mat-col-sep"></div>
+            <div class="mat-col-book">교재명</div>
+            <div class="mat-col-sep"></div>
+            <div class="mat-col-res">자료명</div>
+            <div class="mat-col-type">자료유형</div>
+            <div class="mat-col-preview">미리보기</div>
+            <div class="mat-col-dl">다운로드</div>
+          </div>
+          <div id="materialsBody"></div>
+        </div>
+        <!-- 하단 바 -->
+        <div class="mat-bottom-bar">
+          <div class="mat-bulk-btns">
+            <button class="mat-bulk-btn" onclick="matBulkDownload()">⬇ 모아받기(ZIP)</button>
+            <button class="mat-bulk-btn" onclick="matIndivDownload()">⬇ 개별 파일받기</button>
+          </div>
+          <div class="pagination" id="matPagination"></div>
+        </div>
+      </div>
+
+      <!-- 스터디존 -->
+      <div id="panel-study" style="display:none;">
+        <h2 class="cs-content-title">📖 스터디존</h2>
+        <!-- 하위 탭 -->
+        <div class="study-tabs">
+          <button class="study-tab active" data-stab="vocab" onclick="switchStudyTab(this)"><span class="stab-icon">✨</span>어휘출제마법사</button>
+          <button class="study-tab" data-stab="grammar" onclick="switchStudyTab(this)"><span class="stab-icon">📖</span>문법예문뱅크</button>
+          <button class="study-tab" data-stab="daily" onclick="switchStudyTab(this)"><span class="stab-icon">🌐</span>데일리외국어</button>
+          <button class="study-tab" data-stab="mp3" onclick="switchStudyTab(this)"><span class="stab-icon">🎧</span>MP3 바로듣기</button>
+        </div>
+        <!-- 어휘출제마법사 -->
+        <div id="stab-vocab" class="study-panel active">
+          <!-- 검색바 -->
+          <div class="gb-search-bar">
+            <span class="gb-search-icon">🔍</span>
+            <input type="text" id="vocaSearchInput" class="gb-search-input" placeholder="교재명을 입력하세요">
+            <button class="gb-btn-search" onclick="applyVocaFilter()">검색</button>
+            <button class="gb-btn-filter" id="vocaFilterToggle" onclick="toggleVocaFilter()">
+              <span class="gb-filter-icon">⚙</span> <span id="vocaFilterLabel">필터 열기</span>
+            </button>
+          </div>
+          <!-- 필터 패널 -->
+          <div class="gb-filter-panel" id="vocaFilterPanel" style="display:none;">
+            <div class="gb-filter-row">
+              <label class="gb-filter-label">학년</label>
+              <div class="gb-level-pills">
+                <button class="gb-level-pill active" data-vcat="" onclick="selectVocaCat(this)">전체</button>
+                <button class="gb-level-pill" data-vcat="elementary" onclick="selectVocaCat(this)">초등</button>
+                <button class="gb-level-pill" data-vcat="middle" onclick="selectVocaCat(this)">중학</button>
+                <button class="gb-level-pill" data-vcat="high" onclick="selectVocaCat(this)">고등</button>
+              </div>
+            </div>
+          </div>
+          <!-- 결과 요약 바 -->
+          <div class="gb-result-bar">
+            <span class="gb-result-icon">✅</span>
+            <span class="gb-result-text">조건에 맞는 자료 <strong id="vocaCount" class="gb-result-count">0</strong>개가 검색되었습니다.</span>
+            <button class="gb-reset-btn" onclick="resetVocaFilter()">↺ 초기화</button>
+          </div>
+          <!-- 정렬 툴바 -->
+          <div class="voca-sort-bar">
+            <div class="gb-sort-btns">
+              <button class="gb-sort-btn active" data-vsort="date" onclick="setVocaSort(this)">↓ 출간일순</button>
+              <button class="gb-sort-btn" data-vsort="pop" onclick="setVocaSort(this)">↓ 인기순</button>
+              <button class="gb-sort-btn" data-vsort="alpha" onclick="setVocaSort(this)">↓ 도서명순</button>
+            </div>
+            <div class="voca-search-inline">
+              <input type="text" id="vocaInlineSearch" class="voca-inline-input" placeholder="[제목+내용] 검색" oninput="applyVocaFilter()">
+              <span class="voca-inline-icon">🔍</span>
+            </div>
+          </div>
+          <!-- 교재 목록 -->
+          <div class="voca-list" id="vocaList"></div>
+          <div class="pagination" id="vocaPagination"></div>
+        </div>
+        <!-- 문법예문뱅크 -->
+        <div id="stab-grammar" class="study-panel" style="display:none;">
+          <!-- 검색바 -->
+          <div class="gb-search-bar">
+            <span class="gb-search-icon">🔍</span>
+            <input type="text" id="gbSearchInput" class="gb-search-input" placeholder="문법 요목(e.g. 문장 형식, 완전자동사 etc.), 영어단어, 한글단어를 입력하세요.">
+            <button class="gb-btn-search" onclick="applyGbFilter()">검색</button>
+            <button class="gb-btn-info" title="검색 도움말">ℹ</button>
+            <button class="gb-btn-filter" id="gbFilterToggle" onclick="toggleGbFilter()">
+              <span class="gb-filter-icon">⚙</span> <span id="gbFilterLabel">필터 열기</span>
+            </button>
+          </div>
+          <!-- 필터 패널 -->
+          <div class="gb-filter-panel" id="gbFilterPanel" style="display:none;">
+            <div class="gb-filter-row">
+              <label class="gb-filter-label">대분류</label>
+              <select class="gb-select" id="gbCat1" onchange="updateGbSubcat()">
+                <option value="">대분류를 선택하세요.</option>
+                <option value="문장형식">문장 형식</option>
+                <option value="시제">시제</option>
+                <option value="조동사">조동사</option>
+                <option value="수동태">수동태</option>
+                <option value="가정법">가정법</option>
+                <option value="부정사">부정사 (to-v)</option>
+                <option value="동명사">동명사</option>
+                <option value="분사">분사</option>
+                <option value="관계사">관계사</option>
+                <option value="접속사">접속사</option>
+                <option value="비교">비교</option>
+                <option value="특수구문">특수구문</option>
+              </select>
+              <label class="gb-filter-label">소분류</label>
+              <select class="gb-select" id="gbCat2">
+                <option value="">소분류를 선택하세요.</option>
+              </select>
+            </div>
+            <div class="gb-filter-row">
+              <label class="gb-filter-label">난이도</label>
+              <div class="gb-level-pills">
+                <button class="gb-level-pill active" data-lv="" onclick="selectGbLevel(this)">전체</button>
+                <button class="gb-level-pill" data-lv="하" onclick="selectGbLevel(this)">(하)초등</button>
+                <button class="gb-level-pill" data-lv="중" onclick="selectGbLevel(this)">(중)중등</button>
+                <button class="gb-level-pill" data-lv="상" onclick="selectGbLevel(this)">(상)고등</button>
+              </div>
+            </div>
+          </div>
+          <!-- 결과 요약 바 -->
+          <div class="gb-result-bar">
+            <span class="gb-result-icon">✅</span>
+            <span class="gb-result-text">조건에 맞는 예문 <strong id="gbCount" class="gb-result-count">0</strong>개가 검색되었습니다.</span>
+            <button class="gb-reset-btn" onclick="resetGbFilter()">↺ 초기화</button>
+          </div>
+          <!-- 정렬 툴바 -->
+          <div class="gb-sort-bar">
+            <div class="gb-sort-btns">
+              <button class="gb-sort-btn active" data-sort="level" onclick="setGbSort(this)">↓ 난이도순</button>
+              <button class="gb-sort-btn" data-sort="alpha" onclick="setGbSort(this)">↓ 알파벳순</button>
+            </div>
+            <label class="gb-show-trans">
+              <input type="checkbox" id="gbShowTrans" checked onchange="renderGbList()"> 해석보기
+            </label>
+          </div>
+          <!-- 예문 리스트 -->
+          <div class="gb-list" id="gbList"></div>
+          <!-- 페이지네이션 -->
+          <div class="pagination" id="gbPagination"></div>
+        </div>
+        <!-- 데일리외국어 -->
+        <div id="stab-daily" class="study-panel" style="display:none;">
+          <!-- 검색바 -->
+          <div class="dl-search-wrap">
+            <div class="dl-search-bar">
+              <span class="dl-search-icon">🔍</span>
+              <input type="text" id="dlSearchInput" class="dl-search-input"
+                placeholder="배우고 싶은 표현을 검색해보세요. (예: 감사합니다, thank you, 거절하기...)"
+                oninput="onDlInput(this.value)"
+                onkeydown="onDlKeydown(event)"
+                autocomplete="off">
+              <button class="dl-search-btn" onclick="applyDlFilter();closeDlDropdown()">검색</button>
+            </div>
+            <!-- 자동완성 드롭다운 -->
+            <div class="dl-dropdown" id="dlDropdown" style="display:none;"></div>
+          </div>
+          <!-- 필터 탭 (언어) -->
+          <div class="dl-lang-tabs">
+            <button class="dl-lang-tab active" data-dlang="" onclick="selectDlLang(this)">🌐 전체</button>
+            <button class="dl-lang-tab" data-dlang="en" onclick="selectDlLang(this)">🇺🇸 영어</button>
+            <button class="dl-lang-tab" data-dlang="jp" onclick="selectDlLang(this)">🇯🇵 일본어</button>
+            <button class="dl-lang-tab" data-dlang="cn" onclick="selectDlLang(this)">🇨🇳 중국어</button>
+          </div>
+          <!-- 카테고리 필터 -->
+          <div class="dl-cat-pills" id="dlCatPills">
+            <button class="dl-cat-pill active" data-dcat="" onclick="selectDlCat(this)">전체</button>
+            <button class="dl-cat-pill" data-dcat="인사" onclick="selectDlCat(this)">인사</button>
+            <button class="dl-cat-pill" data-dcat="감사" onclick="selectDlCat(this)">감사</button>
+            <button class="dl-cat-pill" data-dcat="사과" onclick="selectDlCat(this)">사과</button>
+            <button class="dl-cat-pill" data-dcat="질문" onclick="selectDlCat(this)">질문</button>
+            <button class="dl-cat-pill" data-dcat="거절" onclick="selectDlCat(this)">거절</button>
+            <button class="dl-cat-pill" data-dcat="칭찬" onclick="selectDlCat(this)">칭찬</button>
+            <button class="dl-cat-pill" data-dcat="감정" onclick="selectDlCat(this)">감정</button>
+            <button class="dl-cat-pill" data-dcat="쇼핑" onclick="selectDlCat(this)">쇼핑</button>
+            <button class="dl-cat-pill" data-dcat="여행" onclick="selectDlCat(this)">여행</button>
+            <button class="dl-cat-pill" data-dcat="음식" onclick="selectDlCat(this)">음식</button>
+          </div>
+          <!-- 결과 요약 -->
+          <div class="dl-result-bar">
+            <span class="dl-result-text"><strong id="dlCount" class="gb-result-count">0</strong>개의 표현이 있습니다.</span>
+            <button class="gb-reset-btn" onclick="resetDlFilter()">↺ 초기화</button>
+          </div>
+          <!-- 카드 그리드 -->
+          <div class="dl-grid" id="dlGrid"></div>
+          <div class="pagination" id="dlPagination"></div>
+        </div>
+
+        <!-- MP3 바로듣기 -->
+        <div id="stab-mp3" class="study-panel" style="display:none;">
+          <div class="mp3-layout" id="mp3Layout">
+            <!-- 왼쪽: 교재 선택 -->
+            <div class="mp3-left-col" id="mp3LeftCol">
+              <div class="mp3-left-label">교재 검색</div>
+              <div class="mp3-search-wrap" style="position:relative;">
+                <div class="mp3-search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input type="text" id="mp3BookSearch" placeholder="교재명을 입력하세요" autocomplete="off"
+                    oninput="onMp3SearchInput(this.value)"
+                    onkeydown="onMp3SearchKey(event)"
+                    onfocus="showMp3Suggest()"
+                    onblur="setTimeout(hideMp3Suggest,200)">
+                  <button id="mp3SearchClear" class="mp3-search-clear" style="display:none" onclick="clearMp3Search()">✕</button>
+                </div>
+                <div id="mp3Suggest" class="mp3-suggest-box" style="display:none;"></div>
+              </div>
+              <div id="mp3BookList" class="mp3-book-list">
+                <div class="mp3-empty-hint">
+                  <div class="mp3-empty-icon">🔍</div>
+                  <p>교재명을 입력하면<br>관련 교재 목록이 표시됩니다</p>
+                </div>
+              </div>
+            </div>
+            <!-- 오른쪽: 플레이어 -->
+            <div class="mp3-right-col">
+              <div id="mp3PlayerWrap">
+                <div class="mp3-select-hint" id="mp3SelectHint">
+                  <div class="mp3-empty-icon">🎵</div>
+                  <p><strong>교재를 먼저 선택해주세요</strong><br>왼쪽에서 교재를 선택하면<br>MP3 트랙 목록이 여기에 표시됩니다</p>
+                </div>
+                <div id="mp3Player" style="display:none;">
+                  <!-- 현재 재생 -->
+                  <div class="mp3-now-card">
+                    <div class="mp3-now-label">지금 재생 중</div>
+                    <div class="mp3-now-title" id="mp3NowTitle">—</div>
+                    <div class="mp3-now-track" id="mp3NowTrack">—</div>
+                    <div class="mp3-prog-bar">
+                      <div class="mp3-prog-bg">
+                        <div class="mp3-prog-fill" id="mp3ProgFill" style="width:0%"></div>
+                      </div>
+                      <div class="mp3-prog-time">
+                        <span id="mp3CurTime">0:00</span>
+                        <span id="mp3DurTime">0:00</span>
+                      </div>
+                    </div>
+                    <audio id="mp3Audio"></audio>
+                    <div class="mp3-controls">
+                      <button class="mp3-ctrl-btn" onclick="mp3Prev()" aria-label="이전 트랙">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                      </button>
+                      <button class="mp3-ctrl-btn mp3-play-btn" id="mp3PlayBtn" onclick="mp3TogglePlay()" aria-label="재생/일시정지">
+                        <svg id="mp3PlayIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                      </button>
+                      <button class="mp3-ctrl-btn" onclick="mp3Next()" aria-label="다음 트랙">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8z"/><rect x="16" y="6" width="2" height="12"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- 트랙 목록 -->
+                  <div class="mp3-tracklist-header">
+                    <span>트랙 목록</span>
+                    <span id="mp3TrackCount" class="mp3-track-cnt-badge"></span>
+                  </div>
+                  <div class="mp3-track-list" id="mp3TrackList"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 데일리 외국어 (구) -->
+      <div id="panel-daily" style="display:none;">
+        <h2 class="cs-content-title">🌍 데일리 외국어</h2>
+        <p style="color:var(--muted);margin-bottom:20px;font-size:13px;">매일 새로운 외국어 표현을 학습하세요.</p>
+        <div style="display:flex;gap:8px;margin-bottom:20px;">
+          <button class="daily-lang-btn" data-lang="en" onclick="renderDaily('en')" style="padding:8px 18px;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;">🇺🇸 영어</button>
+          <button class="daily-lang-btn" data-lang="cn" onclick="renderDaily('cn')" style="padding:8px 18px;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;">🇨🇳 중국어</button>
+          <button class="daily-lang-btn" data-lang="jp" onclick="renderDaily('jp')" style="padding:8px 18px;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;">🇯🇵 일본어</button>
+        </div>
+        <div id="dailyContent"></div>
+      </div>
+
+      <!-- 교재 활용법 -->
+      <div id="panel-howto" style="display:none;">
+        <h2 class="cs-content-title">📖 교재 활용법</h2>
+
+        <!-- 하위 탭 -->
+        <div class="study-tabs">
+          <button class="study-tab active" data-htab="intro" onclick="switchHowtoTab(this)"><span class="stab-icon">🎬</span>교재소개 및 활용방법</button>
+          <button class="study-tab" data-htab="curation" onclick="switchHowtoTab(this)"><span class="stab-icon">⭐</span>큐레이션</button>
+        </div>
+
+        <!-- ① 교재소개 및 활용방법 -->
+        <div id="htab-intro" class="howto-panel active">
+          <div class="hw-toolbar">
+            <span class="hw-count" id="hwCount">전체 <strong>0</strong>건</span>
+            <div class="hw-search">
+              <input type="text" id="hwSearchInput" placeholder="[제목+내용] 검색" oninput="applyHwFilter()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+          </div>
+          <div class="hw-tags" id="hwTags"></div>
+          <div id="hwList"></div>
+        </div>
+
+        <!-- ② 큐레이션 -->
+        <div id="htab-curation" class="howto-panel">
+          <!-- 학교급 탭 -->
+          <div class="cur2-school-tabs">
+            <button class="cur2-school-tab active" data-school="elementary" onclick="setCur2School(this,'elementary')">📗 초등</button>
+            <button class="cur2-school-tab" data-school="middle" onclick="setCur2School(this,'middle')">📘 중학</button>
+            <button class="cur2-school-tab" data-school="high" onclick="setCur2School(this,'high')">📕 고등</button>
+          </div>
+
+          <!-- 초등 -->
+          <!-- 초등 -->
+          <div class="cur2-section cur2-group" data-school="elementary">
+            <div class="cur2-section-title">초등용 영어교재</div>
+            <div class="cur2-diff-bar">
+              <span class="cur2-diff-lo">← 난이도(하)</span>
+              <div class="cur2-diff-gradient"></div>
+              <span class="cur2-diff-hi">난이도(상) →</span>
+            </div>
+            <div class="cur2-table-wrap">
+              <table class="cur2-table">
+                <thead>
+                  <tr>
+                    <th class="cur2-skill-th" rowspan="2">영역</th>
+                    <th colspan="2">예비초등</th>
+                    <th colspan="2">1학년</th>
+                    <th colspan="2">2학년</th>
+                    <th colspan="2">3학년</th>
+                    <th colspan="2">4학년</th>
+                    <th colspan="2">5학년</th>
+                    <th colspan="2">6학년</th>
+                  </tr>
+                  <tr class="cur2-sem-row">
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                    <th>1학기</th><th>2학기</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="cur2-skill-cell skill-phonics" rowspan="2">파닉스</td>
+                    <td colspan="3" class="cur2-book">Phonics NOW 1</td>
+                    <td colspan="3" class="cur2-book">Phonics NOW 2</td>
+                    <td colspan="3" class="cur2-book">Phonics NOW 3</td>
+                    <td colspan="5" class="cur2-empty"></td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="cur2-book">Benchmark Reading 1.1</td>
+                    <td colspan="4" class="cur2-book">Benchmark Reading 1.2</td>
+                    <td colspan="6" class="cur2-book">Benchmark Reading 1.3</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-grammar">문법</td>
+                    <td colspan="6" class="cur2-empty"></td>
+                    <td colspan="4" class="cur2-book">Grammar Space Kids 1~3</td>
+                    <td colspan="4" class="cur2-empty"></td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-test">검정시험</td>
+                    <td colspan="4" class="cur2-empty"></td>
+                    <td colspan="4" class="cur2-book">JET Planet 5·6급</td>
+                    <td colspan="2" class="cur2-book">JET Planet 3·4급</td>
+                    <td colspan="4" class="cur2-book">JET Planet 1·2급</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-test">기출</td>
+                    <td colspan="4" class="cur2-empty"></td>
+                    <td colspan="4" class="cur2-book">JET 기출문제집 5/6급</td>
+                    <td colspan="2" class="cur2-book">기출 3/4급</td>
+                    <td colspan="4" class="cur2-book">기출 1/2급</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 중학 -->
+          <div class="cur2-section cur2-group" data-school="middle" style="display:none;">
+            <div class="cur2-section-title">중학용 영어교재</div>
+            <div class="cur2-diff-bar">
+              <span class="cur2-diff-lo">← 난이도(하)</span>
+              <div class="cur2-diff-gradient"></div>
+              <span class="cur2-diff-hi">난이도(상) →</span>
+            </div>
+            <div class="cur2-table-wrap">
+              <table class="cur2-table">
+                <thead>
+                  <tr>
+                    <th class="cur2-skill-th" rowspan="2">영역</th>
+                    <th colspan="4">중1</th>
+                    <th colspan="4">중2</th>
+                    <th colspan="4">중3</th>
+                  </tr>
+                  <tr class="cur2-sem-row">
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="cur2-skill-cell skill-vocab">어휘</td>
+                    <td colspan="4" class="cur2-book">Booster Voca 기본</td>
+                    <td colspan="4" class="cur2-book">Booster Voca 실력</td>
+                    <td colspan="4" class="cur2-book">Booster Voca 완성 / Time for VOCA</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-reading" rowspan="2">독해</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 독해 1</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 독해 2</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 독해 3</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="cur2-book">I Love Reading Level 1</td>
+                    <td colspan="4" class="cur2-book">I Love Reading Level 2</td>
+                    <td colspan="4" class="cur2-book">I Love Reading Level 3</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-listening">듣기</td>
+                    <td colspan="4" class="cur2-book">적중 100% 듣기 모의고사 Level 1</td>
+                    <td colspan="4" class="cur2-book">Level 2</td>
+                    <td colspan="4" class="cur2-book">Level 3</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-grammar" rowspan="2">문법</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 문법 1</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 문법 2</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 문법 3</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="cur2-book">문제로 풀자 중학영문법 L1</td>
+                    <td colspan="4" class="cur2-book">문제로 풀자 L2</td>
+                    <td colspan="4" class="cur2-book">문제로 풀자 L3</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-writing">쓰기</td>
+                    <td colspan="4" class="cur2-book">알리GO 올리GO 서술형 쓰기 1</td>
+                    <td colspan="4" class="cur2-book">서술형 쓰기 2</td>
+                    <td colspan="4" class="cur2-book">서술형 쓰기 3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 고등 -->
+          <div class="cur2-section cur2-group" data-school="high" style="display:none;">
+            <div class="cur2-section-title">고등용 영어교재</div>
+            <div class="cur2-diff-bar">
+              <span class="cur2-diff-lo">← 난이도(하)</span>
+              <div class="cur2-diff-gradient"></div>
+              <span class="cur2-diff-hi">난이도(상) →</span>
+            </div>
+            <div class="cur2-table-wrap">
+              <table class="cur2-table">
+                <thead>
+                  <tr>
+                    <th class="cur2-skill-th" rowspan="2">영역</th>
+                    <th colspan="4">고1</th>
+                    <th colspan="4">고2</th>
+                    <th colspan="4">고3</th>
+                  </tr>
+                  <tr class="cur2-sem-row">
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="cur2-skill-cell skill-vocab" rowspan="2">어휘</td>
+                    <td colspan="4" class="cur2-book">Booster VOCA 어원편</td>
+                    <td colspan="4" class="cur2-book">Booster VOCA 수능편</td>
+                    <td colspan="4" class="cur2-book">수직상승 빈출어법</td>
+                  </tr>
+                  <tr>
+                    <td colspan="8" class="cur2-empty"></td>
+                    <td colspan="4" class="cur2-book">Reading Booster 어법어휘</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-reading" rowspan="2">독해</td>
+                    <td colspan="4" class="cur2-book">Reading Sharp Level 1</td>
+                    <td colspan="4" class="cur2-book">Reading Sharp Level 2</td>
+                    <td colspan="4" class="cur2-book">Reading Booster 유형독해</td>
+                  </tr>
+                  <tr>
+                    <td colspan="8" class="cur2-empty"></td>
+                    <td colspan="4" class="cur2-book">Reading Booster 모의고사 15회</td>
+                  </tr>
+                  <tr>
+                    <td class="cur2-skill-cell skill-grammar" rowspan="2">문법</td>
+                    <td colspan="2" class="cur2-book">Grammar Sharp 기초</td>
+                    <td colspan="2" class="cur2-book">기본 1</td>
+                    <td colspan="4" class="cur2-book">Grammar Sharp 기본 2</td>
+                    <td colspan="4" class="cur2-book">Grammar Sharp 완성</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="cur2-book">수직상승 빈출구문</td>
+                    <td colspan="4" class="cur2-book">Reading Booster 구문독해</td>
+                    <td colspan="4" class="cur2-empty"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 큐레이션 -->
+      <div id="panel-curation" style="display:none;">
+        <h2 class="cs-content-title">⭐ 영어 교재 큐레이션</h2>
+        <p style="color:var(--muted);margin-bottom:22px;font-size:13px;">나에게 맞는 단계별 학습 로드맵을 확인하세요</p>
+
+        <!-- 캐릭터 레벨 탭 -->
+        <div class="curric-char-tabs" id="curricCharTabs">
+          <div class="curric-char-tab active" data-level="all" onclick="setCurricLevel(this,'all')">
+            <div class="char-tab-desc">인기 커리큘럼을<br>한눈에</div>
+            <div class="char-tab-avatar">👨‍🏫</div>
+            <div class="char-tab-label">전체</div>
+          </div>
+          <div class="curric-char-tab" data-level="elementary" onclick="setCurricLevel(this,'elementary')">
+            <div class="char-tab-desc">기초부터 쉽고<br>재미있게 학습하는</div>
+            <div class="char-tab-avatar">👧</div>
+            <div class="char-tab-label">초등</div>
+          </div>
+          <div class="curric-char-tab" data-level="middle" onclick="setCurricLevel(this,'middle')">
+            <div class="char-tab-desc">체계적으로 탄탄하게<br>실력을 쌓는</div>
+            <div class="char-tab-avatar">🧑‍🎒</div>
+            <div class="char-tab-label">중학</div>
+          </div>
+          <div class="curric-char-tab" data-level="high" onclick="setCurricLevel(this,'high')">
+            <div class="char-tab-desc">수능 기본기부터<br>실전 대비까지</div>
+            <div class="char-tab-avatar">👩‍🎓</div>
+            <div class="char-tab-label">고등</div>
+          </div>
+        </div>
+
+        <!-- 커리큘럼 테이블 -->
+        <div class="curric-table-wrap" style="margin-top:0;">
+          <table class="curric-table">
+            <colgroup>
+              <col style="width:68px">
+              <col style="width:90px">
+              <col style="width:78px">
+              <col><col><col><col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>레벨</th>
+                <th colspan="2">영역</th>
+                <th>Quarter 1</th>
+                <th>Quarter 2</th>
+                <th>Quarter 3</th>
+                <th>Quarter 4</th>
+              </tr>
+            </thead>
+
+            <!-- ── 초등1 ── -->
+            <tbody class="curric-group" data-level="elementary">
+              <tr>
+                <td class="level-cell elementary-bg" rowspan="12">초등1</td>
+                <td class="area-main" rowspan="4">Phonics</td>
+                <td class="area-sub" rowspan="3">ELT</td>
+                <td class="book-cell">Phonics Code 1 / Phonics Code 2</td>
+                <td class="book-cell">Phonics Code 3</td>
+                <td class="book-cell">Phonics Code 4</td>
+                <td class="book-cell">Phonics Code 5</td>
+              </tr>
+              <tr>
+                <td class="book-cell">Come On, Phonics 1 / Come On, Phonics 2</td>
+                <td class="book-cell">Come On, Phonics 3</td>
+                <td class="book-cell">Come On, Phonics 4</td>
+                <td class="book-cell">Come On, Phonics 5</td>
+              </tr>
+              <tr>
+                <td class="book-cell">Phonics Show 1</td>
+                <td class="book-cell">Phonics Show 2</td>
+                <td class="book-cell">Phonics Show 3</td>
+                <td class="book-cell">Phonics Show 4</td>
+              </tr>
+              <tr>
+                <td class="area-sub">파닉스</td>
+                <td class="book-cell" colspan="2">초등영어 파닉스가 된다 1</td>
+                <td class="book-cell" colspan="2">초등영어 파닉스가 된다 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">Coursebook</td>
+                <td class="book-cell">English Time 1 (OUP)</td>
+                <td class="book-cell">Come On Everyone 1 / Learn with Us 1</td>
+                <td class="book-cell">English Time 2 (OUP)</td>
+                <td class="book-cell">Come On Everyone 2 / Learn with Us 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" rowspan="4">Reading</td>
+                <td class="area-sub">Link series</td>
+                <td class="book-cell">Easy Link Starter 1</td>
+                <td class="book-cell">Easy Link Starter 2</td>
+                <td class="book-cell">Easy Link Starter 3</td>
+                <td class="book-cell">Easy Link 1</td>
+              </tr>
+              <tr>
+                <td class="area-sub" rowspan="2">ELT</td>
+                <td class="book-cell">Reading Sketch Starter 1</td>
+                <td class="book-cell">Reading Sketch Starter 2</td>
+                <td class="book-cell">Reading Sketch Starter 3</td>
+                <td class="book-cell">Reading Sketch 1</td>
+              </tr>
+              <tr>
+                <td class="book-cell">Read It! 30 1</td>
+                <td class="book-cell">Read It! 30 2</td>
+                <td class="book-cell">Read It! 30 3</td>
+                <td class="book-cell">Read It! 50 1</td>
+              </tr>
+              <tr>
+                <td class="area-sub">독해 기본서</td>
+                <td class="book-cell" colspan="2">초등영어 리딩이 된다 Start 1</td>
+                <td class="book-cell" colspan="2">초등영어 리딩이 된다 Start 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">Listening &amp; Speaking</td>
+                <td class="book-cell">Listening Stage Starter 1</td>
+                <td class="book-cell">Listening Seed 1</td>
+                <td class="book-cell">Everyone, Speak! Kids 1 / Speaking Stage Starter 1</td>
+                <td class="book-cell">Listening Stage Starter 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2" rowspan="2">Grammar &amp; Writing</td>
+                <td class="book-cell">Grammar Space Kids 1</td>
+                <td class="book-cell">Grammar Space Kids 2</td>
+                <td class="book-cell">Write Right Beginner 1 / Grammar Space Kids 3</td>
+                <td class="book-cell"></td>
+              </tr>
+              <tr>
+                <td class="book-cell" colspan="2">Grammar Stage Starter 1</td>
+                <td class="book-cell" colspan="2">Grammar Stage Starter 2</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 초등2 ── -->
+            <tbody class="curric-group" data-level="elementary">
+              <tr>
+                <td class="level-cell elementary-bg" rowspan="6">초등2</td>
+                <td class="area-main" colspan="2">Coursebook</td>
+                <td class="book-cell">English Time 3 (OUP)</td>
+                <td class="book-cell">Come On Everyone 3 / Learn with Us 3</td>
+                <td class="book-cell">English Time 4 (OUP)</td>
+                <td class="book-cell">Come On Everyone 4 / Learn with Us 4</td>
+              </tr>
+              <tr>
+                <td class="area-main" rowspan="3">Reading</td>
+                <td class="area-sub">Link series</td>
+                <td class="book-cell">Easy Link 2</td>
+                <td class="book-cell">Easy Link 3</td>
+                <td class="book-cell">Easy Link 4</td>
+                <td class="book-cell">Easy Link 5</td>
+              </tr>
+              <tr>
+                <td class="area-sub">ELT</td>
+                <td class="book-cell">Reading Sketch 2</td>
+                <td class="book-cell">Reading Sketch 3</td>
+                <td class="book-cell">Read It! 50 2</td>
+                <td class="book-cell">Read It! 50 3</td>
+              </tr>
+              <tr>
+                <td class="area-sub">독해 기본서</td>
+                <td class="book-cell" colspan="2">초등영어 리딩이 된다 1</td>
+                <td class="book-cell" colspan="2">초등영어 리딩이 된다 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">Listening &amp; Speaking</td>
+                <td class="book-cell">Listening Stage 1</td>
+                <td class="book-cell">Speaking Stage 1</td>
+                <td class="book-cell">Listening Stage 2</td>
+                <td class="book-cell">Speaking Stage 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">Grammar &amp; Writing</td>
+                <td class="book-cell">Grammar Space 1</td>
+                <td class="book-cell">Grammar Space 2</td>
+                <td class="book-cell">Write Right 1</td>
+                <td class="book-cell">Grammar Space 3</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 중1 ── -->
+            <tbody class="curric-group" data-level="middle">
+              <tr>
+                <td class="level-cell middle-bg" rowspan="5">중1</td>
+                <td class="area-main" colspan="2">Coursebook (교과서)</td>
+                <td class="book-cell" colspan="2">영어1 (천재 / YBM / 비상)</td>
+                <td class="book-cell" colspan="2">영어1 (동아 / 능률)</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">독해</td>
+                <td class="book-cell">중학 영어 독해 Level 1 ①</td>
+                <td class="book-cell">중학 영어 독해 Level 1 ②</td>
+                <td class="book-cell">중학 영어 독해 Level 2 ①</td>
+                <td class="book-cell">중학 영어 독해 Level 2 ②</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">듣기</td>
+                <td class="book-cell" colspan="2">중학 영어 듣기 모의고사 Level 1</td>
+                <td class="book-cell" colspan="2">중학 영어 듣기 모의고사 Level 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">어휘</td>
+                <td class="book-cell" colspan="2">중등 영어 어휘 마스터 1</td>
+                <td class="book-cell" colspan="2">중등 영어 어휘 마스터 2</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">문법·쓰기</td>
+                <td class="book-cell">중학 영어 문법 정복 1</td>
+                <td class="book-cell">중학 영어 쓰기 완성 1</td>
+                <td class="book-cell">중학 영어 문법 정복 2</td>
+                <td class="book-cell">중학 영어 쓰기 완성 2</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 중2 ── -->
+            <tbody class="curric-group" data-level="middle">
+              <tr>
+                <td class="level-cell middle-bg" rowspan="5">중2</td>
+                <td class="area-main" colspan="2">Coursebook (교과서)</td>
+                <td class="book-cell" colspan="2">영어2 (천재 / YBM / 비상)</td>
+                <td class="book-cell" colspan="2">영어2 (동아 / 능률)</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">독해</td>
+                <td class="book-cell">중학 영어 독해 Level 3 ①</td>
+                <td class="book-cell">중학 영어 독해 Level 3 ②</td>
+                <td class="book-cell">중학 영어 독해 Level 4 ①</td>
+                <td class="book-cell">중학 영어 독해 Level 4 ②</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">듣기</td>
+                <td class="book-cell" colspan="2">중학 영어 듣기 모의고사 Level 3</td>
+                <td class="book-cell" colspan="2">중학 영어 듣기 모의고사 Level 4</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">어휘</td>
+                <td class="book-cell" colspan="2">중등 영어 어휘 마스터 3</td>
+                <td class="book-cell" colspan="2">중등 영어 어휘 마스터 4</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">문법·쓰기</td>
+                <td class="book-cell">중학 영어 문법 정복 3</td>
+                <td class="book-cell">중학 영어 쓰기 완성 3</td>
+                <td class="book-cell">중학 영어 구문 독해</td>
+                <td class="book-cell">중학 서술형 집중 연습</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 중3 ── -->
+            <tbody class="curric-group" data-level="middle">
+              <tr>
+                <td class="level-cell middle-bg" rowspan="4">중3</td>
+                <td class="area-main" colspan="2">독해</td>
+                <td class="book-cell">수능형 중학 독해 ①</td>
+                <td class="book-cell">수능형 중학 독해 ②</td>
+                <td class="book-cell">고난도 독해 실전 ①</td>
+                <td class="book-cell">고난도 독해 실전 ②</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">듣기</td>
+                <td class="book-cell" colspan="4">중학 영어 듣기 고난도 (수능 입문)</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">어휘</td>
+                <td class="book-cell" colspan="2">수능 어휘 기초 완성 (중학→수능 Bridge)</td>
+                <td class="book-cell" colspan="2">고등 필수 어휘 입문</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">문법·구문</td>
+                <td class="book-cell" colspan="2">중학 영어 구문 마스터</td>
+                <td class="book-cell" colspan="2">수능 구문 기초 완성</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 고1 ── -->
+            <tbody class="curric-group" data-level="high">
+              <tr>
+                <td class="level-cell high-bg" rowspan="4">고1</td>
+                <td class="area-main" colspan="2">독해</td>
+                <td class="book-cell" colspan="2">수능 영어 독해 기본 (유형별 학습)</td>
+                <td class="book-cell" colspan="2">수능 영어 독해 실전 (실전 연습)</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">듣기</td>
+                <td class="book-cell" colspan="2">수능 영어 듣기 기본 (45회)</td>
+                <td class="book-cell" colspan="2">수능 영어 듣기 실전</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">어휘</td>
+                <td class="book-cell" colspan="2">수능 필수 어휘 1800</td>
+                <td class="book-cell" colspan="2">수능 어휘 Speed Check</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">구문·문법</td>
+                <td class="book-cell" colspan="2">수능 구문 독해 완성</td>
+                <td class="book-cell" colspan="2">수능 영어 고난도 구문 50</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 고2 ── -->
+            <tbody class="curric-group" data-level="high">
+              <tr>
+                <td class="level-cell high-bg" rowspan="4">고2</td>
+                <td class="area-main" colspan="2">독해</td>
+                <td class="book-cell">수능 고난도 독해 ①</td>
+                <td class="book-cell">수능 고난도 독해 ②</td>
+                <td class="book-cell">빈칸·순서·삽입 집중 공략</td>
+                <td class="book-cell">Mini 실전 모의고사 10회</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">듣기</td>
+                <td class="book-cell" colspan="2">수능 영어 듣기 고난도</td>
+                <td class="book-cell" colspan="2">EBS 듣기 연계 완성</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">어휘</td>
+                <td class="book-cell" colspan="4">수능 빈출 어휘 2000 + 문맥 어휘</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">EBS 연계</td>
+                <td class="book-cell" colspan="2">EBS 수능 연계 집중 분석 (전반기)</td>
+                <td class="book-cell" colspan="2">EBS 수능 연계 집중 분석 (후반기)</td>
+              </tr>
+            </tbody>
+
+            <!-- ── 고3 ── -->
+            <tbody class="curric-group" data-level="high">
+              <tr>
+                <td class="level-cell high-bg" rowspan="4">고3</td>
+                <td class="area-main" colspan="2">독해 최종점검</td>
+                <td class="book-cell" colspan="2">수능 실전 독해 Final (40회)</td>
+                <td class="book-cell" colspan="2">수능 D-30 집중 실전</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">모의고사</td>
+                <td class="book-cell">실전 모의고사 1회</td>
+                <td class="book-cell">실전 모의고사 2회</td>
+                <td class="book-cell">실전 모의고사 3회</td>
+                <td class="book-cell">수능 Final 모의고사</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">EBS 연계</td>
+                <td class="book-cell" colspan="4">EBS 수능특강 + 수능완성 집중 분석</td>
+              </tr>
+              <tr>
+                <td class="area-main" colspan="2">취약 유형 보완</td>
+                <td class="book-cell" colspan="2">빈칸·함축·순서 고난도 집중</td>
+                <td class="book-cell" colspan="2">수능 영어 1등급 완성</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-nav">
+      <a href="#" class="footer-nav-link">회사소개</a>
+      <a href="#" class="footer-nav-link">이용약관</a>
+      <a href="#" class="footer-nav-link bold">개인정보처리방침</a>
+      <a href="#" class="footer-nav-link">무단 이메일주소 수집거부</a>
+    </div>
+    <div class="footer-corp">
+      <div class="footer-ybm-logo">
+        <div class="footer-ybm-mark">
+          <svg viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="28" rx="3" fill="#1a2e44"/>
+            <text x="5" y="20" font-family="Arial Black,sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="-1">YBM</text>
+          </svg>
+        </div>
+        <div class="footer-ybm-name">와이비엠</div>
+      </div>
+      <div class="footer-info">
+        <p>㈜와이비엠&nbsp;&nbsp;서울시 종로구 종로 104&nbsp;&nbsp;대표이사 허문호&nbsp;&nbsp;사업자등록번호 101-81-14655&nbsp;&nbsp;통신판매신고번호 제 01-320 호</p>
+        <p>사이트 문의 : 02-2000-0500&nbsp;&nbsp;E-mail : ybmbooksam@ybm.co.kr</p>
+        <p>Copyright © ㈜와이비엠. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- 데일리 외국어 모달 -->
+<div id="dailyModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.55);align-items:center;justify-content:center;" onclick="if(event.target===this)closeDailyModal()">
+  <div style="background:white;border-radius:16px;width:90%;max-width:480px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.35);" onclick="event.stopPropagation()">
+    <div id="dailyModalHeader" style="padding:28px 28px 20px;color:white;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div id="dailyModalBadge" style="font-size:11px;font-weight:800;letter-spacing:2px;opacity:.8;margin-bottom:8px;"></div>
+          <div id="dailyModalLang"  style="font-size:22px;font-weight:900;"></div>
+        </div>
+        <button onclick="closeDailyModal()" style="background:rgba(255,255,255,.2);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;">✕</button>
+      </div>
+    </div>
+    <div style="padding:24px 28px 28px;">
+      <div id="dailyModalWord"    style="font-size:30px;font-weight:900;color:#1a2e44;margin-bottom:6px;"></div>
+      <div id="dailyModalPron"    style="font-size:14px;color:#888;margin-bottom:16px;"></div>
+      <div style="background:#f8f9fb;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+        <div style="font-size:11px;font-weight:800;color:#999;letter-spacing:1px;margin-bottom:6px;">뜻</div>
+        <div id="dailyModalMeaning" style="font-size:15px;font-weight:700;color:#1a2e44;"></div>
+      </div>
+      <div style="background:#f8f9fb;border-radius:10px;padding:14px 16px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:800;color:#999;letter-spacing:1px;margin-bottom:8px;">예문</div>
+        <div id="dailyModalEx1" style="font-size:14px;color:#333;line-height:1.7;margin-bottom:4px;"></div>
+        <div id="dailyModalEx2" style="font-size:13px;color:#888;line-height:1.6;"></div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="Toast.show('음원을 재생합니다.','success')" style="flex:1;padding:12px;background:#1a2e44;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🔊 발음 듣기</button>
+        <button onclick="closeDailyModal()" style="flex:1;padding:12px;background:#f0f2f5;color:#1a2e44;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 데일리외국어 카드 상세 모달 -->
+<div id="dlCardModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;" onclick="if(event.target===this)closeDlCard()">
+  <div class="dl-modal-wrap" onclick="event.stopPropagation()">
+    <!-- 오디오 플레이어 -->
+    <div class="dl-modal-audio-bar">
+      <audio id="dlModalAudio" controls style="width:100%;height:36px;outline:none;"></audio>
+    </div>
+    <!-- 헤더: 언어 라벨 -->
+    <div class="dl-modal-header-bg" id="dlModalHeaderBg">
+      <div class="dl-modal-lang-label" id="dlModalLangLabel"></div>
+      <button class="dl-modal-close-x" onclick="closeDlCard()">✕</button>
+    </div>
+    <!-- 표현 영역 -->
+    <div class="dl-modal-body">
+      <div class="dl-modal-expr" id="dlModalExpr"></div>
+      <div class="dl-modal-ko" id="dlModalKo"></div>
+      <div class="dl-modal-pron" id="dlModalPron"></div>
+      <!-- 설명 -->
+      <p class="dl-modal-desc" id="dlModalDesc"></p>
+      <!-- 대화문 -->
+      <div class="dl-modal-section" id="dlModalDialogWrap">
+        <div id="dlModalDialog"></div>
+      </div>
+      <!-- 어휘 -->
+      <div class="dl-modal-vocab-wrap" id="dlModalVocabWrap">
+        <div class="dl-modal-vocab" id="dlModalVocab"></div>
+      </div>
+      <!-- YBM 로고 -->
+      <div class="dl-modal-ybm">
+        <img src="images/logo.png" alt="YBM" style="height:22px;opacity:.6;" onerror="this.style.display='none'">
+        <span style="font-size:13px;font-weight:900;color:#bbb;letter-spacing:1px;">YBM</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 어휘출제마법사 위저드 모달 -->
+<div id="vocaWizardModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.55);align-items:center;justify-content:center;">
+  <div class="vwiz-wrap">
+    <!-- 헤더 -->
+    <div class="vwiz-header">
+      <span class="vwiz-title">어휘출제마법사</span>
+      <span class="vwiz-sep">|</span>
+      <span class="vwiz-step-num">① <strong id="vwizStepNum">1</strong>/3</span>
+      <button class="vwiz-close" onclick="closeVocaWizard()">✕</button>
+    </div>
+    <!-- STEP 바 -->
+    <div class="vwiz-step-bar">
+      <span class="vwiz-step-badge">STEP <span id="vwizStepBadge">1</span></span>
+      <span class="vwiz-step-label" id="vwizStepLabel">교재 선택</span>
+      <span class="vwiz-step-book" id="vwizStepBook"></span>
+    </div>
+    <!-- 콘텐츠 -->
+    <div class="vwiz-body" id="vwizBody">
+      <!-- STEP 1 -->
+      <div id="vwizStep1">
+        <p class="vwiz-desc">출제할 교재를 선택해주세요.<br>최대 3권까지 복수 선택 가능합니다.</p>
+        <div class="vwiz-books" id="vwizBooks">
+          <div class="vwiz-book-slot" id="vwizSlot0" onclick="openVocaBookPicker(0)">
+            <span class="vwiz-slot-plus">＋</span>
+            <span class="vwiz-slot-label">교재를 추가하시려면<br>클릭하세요.</span>
+          </div>
+          <div class="vwiz-book-slot" id="vwizSlot1" onclick="openVocaBookPicker(1)">
+            <span class="vwiz-slot-plus">＋</span>
+            <span class="vwiz-slot-label">교재를 추가하시려면<br>클릭하세요.</span>
+          </div>
+          <div class="vwiz-book-slot" id="vwizSlot2" onclick="openVocaBookPicker(2)">
+            <span class="vwiz-slot-plus">＋</span>
+            <span class="vwiz-slot-label">교재를 추가하시려면<br>클릭하세요.</span>
+          </div>
+        </div>
+        <div class="vwiz-divider"></div>
+        <p class="vwiz-type-label">출제 유형을 선택해주세요.</p>
+        <div class="vwiz-type-btns">
+          <button class="vwiz-type-btn active" onclick="selectVwizType(this,'online')">
+            <span class="vwiz-type-name">온라인 단어 시험지 만들기</span>
+            <span class="vwiz-type-sub">(학습/테스트/수업 모드 지원)</span>
+          </button>
+        </div>
+        <div class="vwiz-footer">
+          <button class="vwiz-next-btn" onclick="vwizNext()">다음 단계 →</button>
+        </div>
+      </div>
+      <!-- STEP 2 -->
+      <div id="vwizStep2" style="display:none;">
+        <p class="vwiz-desc">출제할 단원 및 범위를 선택해주세요.</p>
+        <div class="vwiz-unit-list" id="vwizUnitList"></div>
+        <div class="vwiz-footer" style="justify-content:space-between;">
+          <button class="vwiz-prev-btn" onclick="vwizPrev()">← 이전 단계</button>
+          <button class="vwiz-next-btn" onclick="vwizNext()">다음 단계 →</button>
+        </div>
+      </div>
+      <!-- STEP 3 -->
+      <div id="vwizStep3" style="display:none;">
+        <p class="vwiz-desc">출제 옵션을 설정하고 시험지를 생성하세요.</p>
+        <div class="vwiz-options">
+          <div class="vwiz-opt-row">
+            <label class="vwiz-opt-label">문항 수</label>
+            <div class="gb-level-pills">
+              <button class="gb-level-pill active" onclick="selectPillInGroup(this)">10개</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">20개</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">30개</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">전체</button>
+            </div>
+          </div>
+          <div class="vwiz-opt-row">
+            <label class="vwiz-opt-label">문제 유형</label>
+            <div class="gb-level-pills">
+              <button class="gb-level-pill active" onclick="selectPillInGroup(this)">영→한</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">한→영</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">혼합</button>
+            </div>
+          </div>
+          <div class="vwiz-opt-row">
+            <label class="vwiz-opt-label">모드</label>
+            <div class="gb-level-pills">
+              <button class="gb-level-pill active" onclick="selectPillInGroup(this)">학습</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">테스트</button>
+              <button class="gb-level-pill" onclick="selectPillInGroup(this)">수업</button>
+            </div>
+          </div>
+        </div>
+        <div class="vwiz-footer" style="justify-content:space-between;">
+          <button class="vwiz-prev-btn" onclick="vwizPrev()">← 이전 단계</button>
+          <button class="vwiz-create-btn" onclick="vwizCreate()">✏ 시험지 생성하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 교재 선택 피커 모달 -->
+<div id="vocaBookPickerModal" style="display:none;position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
+  <div class="vbp-wrap">
+    <div class="vbp-header">
+      <span class="vbp-title">교재 선택</span>
+      <button class="vwiz-close" onclick="closeVocaBookPicker()">✕</button>
+    </div>
+    <div class="vbp-search">
+      <input type="text" id="vbpSearch" class="gb-search-input" placeholder="교재명 검색" oninput="renderVbpList()">
+    </div>
+    <div class="vbp-list" id="vbpList"></div>
+  </div>
+</div>
+
+<!-- 교재 활용법 동영상 모달 -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.7);align-items:center;justify-content:center;" onclick="if(event.target===this)closeVideoModal()">
+  <div style="background:white;border-radius:16px;width:92%;max-width:640px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.4);" onclick="event.stopPropagation()">
+    <div id="videoModalPlayer" style="height:300px;display:flex;align-items:center;justify-content:center;position:relative;">
+      <div onclick="Toast.show('영상 재생을 시작합니다.','success')" style="width:64px;height:64px;background:rgba(255,255,255,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.25);">▶</div>
+      <button onclick="closeVideoModal()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,.4);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:20px 24px 24px;">
+      <div id="videoModalTitle" style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:8px;"></div>
+      <div id="videoModalDesc"  style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;"></div>
+      <button onclick="location.href=document.getElementById('videoModalBookLink').value" style="background:var(--navy);color:white;border:none;padding:10px 22px;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;">교재 상세 보기 →</button>
+      <input type="hidden" id="videoModalBookLink">
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js?v=3"></script>
+<script>
+const initTab = getParam('tab') || 'materials';
+switchTab(initTab, document.querySelector(`[data-tab="${initTab}"]`));
+
+// 큐레이션 탭으로 이동 시 level 파라미터로 커리큘럼 탭 자동 선택
+const initLevel = getParam('level') || 'all';
+if (initTab === 'curation') {
+  const levelBtn = document.querySelector(`#curricCharTabs [data-level="${initLevel}"]`);
+  if (levelBtn) setCurricLevel(levelBtn, initLevel);
+}
+
+// 스터디존 하위탭 자동 선택 + 어휘출제마법사 초기화 → 하단 IIFE에서 처리
+
+/* ===== 데일리외국어 ===== */
+const LANG_INFO = {
+  en: {flag:'🇺🇸', name:'영어',   color:'#1a3a6e', label:'스피킹이 강해지는'},
+  jp: {flag:'🇯🇵', name:'일본어', color:'#b02020', label:'회화가 자연스러워지는'},
+  cn: {flag:'🇨🇳', name:'중국어', color:'#c47d00', label:'실력이 쌓이는'},
+};
+const DL_DATA = [
+  // ── 영어 ──
+  { id:1, lang:'en', cat:'인사', title:'처음 만났을 때 인사하기',
+    expr:'Nice to meet you.', pron:'나이스 투 밋 유', ko:'처음 뵙겠습니다.',
+    audio:'audio/en-01.mp3',
+    desc:'처음 만난 사람에게 건네는 가장 기본적인 인사 표현입니다. 격식체로는 "It\'s a pleasure to meet you."라고도 합니다.',
+    dialog:[
+      {s:'A', en:'Hi, I\'m Sarah. Nice to meet you!', ko:'안녕하세요, 저는 Sarah예요. 만나서 반가워요!'},
+      {s:'B', en:'Nice to meet you too! I\'m James.', ko:'저도 반가워요! 저는 James입니다.'},
+      {s:'A', en:'Are you new here?', ko:'여기 처음이세요?'},
+    ],
+    vocab:'pleasure 기쁨, 즐거움 / It\'s a pleasure 만나서 영광입니다' },
+
+  { id:2, lang:'en', cat:'인사', title:'아침 인사',
+    expr:'Good morning!', pron:'굿 모닝', ko:'좋은 아침이에요!',
+    audio:'audio/en-02.mp3',
+    desc:'아침에 처음 만나는 사람에게 건네는 인사입니다. 시간대에 따라 Good afternoon!(오후), Good evening!(저녁)으로 바꿔 쓸 수 있습니다.',
+    dialog:[
+      {s:'A', en:'Good morning! Did you sleep well?', ko:'좋은 아침! 잘 잤어요?'},
+      {s:'B', en:'Good morning! Yes, I slept great. You?', ko:'좋은 아침! 네, 잘 잤어요. 당신은요?'},
+      {s:'A', en:'Same here. Ready for today?', ko:'저도요. 오늘 준비됐어요?'},
+    ],
+    vocab:'sleep well 잘 자다 / ready for ~를 위해 준비된' },
+
+  { id:3, lang:'en', cat:'인사', title:'헤어질 때 인사',
+    expr:'See you later!', pron:'씨 유 레이터', ko:'나중에 봐요!',
+    audio:'audio/en-03.mp3',
+    desc:'곧 다시 만날 것을 전제로 하는 작별 인사입니다. "See you tomorrow!(내일 봐요)", "See you soon!(곧 봐요)"처럼 시간을 넣어 쓸 수도 있습니다.',
+    dialog:[
+      {s:'A', en:'I have to go now. See you later!', ko:'이제 가야 해요. 나중에 봐요!'},
+      {s:'B', en:'Okay! See you tomorrow at the office.', ko:'알겠어요! 내일 사무실에서 봐요.'},
+    ],
+    vocab:'have to ~해야 한다 / later 나중에, 이따가' },
+
+  { id:4, lang:'en', cat:'감사', title:'감사 표현 기본',
+    expr:'Thank you so much.', pron:'땡큐 쏘 머치', ko:'정말 감사합니다.',
+    audio:'audio/en-04.mp3',
+    desc:'감사함을 강조할 때 쓰는 표현입니다. "Thank you very much."도 같은 의미로 쓰이며, 더 격식 있는 표현으로는 "I\'m deeply grateful."이 있습니다.',
+    dialog:[
+      {s:'A', en:'Here\'s the report you asked for.', ko:'요청하신 보고서입니다.'},
+      {s:'B', en:'Thank you so much! This is exactly what I needed.', ko:'정말 감사합니다! 딱 제가 필요한 거예요.'},
+      {s:'A', en:'No problem at all. Let me know if you need anything else.', ko:'천만에요. 다른 필요한 게 있으면 알려주세요.'},
+    ],
+    vocab:'No problem 천만에요 / exactly 정확히, 딱' },
+
+  { id:5, lang:'en', cat:'감사', title:'도움에 감사하기',
+    expr:'I really appreciate it.', pron:'아이 리얼리 어프리시에잇 잇', ko:'정말 고맙습니다.',
+    audio:'audio/en-05.mp3',
+    desc:'appreciate는 단순한 thank you보다 더 깊은 감사를 나타냅니다. 누군가의 도움이나 행동에 진심으로 감사할 때 사용하세요.',
+    dialog:[
+      {s:'A', en:'I stayed late to help you finish the project.', ko:'프로젝트 마무리를 돕기 위해 늦게까지 있었어요.'},
+      {s:'B', en:'I really appreciate it. I couldn\'t have done it without you.', ko:'정말 고맙습니다. 당신 없이는 못 했을 거예요.'},
+    ],
+    vocab:'appreciate 감사하다, 고마워하다 / without ~없이' },
+
+  { id:6, lang:'en', cat:'사과', title:'실수했을 때 사과하기',
+    expr:"I'm so sorry.", pron:'아임 쏘 쏘리', ko:'정말 죄송합니다.',
+    audio:'audio/en-06.mp3',
+    desc:'진심 어린 사과를 표현할 때 씁니다. "I\'m terribly sorry.(정말 많이 죄송합니다)"처럼 부사를 바꿔 강도를 조절할 수 있습니다.',
+    dialog:[
+      {s:'A', en:'I accidentally spilled coffee on your laptop.', ko:'실수로 노트북에 커피를 쏟았어요.'},
+      {s:'B', en:'What?!', ko:'뭐라고요?!'},
+      {s:'A', en:"I'm so sorry. I'll pay for the repairs.", ko:'정말 죄송합니다. 수리비는 제가 낼게요.'},
+    ],
+    vocab:'accidentally 실수로, 우연히 / spill 쏟다 / repair 수리' },
+
+  { id:7, lang:'en', cat:'거절', title:'정중하게 거절하기',
+    expr:"I'm afraid I can't.", pron:'아임 어프레이드 아이 캔트', ko:'죄송하지만 어렵겠습니다.',
+    audio:'audio/en-07.mp3',
+    desc:'I\'m afraid는 부정적인 소식이나 거절을 부드럽게 전할 때 쓰는 표현입니다. 직접적인 "No"보다 훨씬 공손하게 들립니다.',
+    dialog:[
+      {s:'A', en:'Can you work this weekend?', ko:'이번 주말에 일할 수 있어요?'},
+      {s:'B', en:"I'm afraid I can't. I already have plans.", ko:'죄송하지만 어렵겠어요. 이미 약속이 있어서요.'},
+      {s:'A', en:'No worries. I\'ll ask someone else.', ko:'괜찮아요. 다른 사람에게 부탁할게요.'},
+    ],
+    vocab:'have plans 약속이 있다 / No worries 괜찮아요' },
+
+  { id:8, lang:'en', cat:'쇼핑', title:'가격 물어보기',
+    expr:'How much is this?', pron:'하우 머치 이즈 디스', ko:'이거 얼마예요?',
+    audio:'audio/en-08.mp3',
+    desc:'쇼핑할 때 가격을 물어보는 가장 기본적인 표현입니다. "What\'s the price?"나 "How much does it cost?"도 같은 의미로 쓸 수 있습니다.',
+    dialog:[
+      {s:'A', en:'Excuse me, how much is this jacket?', ko:'실례합니다, 이 재킷 얼마예요?'},
+      {s:'B', en:'It\'s $89.99.', ko:'89달러 99센트입니다.'},
+      {s:'A', en:'Do you have any discounts?', ko:'할인이 있나요?'},
+    ],
+    vocab:'Excuse me 실례합니다 / discount 할인' },
+
+  { id:9, lang:'en', cat:'음식', title:'식당에서 주문하기',
+    expr:"I'd like to order, please.", pron:'아이드 라이크 투 오더 플리즈', ko:'주문하고 싶어요.',
+    audio:'audio/en-09.mp3',
+    desc:'"I\'d like to"는 "I want to"보다 더 정중한 표현입니다. 식당에서 주문할 때 또는 무언가를 공손하게 요청할 때 활용하세요.',
+    dialog:[
+      {s:'A', en:'Are you ready to order?', ko:'주문하시겠어요?'},
+      {s:'B', en:"Yes, I'd like to order the pasta, please.", ko:'네, 파스타 주문하겠습니다.'},
+      {s:'A', en:'Would you like anything to drink?', ko:'음료는 무엇으로 드릴까요?'},
+    ],
+    vocab:'ready to order 주문할 준비가 된 / Would you like ~하시겠어요?' },
+
+  { id:10, lang:'en', cat:'여행', title:'호텔 체크인하기',
+    expr:"I have a reservation.", pron:'아이 해브 어 레저베이션', ko:'예약했습니다.',
+    audio:'audio/en-10.mp3',
+    desc:'호텔에 도착해서 체크인할 때 쓰는 표현입니다. 이름을 함께 말하면 더 자연스럽습니다. "I have a reservation under [이름]."',
+    dialog:[
+      {s:'A', en:'Welcome! How can I help you?', ko:'어서오세요! 무엇을 도와드릴까요?'},
+      {s:'B', en:"I have a reservation. The name's Kim Minjun.", ko:'예약했습니다. 이름은 김민준입니다.'},
+      {s:'A', en:'Let me check that for you. One moment, please.', ko:'확인해 드리겠습니다. 잠시만 기다려 주세요.'},
+    ],
+    vocab:'reservation 예약 / under one\'s name ~의 이름으로' },
+
+  // ── 일본어 ──
+  { id:11, lang:'jp', cat:'인사', title:'처음 만났을 때 인사하기',
+    expr:'はじめまして。', pron:'하지메마시테', ko:'처음 뵙겠습니다.',
+    audio:'audio/jp-01.mp3',
+    desc:'일본어로 처음 만나는 사람에게 하는 인사입니다. 보통 뒤에 よろしくお願いします(잘 부탁드립니다)를 붙여 함께 씁니다.',
+    dialog:[
+      {s:'A', en:'はじめまして。田中と申します。', ko:'처음 뵙겠습니다. 다나카라고 합니다.'},
+      {s:'B', en:'はじめまして。鈴木です。よろしくお願いします。', ko:'처음 뵙겠습니다. 스즈키입니다. 잘 부탁드립니다.'},
+    ],
+    vocab:'申します(もうします) ~라고 합니다 / よろしく 잘 부탁해요' },
+
+  { id:12, lang:'jp', cat:'감사', title:'감사 표현',
+    expr:'ありがとうございます。', pron:'아리가토 고자이마스', ko:'감사합니다.',
+    audio:'audio/jp-02.mp3',
+    desc:'일본어의 기본 감사 표현입니다. 친한 사이에는 ありがとう만 써도 됩니다. 더 정중하게는 どうもありがとうございます라고 합니다.',
+    dialog:[
+      {s:'A', en:'これ、どうぞ。', ko:'자, 받으세요.'},
+      {s:'B', en:'ありがとうございます！助かります。', ko:'감사합니다! 도움이 됩니다.'},
+    ],
+    vocab:'どうぞ 자, 받으세요 / 助かります(たすかります) 도움이 됩니다' },
+
+  { id:13, lang:'jp', cat:'사과', title:'사과하기',
+    expr:'申し訳ありません。', pron:'모시와케 아리마센', ko:'죄송합니다.',
+    audio:'audio/jp-03.mp3',
+    desc:'すみません보다 더 정중하고 격식 있는 사과 표현입니다. 비즈니스 상황이나 큰 실수를 했을 때 사용합니다.',
+    dialog:[
+      {s:'A', en:'資料の提出が遅れてしまいました。申し訳ありません。', ko:'자료 제출이 늦어버렸습니다. 죄송합니다.'},
+      {s:'B', en:'次回は気をつけてください。', ko:'다음번에는 주의해 주세요.'},
+    ],
+    vocab:'資料(しりょう) 자료 / 提出(ていしゅつ) 제출 / 次回(じかい) 다음번' },
+
+  { id:14, lang:'jp', cat:'쇼핑', title:'가격 물어보기',
+    expr:'いくらですか？', pron:'이쿠라데스카', ko:'얼마예요?',
+    audio:'audio/jp-04.mp3',
+    desc:'가격을 물어볼 때 쓰는 가장 기본적인 표현입니다. これはいくらですか(이것은 얼마예요?)처럼 앞에 지시어를 붙여 쓸 수 있습니다.',
+    dialog:[
+      {s:'A', en:'すみません、このバッグはいくらですか？', ko:'저기요, 이 가방은 얼마예요?'},
+      {s:'B', en:'8,000円です。', ko:'8,000엔입니다.'},
+      {s:'A', en:'少し安くなりますか？', ko:'조금 싸게 해주실 수 있나요?'},
+    ],
+    vocab:'バッグ 가방 / 少し(すこし) 조금 / 安く(やすく) 싸게' },
+
+  { id:15, lang:'jp', cat:'음식', title:'주문하기',
+    expr:'これをください。', pron:'코레오 쿠다사이', ko:'이것 주세요.',
+    audio:'audio/jp-05.mp3',
+    desc:'식당이나 가게에서 무언가를 달라고 할 때 씁니다. 메뉴판을 가리키며 これ(이것)를 말하면 됩니다.',
+    dialog:[
+      {s:'A', en:'ご注文はお決まりですか？', ko:'주문은 정하셨나요?'},
+      {s:'B', en:'はい、これとこれをください。', ko:'네, 이것과 이것 주세요.'},
+      {s:'A', en:'かしこまりました。', ko:'알겠습니다.'},
+    ],
+    vocab:'ご注文(ごちゅうもん) 주문 / かしこまりました 알겠습니다(정중)' },
+
+  // ── 중국어 ──
+  { id:16, lang:'cn', cat:'인사', title:'안녕하세요',
+    expr:'你好！', pron:'nǐ hǎo (니 하오)', ko:'안녕하세요!',
+    audio:'audio/cn-01.mp3',
+    desc:'중국어의 가장 기본적인 인사 표현입니다. 더 정중하게는 您好(nín hǎo)를 씁니다. 아침에는 早上好(zǎoshang hǎo)를 사용합니다.',
+    dialog:[
+      {s:'A', en:'你好！你是新来的同学吗？', ko:'안녕하세요! 새로 온 학생이에요?'},
+      {s:'B', en:'你好！是的，我叫李明。', ko:'안녕하세요! 네, 저는 리밍이라고 해요.'},
+    ],
+    vocab:'新来的(xīn lái de) 새로 온 / 同学(tóngxué) 학우, 동급생' },
+
+  { id:17, lang:'cn', cat:'감사', title:'감사 표현',
+    expr:'谢谢你。', pron:'xiè xiè nǐ (시에 시에 니)', ko:'감사합니다.',
+    audio:'audio/cn-02.mp3',
+    desc:'중국어로 감사를 표현하는 기본 표현입니다. 더 정중하게는 非常感谢(fēicháng gǎnxiè, 대단히 감사합니다)를 씁니다.',
+    dialog:[
+      {s:'A', en:'这是送给你的礼物。', ko:'이건 당신에게 드리는 선물이에요.'},
+      {s:'B', en:'谢谢你，太好了！', ko:'감사합니다, 너무 좋아요!'},
+    ],
+    vocab:'礼物(lǐwù) 선물 / 太好了(tài hǎo le) 너무 좋아요' },
+
+  { id:18, lang:'cn', cat:'쇼핑', title:'가격 물어보기',
+    expr:'多少钱？', pron:'duō shǎo qián (뚜어 사오 치엔)', ko:'얼마예요?',
+    audio:'audio/cn-03.mp3',
+    desc:'중국어로 가격을 물어볼 때 쓰는 표현입니다. 이것은 얼마예요?는 这个多少钱(zhège duōshǎo qián)이라고 합니다.',
+    dialog:[
+      {s:'A', en:'这件衣服多少钱？', ko:'이 옷 얼마예요?'},
+      {s:'B', en:'这件是200块。', ko:'이건 200위안이에요.'},
+      {s:'A', en:'能便宜一点吗？', ko:'조금 싸게 해주실 수 있나요?'},
+    ],
+    vocab:'衣服(yīfu) 옷 / 块(kuài) 위안(화폐단위) / 便宜(piányí) 저렴하다' },
+
+  { id:19, lang:'cn', cat:'음식', title:'주문하기',
+    expr:'我要这个。', pron:'wǒ yào zhè gè (워 야오 저 거)', ko:'이것 주세요.',
+    audio:'audio/cn-04.mp3',
+    desc:'식당에서 주문할 때 쓰는 표현입니다. 我要(wǒ yào)는 "저는 ~를 원합니다"라는 뜻으로 주문이나 요청 시 폭넓게 쓰입니다.',
+    dialog:[
+      {s:'A', en:'您要点什么？', ko:'무엇을 주문하시겠어요?'},
+      {s:'B', en:'我要这个和这个，谢谢。', ko:'이것과 이것 주세요, 감사합니다.'},
+      {s:'A', en:'好的，请稍等。', ko:'알겠습니다, 잠시만 기다려 주세요.'},
+    ],
+    vocab:'点(diǎn) 주문하다 / 稍等(shāo děng) 잠깐 기다리다' },
+];
+const DL_PAGE_SIZE = 12;
+let dlFilter = {lang:'', cat:'', q:''};
+let dlPage = 1;
+let dlFiltered = [...DL_DATA];
+
+function initDailyCards() {
+  dlFiltered = [...DL_DATA];
+  dlPage = 1;
+  renderDlGrid();
+}
+
+function selectDlLang(btn) {
+  document.querySelectorAll('[data-dlang]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  dlFilter.lang = btn.dataset.dlang;
+  dlPage = 1;
+  applyDlFilter();
+}
+function selectDlCat(btn) {
+  document.querySelectorAll('[data-dcat]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  dlFilter.cat = btn.dataset.dcat;
+  dlPage = 1;
+  applyDlFilter();
+}
+/* ── 자동완성 드롭다운 ── */
+let dlDropdownIndex = -1;
+function onDlInput(val) {
+  const q = val.trim().toLowerCase();
+  if (!q) { closeDlDropdown(); applyDlFilter(); return; }
+  // 현재 언어/카테고리 필터 내에서 매칭
+  const pool = DL_DATA.filter(d => {
+    if (dlFilter.lang && d.lang !== dlFilter.lang) return false;
+    if (dlFilter.cat  && d.cat  !== dlFilter.cat)  return false;
+    return true;
+  });
+  // 제목, 표현, 한글뜻, 발음 매칭
+  const matches = pool.filter(d =>
+    d.title.toLowerCase().includes(q) ||
+    d.expr.toLowerCase().includes(q) ||
+    d.ko.toLowerCase().includes(q) ||
+    d.pron.toLowerCase().includes(q)
+  ).slice(0, 8);
+
+  const dd = document.getElementById('dlDropdown');
+  if (!matches.length) { closeDlDropdown(); applyDlFilter(); return; }
+  dlDropdownIndex = -1;
+  dd.innerHTML = matches.map((d, i) => {
+    const li = LANG_INFO[d.lang];
+    const hl = s => s.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+    return `<div class="dl-dd-item" data-id="${d.id}" onmousedown="pickDlDropdown(${d.id})">
+      <span class="dl-dd-flag">${li.flag}</span>
+      <div class="dl-dd-info">
+        <div class="dl-dd-title">${hl(d.title)}</div>
+        <div class="dl-dd-expr">${hl(d.expr)} <span class="dl-dd-ko">${hl(d.ko)}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  dd.style.display = 'block';
+  // 실시간 필터도 적용
+  applyDlFilter();
+}
+function onDlKeydown(e) {
+  const dd = document.getElementById('dlDropdown');
+  const items = dd.querySelectorAll('.dl-dd-item');
+  if (!items.length || dd.style.display === 'none') return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    dlDropdownIndex = Math.min(dlDropdownIndex + 1, items.length - 1);
+    items.forEach((el,i) => el.classList.toggle('active', i === dlDropdownIndex));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    dlDropdownIndex = Math.max(dlDropdownIndex - 1, -1);
+    items.forEach((el,i) => el.classList.toggle('active', i === dlDropdownIndex));
+  } else if (e.key === 'Enter') {
+    if (dlDropdownIndex >= 0) {
+      const id = +items[dlDropdownIndex].dataset.id;
+      pickDlDropdown(id);
+    } else {
+      applyDlFilter(); closeDlDropdown();
+    }
+  } else if (e.key === 'Escape') {
+    closeDlDropdown();
+  }
+}
+function pickDlDropdown(id) {
+  const d = DL_DATA.find(x => x.id === id);
+  if (!d) return;
+  document.getElementById('dlSearchInput').value = d.title;
+  closeDlDropdown();
+  applyDlFilter();
+  // 해당 카드 열기
+  setTimeout(() => openDlCard(id), 100);
+}
+function closeDlDropdown() {
+  document.getElementById('dlDropdown').style.display = 'none';
+  dlDropdownIndex = -1;
+}
+// 외부 클릭 시 드롭다운 닫기
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dl-search-wrap')) closeDlDropdown();
+});
+
+function applyDlFilter() {
+  dlFilter.q = (document.getElementById('dlSearchInput')?.value||'').trim().toLowerCase();
+  dlFiltered = DL_DATA.filter(d => {
+    if (dlFilter.lang && d.lang !== dlFilter.lang) return false;
+    if (dlFilter.cat  && d.cat  !== dlFilter.cat)  return false;
+    if (dlFilter.q && !d.title.toLowerCase().includes(dlFilter.q) && !d.expr.toLowerCase().includes(dlFilter.q) && !d.ko.toLowerCase().includes(dlFilter.q) && !d.pron.toLowerCase().includes(dlFilter.q)) return false;
+    return true;
+  });
+  dlPage = 1;
+  renderDlGrid();
+}
+function resetDlFilter() {
+  document.getElementById('dlSearchInput').value = '';
+  document.querySelectorAll('[data-dlang]').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-dlang=""]').classList.add('active');
+  document.querySelectorAll('[data-dcat]').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-dcat=""]').classList.add('active');
+  dlFilter = {lang:'', cat:'', q:''};
+  dlFiltered = [...DL_DATA];
+  dlPage = 1;
+  renderDlGrid();
+}
+function interleaveDl(arr) {
+  // 언어 필터가 없을 때 영→일→중 순으로 번갈아 배치
+  const en = arr.filter(d=>d.lang==='en');
+  const jp = arr.filter(d=>d.lang==='jp');
+  const cn = arr.filter(d=>d.lang==='cn');
+  const result = [];
+  const max = Math.max(en.length, jp.length, cn.length);
+  for (let i=0; i<max; i++) {
+    if (en[i]) result.push(en[i]);
+    if (jp[i]) result.push(jp[i]);
+    if (cn[i]) result.push(cn[i]);
+  }
+  return result;
+}
+function renderDlGrid() {
+  // 전체 표시 시 언어별 교차 배치
+  const displayData = dlFilter.lang ? dlFiltered : interleaveDl(dlFiltered);
+  document.getElementById('dlCount').textContent = displayData.length;
+  const start = (dlPage-1)*DL_PAGE_SIZE;
+  const page = displayData.slice(start, start+DL_PAGE_SIZE);
+  const grid = document.getElementById('dlGrid');
+  if (!page.length) {
+    grid.innerHTML = '<div class="gb-empty" style="grid-column:1/-1;">검색 결과가 없습니다.</div>';
+    document.getElementById('dlPagination').innerHTML = '';
+    return;
+  }
+  grid.innerHTML = page.map(d => {
+    const li = LANG_INFO[d.lang];
+    return `
+    <div class="dl-card" onclick="openDlCard(${d.id})">
+      <div class="dl-card-header" style="background:${li.color}">
+        <div class="dl-card-header-top">
+          <span class="dl-card-flag">${li.flag}</span>
+          <span class="dl-card-cat-badge">${d.cat}</span>
+        </div>
+        <div class="dl-card-header-label">${li.label} <strong>${li.name}</strong></div>
+      </div>
+      <div class="dl-card-body">
+        <div class="dl-card-title">${d.title}</div>
+        <div class="dl-card-expr">${d.expr}</div>
+        <div class="dl-card-pron">[${d.pron}]</div>
+        <div class="dl-card-ko-box">${d.ko}</div>
+      </div>
+      <div class="dl-card-footer">
+        <span class="dl-card-audio-icon">🔊</span>
+        <span class="dl-card-more">자세히 보기 →</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // 페이지네이션
+  const total = displayData.length;
+  const totalPages = Math.ceil(total/DL_PAGE_SIZE);
+  let pg = '';
+  if (totalPages > 1) {
+    if (dlPage>1) pg+=`<button class="page-btn" onclick="dlGoPage(${dlPage-1})">‹</button>`;
+    for (let i=1;i<=totalPages;i++) {
+      if(i===dlPage) pg+=`<button class="page-btn active">${i}</button>`;
+      else if(i<=2||i>totalPages-1||Math.abs(i-dlPage)<=1) pg+=`<button class="page-btn" onclick="dlGoPage(${i})">${i}</button>`;
+      else if(Math.abs(i-dlPage)===2) pg+=`<span class="page-ellipsis">…</span>`;
+    }
+    if(dlPage<totalPages) pg+=`<button class="page-btn" onclick="dlGoPage(${dlPage+1})">›</button>`;
+  }
+  document.getElementById('dlPagination').innerHTML = pg;
+}
+function dlGoPage(p){dlPage=p;renderDlGrid();}
+
+// 카드 상세 모달
+let dlCurrentCard = null;
+function openDlCard(id) {
+  const d = DL_DATA.find(x=>x.id===id);
+  if(!d) return;
+  dlCurrentCard = d;
+  const li = LANG_INFO[d.lang];
+  // 오디오 플레이어
+  const audioEl = document.getElementById('dlModalAudio');
+  audioEl.src = d.audio || '';
+  audioEl.load();
+  // 헤더
+  document.getElementById('dlModalHeaderBg').style.background = li.color;
+  document.getElementById('dlModalLangLabel').innerHTML = `${li.label} <strong>${li.name}</strong>`;
+  // 표현
+  document.getElementById('dlModalExpr').textContent = d.expr;
+  document.getElementById('dlModalPron').textContent = d.pron;
+  document.getElementById('dlModalKo').textContent = d.ko;
+  // 설명
+  document.getElementById('dlModalDesc').textContent = d.desc || '';
+  // 대화문
+  const dialogEl = document.getElementById('dlModalDialog');
+  if (d.dialog && d.dialog.length) {
+    dialogEl.innerHTML = d.dialog.map(line => `
+      <div class="dl-dialog-line">
+        <span class="dl-dialog-speaker dl-spk-${line.s.toLowerCase()}">${line.s}</span>
+        <div class="dl-dialog-text">
+          <div class="dl-dialog-en">${line.en}</div>
+          <div class="dl-dialog-ko">${line.ko}</div>
+        </div>
+      </div>`).join('');
+    document.getElementById('dlModalDialogWrap').style.display = '';
+  } else {
+    document.getElementById('dlModalDialogWrap').style.display = 'none';
+  }
+  // 어휘
+  const vocabEl = document.getElementById('dlModalVocab');
+  if (d.vocab) {
+    vocabEl.textContent = d.vocab;
+    document.getElementById('dlModalVocabWrap').style.display = '';
+  } else {
+    document.getElementById('dlModalVocabWrap').style.display = 'none';
+  }
+  document.getElementById('dlCardModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeDlCard() {
+  document.getElementById('dlModalAudio').pause();
+  document.getElementById('dlCardModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+/* ===== 어휘출제마법사 ===== */
+const VOCA_PAGE_SIZE = 10;
+let vocaFilter = {cat:'', q:''};
+let vocaSort = 'date';
+let vocaPage = 1;
+let vocaFiltered = [];
+
+const VOCA_BOOKS = BOOKS.filter(b => b.type !== '교과서');
+
+function initVocaList() {
+  vocaFiltered = [...VOCA_BOOKS];
+  applyVocaSortAndRender();
+}
+
+function toggleVocaFilter() {
+  const p = document.getElementById('vocaFilterPanel');
+  const l = document.getElementById('vocaFilterLabel');
+  const open = p.style.display === 'none';
+  p.style.display = open ? '' : 'none';
+  l.textContent = open ? '필터 닫기' : '필터 열기';
+  document.getElementById('vocaFilterToggle').classList.toggle('active', open);
+}
+
+function selectVocaCat(btn) {
+  document.querySelectorAll('[data-vcat]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  vocaFilter.cat = btn.dataset.vcat;
+}
+
+function setVocaSort(btn) {
+  document.querySelectorAll('[data-vsort]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  vocaSort = btn.dataset.vsort;
+  applyVocaSortAndRender();
+}
+
+function applyVocaFilter() {
+  const q = (document.getElementById('vocaSearchInput')?.value || '').trim().toLowerCase();
+  const q2 = (document.getElementById('vocaInlineSearch')?.value || '').trim().toLowerCase();
+  const combined = q || q2;
+  vocaFiltered = VOCA_BOOKS.filter(b => {
+    if (vocaFilter.cat && b.cat !== vocaFilter.cat) return false;
+    if (combined && !b.title.toLowerCase().includes(combined) && !(b.desc||'').toLowerCase().includes(combined)) return false;
+    return true;
+  });
+  vocaPage = 1;
+  applyVocaSortAndRender();
+}
+
+function applyVocaSortAndRender() {
+  if (vocaSort === 'date') vocaFiltered.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  else if (vocaSort === 'alpha') vocaFiltered.sort((a,b) => a.title.localeCompare(b.title));
+  else vocaFiltered.sort((a,b) => (b.badge==='best'?1:0)-(a.badge==='best'?1:0));
+  renderVocaList();
+}
+
+function resetVocaFilter() {
+  document.getElementById('vocaSearchInput').value = '';
+  document.getElementById('vocaInlineSearch').value = '';
+  document.querySelectorAll('[data-vcat]').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-vcat=""]').classList.add('active');
+  vocaFilter = {cat:'', q:''};
+  vocaFiltered = [...VOCA_BOOKS];
+  vocaPage = 1;
+  applyVocaSortAndRender();
+}
+
+function renderVocaList() {
+  document.getElementById('vocaCount').textContent = vocaFiltered.length.toLocaleString();
+  const start = (vocaPage-1)*VOCA_PAGE_SIZE;
+  const page = vocaFiltered.slice(start, start+VOCA_PAGE_SIZE);
+  const list = document.getElementById('vocaList');
+  if (!page.length) { list.innerHTML='<div class="gb-empty">검색 결과가 없습니다.</div>'; document.getElementById('vocaPagination').innerHTML=''; return; }
+
+  list.innerHTML = page.map(b => `
+    <div class="voca-row">
+      <img class="voca-cover" src="${b.img}" alt="${b.title}" onerror="this.src='images/no-image.png'">
+      <div class="voca-info">
+        <div class="voca-title">${b.title}</div>
+        <div class="voca-desc">${b.desc||''}</div>
+        <div class="voca-tags">
+          <span class="voca-tag">${b.author||'YBM 편집부'}</span>
+          <span class="voca-tag">${b.date||''}</span>
+        </div>
+      </div>
+      <button class="voca-start-btn" onclick="openVocaWizard(${b.id})">✏ 어휘출제 마법사 시작하기</button>
+    </div>
+  `).join('');
+
+  // 페이지네이션
+  const total = vocaFiltered.length;
+  const totalPages = Math.ceil(total/VOCA_PAGE_SIZE);
+  let pg = '';
+  if (totalPages > 1) {
+    if (vocaPage > 1) pg += `<button class="page-btn" onclick="vocaGoPage(${vocaPage-1})">‹</button>`;
+    for (let i=1;i<=totalPages;i++) {
+      if(i===vocaPage) pg+=`<button class="page-btn active">${i}</button>`;
+      else if(i<=3||i>totalPages-2||Math.abs(i-vocaPage)<=1) pg+=`<button class="page-btn" onclick="vocaGoPage(${i})">${i}</button>`;
+      else if(Math.abs(i-vocaPage)===2) pg+=`<span class="page-ellipsis">…</span>`;
+    }
+    if (vocaPage<totalPages) pg+=`<button class="page-btn" onclick="vocaGoPage(${vocaPage+1})">›</button>`;
+  }
+  document.getElementById('vocaPagination').innerHTML = pg;
+}
+
+function vocaGoPage(p) { vocaPage=p; renderVocaList(); }
+
+/* ── 위저드 ── */
+let vwizSelectedBooks = [null, null, null]; // 최대 3권
+let vwizCurrentSlot = 0;
+let vwizStep = 1;
+let vwizType = 'online';
+
+function openVocaWizard(bookId) {
+  const book = BOOKS.find(b => b.id === bookId);
+  if (!book) return;
+  vwizSelectedBooks = [book, null, null];
+  vwizStep = 1;
+  renderVwizSlots();
+  updateVwizStep();
+  document.getElementById('vocaWizardModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVocaWizard() {
+  document.getElementById('vocaWizardModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function renderVwizSlots() {
+  vwizSelectedBooks.forEach((book, i) => {
+    const slot = document.getElementById('vwizSlot' + i);
+    if (book) {
+      slot.classList.add('filled');
+      slot.innerHTML = `
+        <button class="vwiz-slot-remove" onclick="event.stopPropagation();removeVwizBook(${i})">✕</button>
+        <img src="${book.img}" alt="${book.title}" onerror="this.src='images/no-image.png'" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+        <div class="vwiz-slot-name">${book.title.length>10?book.title.slice(0,10)+'…':book.title}</div>
+      `;
+      slot.onclick = null;
+    } else {
+      slot.classList.remove('filled');
+      slot.innerHTML = `
+        <span class="vwiz-slot-plus">＋</span>
+        <span class="vwiz-slot-label">교재를 추가하시려면<br>클릭하세요.</span>
+      `;
+      slot.onclick = () => openVocaBookPicker(i);
+    }
+  });
+  // STEP 바 교재명 업데이트
+  const names = vwizSelectedBooks.filter(Boolean).map(b=>b.title).join(', ');
+  document.getElementById('vwizStepBook').textContent = names ? '• ' + (names.length>20?names.slice(0,20)+'…':names) : '';
+}
+
+function removeVwizBook(i) {
+  vwizSelectedBooks[i] = null;
+  // compact
+  const filled = vwizSelectedBooks.filter(Boolean);
+  vwizSelectedBooks = [...filled, ...Array(3-filled.length).fill(null)];
+  renderVwizSlots();
+}
+
+function updateVwizStep() {
+  document.getElementById('vwizStepNum').textContent = vwizStep;
+  document.getElementById('vwizStepBadge').textContent = vwizStep;
+  const labels = ['교재 선택','단원 선택','옵션 설정'];
+  document.getElementById('vwizStepLabel').textContent = labels[vwizStep-1];
+  [1,2,3].forEach(s => {
+    document.getElementById('vwizStep'+s).style.display = s===vwizStep ? '' : 'none';
+  });
+  if (vwizStep === 2) renderVwizUnits();
+}
+
+function vwizNext() {
+  if (vwizStep === 1) {
+    const selected = vwizSelectedBooks.filter(Boolean);
+    if (!selected.length) { Toast.show('교재를 최소 1권 선택해주세요.','error'); return; }
+  }
+  if (vwizStep < 3) { vwizStep++; updateVwizStep(); }
+}
+function vwizPrev() { if (vwizStep > 1) { vwizStep--; updateVwizStep(); } }
+
+function selectVwizType(btn, type) {
+  document.querySelectorAll('.vwiz-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  vwizType = type;
+}
+
+const VWIZ_UNITS = ['Unit 1','Unit 2','Unit 3','Unit 4','Unit 5','Unit 6','Unit 7','Unit 8','Unit 9','Unit 10'];
+let vwizSelectedUnits = new Set();
+
+function renderVwizUnits() {
+  vwizSelectedUnits = new Set(VWIZ_UNITS.map((_,i)=>i)); // 전체 선택 기본
+  const book = vwizSelectedBooks.filter(Boolean)[0];
+  const html = `
+    <div class="vwiz-unit-header">
+      <label><input type="checkbox" id="vwizAllUnits" checked onchange="toggleAllUnits(this)"> 전체 선택</label>
+      <span class="vwiz-unit-count">${VWIZ_UNITS.length}개 단원</span>
+    </div>
+    <div class="vwiz-unit-grid">
+      ${VWIZ_UNITS.map((u,i) => `
+        <label class="vwiz-unit-item">
+          <input type="checkbox" value="${i}" checked onchange="toggleUnit(${i})"> ${u}
+        </label>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('vwizUnitList').innerHTML = html;
+}
+
+function toggleAllUnits(cb) {
+  document.querySelectorAll('#vwizUnitList input[type=checkbox][value]').forEach(c => {
+    c.checked = cb.checked;
+    cb.checked ? vwizSelectedUnits.add(+c.value) : vwizSelectedUnits.delete(+c.value);
+  });
+}
+function toggleUnit(i) {
+  const cb = document.querySelector(`#vwizUnitList input[value="${i}"]`);
+  cb.checked ? vwizSelectedUnits.add(i) : vwizSelectedUnits.delete(i);
+}
+
+function vwizCreate() {
+  Toast.show('시험지가 생성되었습니다! (데모)', 'success');
+  closeVocaWizard();
+}
+
+function selectPillInGroup(btn) {
+  const group = btn.closest('.gb-level-pills');
+  group.querySelectorAll('.gb-level-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ── 교재 피커 ── */
+function openVocaBookPicker(slotIdx) {
+  vwizCurrentSlot = slotIdx;
+  document.getElementById('vbpSearch').value = '';
+  renderVbpList();
+  document.getElementById('vocaBookPickerModal').style.display = 'flex';
+}
+function closeVocaBookPicker() {
+  document.getElementById('vocaBookPickerModal').style.display = 'none';
+}
+function renderVbpList() {
+  const q = document.getElementById('vbpSearch').value.trim().toLowerCase();
+  const list = BOOKS.filter(b => !q || b.title.toLowerCase().includes(q)).slice(0, 30);
+  document.getElementById('vbpList').innerHTML = list.map(b => `
+    <div class="vbp-item" onclick="selectVbpBook(${b.id})">
+      <img class="vbp-cover" src="${b.img}" alt="${b.title}" onerror="this.src='images/no-image.png'">
+      <div>
+        <div class="vbp-title">${b.title}</div>
+        <div class="vbp-sub">${b.author||'YBM 편집부'} · ${b.date||''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function selectVbpBook(id) {
+  const book = BOOKS.find(b=>b.id===id);
+  if (!book) return;
+  // 이미 선택된 책인지 확인
+  if (vwizSelectedBooks.some(b=>b&&b.id===id)) {
+    Toast.show('이미 선택된 교재입니다.','error'); return;
+  }
+  vwizSelectedBooks[vwizCurrentSlot] = book;
+  renderVwizSlots();
+  closeVocaBookPicker();
+}
+
+/* ===== 문법예문뱅크 ===== */
+const GB_SUBCATS = {
+  '문장형식':['1형식 (완전자동사)','2형식 (불완전자동사)','3형식 (완전타동사)','4형식 (수여동사)','5형식 (불완전타동사)'],
+  '시제':['단순현재','단순과거','단순미래','현재진행','과거진행','현재완료','과거완료','미래완료'],
+  '조동사':['can/could','may/might','must/have to','will/would','should/ought to','need/dare'],
+  '수동태':['단순수동태','조동사 수동태','완료 수동태','by 이외의 전치사'],
+  '가정법':['가정법 과거','가정법 과거완료','혼합가정법','as if/though ~ 가정법 동사','I wish 가정법','without/but for 가정법'],
+  '부정사':['명사적 용법','형용사적 용법','부사적 용법','원형부정사','독립부정사','to부정사 관용표현'],
+  '동명사':['주어/보어 역할','목적어 역할','동명사 관용표현','동명사 vs to부정사'],
+  '분사':['현재분사','과거분사','분사구문 (기본)','분사구문 (완료)','독립분사구문'],
+  '관계사':['관계대명사 who/which/that','관계대명사 what','관계부사 when/where/why/how','복합관계사','계속적 용법'],
+  '접속사':['등위접속사','종속접속사 (시간)','종속접속사 (이유/결과)','종속접속사 (양보)','상관접속사'],
+  '비교':['원급 비교','비교급','최상급','비교 관용표현'],
+  '특수구문':['강조구문 (It~that)','도치','생략','삽입','동격'],
+};
+const GB_DATA = [
+  // 가정법 - as if/though
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'하',en:'She acted <b>as if</b> nothing <b>had happened</b>.',ko:'그녀는 아무 일도 없었던 것처럼 행동했다.'},
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'하',en:'It looks <b>as if</b> it <b>might snow</b>.',ko:'눈이 올 것 같다.'},
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'하',en:'He talks <b>as if</b> he <b>were</b> rich.',ko:'그는 마치 부자인 것처럼 말한다.'},
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'하',en:'He acts <b>as if</b> he <b>knew</b> you.',ko:'그는 마치 당신을 아는 것처럼 행동한다.'},
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'중',en:'We act <b>as though</b> comfort and luxury <b>were</b> the chief requirements of life.',ko:'우리는 편안함과 사치가 인생의 주요 요건인 것처럼 행동한다.'},
+  {cat1:'가정법',cat2:'as if/though ~ 가정법 동사',lv:'중',en:'She smiled <b>as if</b> she <b>had known</b> the secret all along.',ko:'그녀는 마치 그 비밀을 줄곧 알고 있었던 것처럼 미소 지었다.'},
+  {cat1:'가정법',cat2:'가정법 과거',lv:'중',en:'If I <b>were</b> you, I <b>would</b> accept the offer.',ko:'내가 너라면, 그 제안을 받아들일 텐데.'},
+  {cat1:'가정법',cat2:'가정법 과거',lv:'중',en:'If she <b>had</b> more time, she <b>would travel</b> abroad.',ko:'그녀에게 시간이 더 있다면, 해외여행을 할 텐데.'},
+  {cat1:'가정법',cat2:'가정법 과거완료',lv:'상',en:'If he <b>had studied</b> harder, he <b>would have passed</b> the exam.',ko:'그가 더 열심히 공부했더라면, 시험에 합격했을 텐데.'},
+  {cat1:'가정법',cat2:'가정법 과거완료',lv:'상',en:'If it <b>had not rained</b>, we <b>would have gone</b> on a picnic.',ko:'비가 오지 않았더라면, 우리는 소풍을 갔을 텐데.'},
+  // 시제
+  {cat1:'시제',cat2:'현재완료',lv:'중',en:'I <b>have lived</b> in Seoul for ten years.',ko:'나는 서울에서 10년간 살았다.'},
+  {cat1:'시제',cat2:'현재완료',lv:'중',en:'She <b>has just finished</b> her homework.',ko:'그녀는 방금 숙제를 끝마쳤다.'},
+  {cat1:'시제',cat2:'과거완료',lv:'상',en:'By the time he arrived, she <b>had already left</b>.',ko:'그가 도착했을 때, 그녀는 이미 떠나고 없었다.'},
+  {cat1:'시제',cat2:'단순과거',lv:'하',en:'She <b>called</b> me last night.',ko:'그녀가 어젯밤에 전화했다.'},
+  {cat1:'시제',cat2:'단순현재',lv:'하',en:'The earth <b>revolves</b> around the sun.',ko:'지구는 태양 주위를 돈다.'},
+  {cat1:'시제',cat2:'현재진행',lv:'하',en:'She <b>is studying</b> English right now.',ko:'그녀는 지금 영어를 공부하는 중이다.'},
+  // 조동사
+  {cat1:'조동사',cat2:'can/could',lv:'하',en:'She <b>can</b> speak three languages.',ko:'그녀는 세 가지 언어를 할 수 있다.'},
+  {cat1:'조동사',cat2:'must/have to',lv:'중',en:'You <b>must</b> wear a seatbelt while driving.',ko:'운전 중에는 안전벨트를 착용해야 한다.'},
+  {cat1:'조동사',cat2:'should/ought to',lv:'중',en:'You <b>should</b> apologize to her.',ko:'너는 그녀에게 사과해야 한다.'},
+  // 수동태
+  {cat1:'수동태',cat2:'단순수동태',lv:'하',en:'The window <b>was broken</b> by the ball.',ko:'창문이 공에 의해 깨졌다.'},
+  {cat1:'수동태',cat2:'조동사 수동태',lv:'중',en:'The project <b>must be completed</b> by Friday.',ko:'그 프로젝트는 금요일까지 완료되어야 한다.'},
+  {cat1:'수동태',cat2:'완료 수동태',lv:'상',en:'The report <b>has been submitted</b> already.',ko:'보고서는 이미 제출되었다.'},
+  // 부정사
+  {cat1:'부정사',cat2:'명사적 용법',lv:'하',en:'She wants <b>to become</b> a doctor.',ko:'그녀는 의사가 되고 싶어 한다.'},
+  {cat1:'부정사',cat2:'부사적 용법',lv:'중',en:'He studied hard <b>to pass</b> the exam.',ko:'그는 시험에 합격하기 위해 열심히 공부했다.'},
+  {cat1:'부정사',cat2:'원형부정사',lv:'중',en:'I heard her <b>sing</b> a beautiful song.',ko:'나는 그녀가 아름다운 노래를 부르는 것을 들었다.'},
+  // 동명사
+  {cat1:'동명사',cat2:'주어/보어 역할',lv:'하',en:'<b>Reading</b> books is a good habit.',ko:'독서는 좋은 습관이다.'},
+  {cat1:'동명사',cat2:'동명사 vs to부정사',lv:'중',en:'He stopped <b>smoking</b> for his health.',ko:'그는 건강을 위해 담배를 끊었다.'},
+  // 분사
+  {cat1:'분사',cat2:'현재분사',lv:'하',en:'The girl <b>playing</b> the piano is my sister.',ko:'피아노를 치고 있는 소녀는 내 여동생이다.'},
+  {cat1:'분사',cat2:'분사구문 (기본)',lv:'중',en:'<b>Walking</b> along the street, I met an old friend.',ko:'길을 걷다가, 나는 오랜 친구를 만났다.'},
+  // 관계사
+  {cat1:'관계사',cat2:'관계대명사 who/which/that',lv:'하',en:'The man <b>who</b> called you is my uncle.',ko:'너에게 전화한 남자는 내 삼촌이다.'},
+  {cat1:'관계사',cat2:'관계대명사 what',lv:'중',en:'Tell me <b>what</b> you want.',ko:'네가 원하는 것을 말해봐.'},
+  {cat1:'관계사',cat2:'관계부사 when/where/why/how',lv:'중',en:'I remember the day <b>when</b> we first met.',ko:'나는 우리가 처음 만난 날을 기억한다.'},
+  // 접속사
+  {cat1:'접속사',cat2:'상관접속사',lv:'중',en:'<b>Not only</b> did she win the prize, <b>but</b> she also broke a record.',ko:'그녀는 상을 받았을 뿐만 아니라 기록도 깼다.'},
+  {cat1:'접속사',cat2:'종속접속사 (양보)',lv:'중',en:'<b>Although</b> he was tired, he kept working.',ko:'피곤했지만, 그는 계속 일했다.'},
+  // 비교
+  {cat1:'비교',cat2:'비교급',lv:'하',en:'She is <b>taller than</b> her brother.',ko:'그녀는 오빠보다 키가 크다.'},
+  {cat1:'비교',cat2:'최상급',lv:'하',en:'This is <b>the most</b> beautiful park in the city.',ko:'이곳은 도시에서 가장 아름다운 공원이다.'},
+  // 특수구문
+  {cat1:'특수구문',cat2:'강조구문 (It~that)',lv:'상',en:'<b>It</b> was Tom <b>that</b> broke the window.',ko:'창문을 깬 것은 바로 Tom이었다.'},
+  {cat1:'특수구문',cat2:'도치',lv:'상',en:'<b>Never</b> have I seen such a beautiful sunset.',ko:'나는 그런 아름다운 일몰을 본 적이 없다.'},
+  // 문장형식
+  {cat1:'문장형식',cat2:'1형식 (완전자동사)',lv:'하',en:'Birds <b>sing</b>.',ko:'새들이 노래한다.'},
+  {cat1:'문장형식',cat2:'5형식 (불완전타동사)',lv:'중',en:'She made him <b>happy</b>.',ko:'그녀는 그를 행복하게 만들었다.'},
+];
+const GB_PAGE_SIZE = 15;
+let gbFilter = {cat1:'', cat2:'', lv:'', q:'', sort:'level'};
+let gbPage = 1;
+let gbFilteredData = [...GB_DATA];
+
+function toggleGbFilter() {
+  const panel = document.getElementById('gbFilterPanel');
+  const label = document.getElementById('gbFilterLabel');
+  const btn = document.getElementById('gbFilterToggle');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? '' : 'none';
+  label.textContent = open ? '필터 닫기' : '필터 열기';
+  btn.classList.toggle('active', open);
+}
+
+function updateGbSubcat() {
+  const cat1 = document.getElementById('gbCat1').value;
+  const sel = document.getElementById('gbCat2');
+  sel.innerHTML = '<option value="">소분류를 선택하세요.</option>';
+  if (cat1 && GB_SUBCATS[cat1]) {
+    GB_SUBCATS[cat1].forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+  }
+}
+
+function selectGbLevel(btn) {
+  document.querySelectorAll('.gb-level-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  gbFilter.lv = btn.dataset.lv;
+}
+
+function applyGbFilter() {
+  gbFilter.cat1 = document.getElementById('gbCat1').value;
+  gbFilter.cat2 = document.getElementById('gbCat2').value;
+  gbFilter.q = document.getElementById('gbSearchInput').value.trim().toLowerCase();
+  gbPage = 1;
+  gbFilteredData = GB_DATA.filter(d => {
+    if (gbFilter.cat1 && d.cat1 !== gbFilter.cat1) return false;
+    if (gbFilter.cat2 && d.cat2 !== gbFilter.cat2) return false;
+    if (gbFilter.lv && d.lv !== gbFilter.lv) return false;
+    if (gbFilter.q) {
+      const plain = d.en.replace(/<[^>]+>/g,'').toLowerCase();
+      if (!plain.includes(gbFilter.q) && !d.ko.toLowerCase().includes(gbFilter.q) && !d.cat2.toLowerCase().includes(gbFilter.q)) return false;
+    }
+    return true;
+  });
+  sortGbData();
+  renderGbList();
+}
+
+function setGbSort(btn) {
+  document.querySelectorAll('.gb-sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  gbFilter.sort = btn.dataset.sort;
+  sortGbData();
+  renderGbList();
+}
+
+const LV_ORDER = {'하':0,'중':1,'상':2};
+function sortGbData() {
+  if (gbFilter.sort === 'level') {
+    gbFilteredData.sort((a,b) => (LV_ORDER[a.lv]||0) - (LV_ORDER[b.lv]||0) || a.cat2.localeCompare(b.cat2));
+  } else {
+    gbFilteredData.sort((a,b) => a.en.replace(/<[^>]+>/g,'').localeCompare(b.en.replace(/<[^>]+>/g,'')));
+  }
+}
+
+const LV_COLOR = {'하':'#3a6ea5','중':'#e6a817','상':'#d94f3d'};
+const LV_LABEL = {'하':'하','중':'중','상':'상'};
+
+function renderGbList() {
+  const showTrans = document.getElementById('gbShowTrans').checked;
+  const total = gbFilteredData.length;
+  document.getElementById('gbCount').textContent = total.toLocaleString();
+
+  const start = (gbPage-1)*GB_PAGE_SIZE;
+  const page = gbFilteredData.slice(start, start+GB_PAGE_SIZE);
+  const list = document.getElementById('gbList');
+
+  if (!page.length) {
+    list.innerHTML = '<div class="gb-empty">검색 결과가 없습니다.</div>';
+    document.getElementById('gbPagination').innerHTML = '';
+    return;
+  }
+
+  // 그룹핑
+  const groups = {};
+  page.forEach(d => {
+    const key = d.cat2;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(d);
+  });
+
+  let html = '';
+  Object.entries(groups).forEach(([cat2, items]) => {
+    const sample = items[0];
+    html += `<div class="gb-group-header">${sample.cat1} | ${cat2}</div>`;
+    items.forEach(d => {
+      html += `<div class="gb-item">
+        <span class="gb-lv-badge" style="background:${LV_COLOR[d.lv]}">${LV_LABEL[d.lv]}</span>
+        <div class="gb-item-body">
+          <div class="gb-item-en">${d.en}</div>
+          ${showTrans ? `<div class="gb-item-ko">${d.ko}</div>` : ''}
+        </div>
+      </div>`;
+    });
+  });
+  list.innerHTML = html;
+
+  // 페이지네이션
+  const totalPages = Math.ceil(total/GB_PAGE_SIZE);
+  let pg = '';
+  if (totalPages > 1) {
+    if (gbPage > 1) pg += `<button class="page-btn" onclick="gbGoPage(${gbPage-1})">‹</button>`;
+    for (let i=1;i<=totalPages;i++) {
+      if (i===gbPage) pg += `<button class="page-btn active">${i}</button>`;
+      else if (i<=3||i>totalPages-2||Math.abs(i-gbPage)<=1) pg += `<button class="page-btn" onclick="gbGoPage(${i})">${i}</button>`;
+      else if (Math.abs(i-gbPage)===2) pg += `<span class="page-ellipsis">…</span>`;
+    }
+    if (gbPage < totalPages) pg += `<button class="page-btn" onclick="gbGoPage(${gbPage+1})">›</button>`;
+  }
+  document.getElementById('gbPagination').innerHTML = pg;
+}
+
+function gbGoPage(p) {
+  gbPage = p;
+  renderGbList();
+  document.getElementById('stab-grammar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetGbFilter() {
+  document.getElementById('gbSearchInput').value = '';
+  document.getElementById('gbCat1').value = '';
+  document.getElementById('gbCat2').innerHTML = '<option value="">소분류를 선택하세요.</option>';
+  document.querySelectorAll('.gb-level-pill').forEach(p => p.classList.remove('active'));
+  document.querySelector('.gb-level-pill[data-lv=""]').classList.add('active');
+  gbFilter = {cat1:'', cat2:'', lv:'', q:'', sort: gbFilter.sort};
+  gbPage = 1;
+  gbFilteredData = [...GB_DATA];
+  sortGbData();
+  renderGbList();
+}
+
+// 초기 렌더
+function initGrammarBank() {
+  gbFilteredData = [...GB_DATA];
+  sortGbData();
+  renderGbList();
+}
+
+function switchStudyTab(btn) {
+  const stab = btn.dataset.stab;
+  document.querySelectorAll('.study-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.study-panel').forEach(p => p.style.display = 'none');
+  btn.classList.add('active');
+  document.getElementById('stab-' + stab).style.display = 'block';
+  if (stab === 'grammar') initGrammarBank();
+  if (stab === 'vocab')   initVocaList();
+  if (stab === 'daily')   initDailyCards();
+  if (stab === 'mp3')     initMp3Tab();
+}
+
+/* ── MP3 바로듣기 ── */
+let mp3Tracks = [], mp3CurIdx = -1, mp3BookId = null, mp3SuggestIdx = -1, mp3SuggestList = [];
+let mp3InitiatedFromDetail = false;
+
+const MP3_TRACK_DB = {};
+
+function fmt(sec) {
+  sec = Math.floor(sec || 0);
+  return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+}
+
+function initMp3Tab() {
+  const bookIdParam = getParam('bookId');
+  if (bookIdParam && !mp3BookId) {
+    mp3InitiatedFromDetail = true;
+    const book = BOOKS.find(b => b.id == bookIdParam);
+    if (book) selectMp3Book(book);
+  }
+}
+
+function onMp3SearchInput(val) {
+  document.getElementById('mp3SearchClear').style.display = val ? 'block' : 'none';
+  renderMp3Suggest(val);
+}
+
+function renderMp3Suggest(q) {
+  const box = document.getElementById('mp3Suggest');
+  if (!q) { box.style.display = 'none'; return; }
+  const lq = q.toLowerCase();
+  mp3SuggestList = BOOKS.filter(b => b.title.toLowerCase().includes(lq)).slice(0, 8);
+  if (!mp3SuggestList.length) { box.style.display = 'none'; return; }
+  const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  box.innerHTML = mp3SuggestList.map((b, i) =>
+    `<div class="mp3-suggest-item" data-idx="${i}" onmousedown="selectMp3Suggest(${i})">
+      ${b.title.replace(re, '<mark>$1</mark>')}
+      <small style="color:var(--muted);margin-left:6px;font-size:11px;">${b.cat==='elementary'?'초등':b.cat==='middle'?'중학':'고등'}</small>
+    </div>`
+  ).join('');
+  box.style.display = 'block';
+  mp3SuggestIdx = -1;
+}
+
+function showMp3Suggest() { if (document.getElementById('mp3BookSearch').value) renderMp3Suggest(document.getElementById('mp3BookSearch').value); }
+function hideMp3Suggest() { document.getElementById('mp3Suggest').style.display = 'none'; }
+
+function selectMp3Suggest(idx) {
+  const book = mp3SuggestList[idx];
+  if (!book) return;
+  document.getElementById('mp3BookSearch').value = book.title;
+  document.getElementById('mp3SearchClear').style.display = 'block';
+  hideMp3Suggest();
+  selectMp3Book(book);
+}
+
+function clearMp3Search() {
+  document.getElementById('mp3BookSearch').value = '';
+  document.getElementById('mp3SearchClear').style.display = 'none';
+  hideMp3Suggest();
+}
+
+function onMp3SearchKey(e) {
+  const items = document.querySelectorAll('.mp3-suggest-item');
+  if (e.key === 'ArrowDown') { mp3SuggestIdx = Math.min(mp3SuggestIdx + 1, items.length - 1); items.forEach((el, i) => el.classList.toggle('focused', i === mp3SuggestIdx)); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { mp3SuggestIdx = Math.max(mp3SuggestIdx - 1, 0); items.forEach((el, i) => el.classList.toggle('focused', i === mp3SuggestIdx)); e.preventDefault(); }
+  else if (e.key === 'Enter' && mp3SuggestIdx >= 0) selectMp3Suggest(mp3SuggestIdx);
+}
+
+function selectMp3Book(book) {
+  mp3BookId = book.id;
+  mp3Tracks = MP3_TRACK_DB[book.id] || generateDemoTracks(book);
+
+  // 모바일: 교재 상세 진입 시 왼쪽 패널 숨김
+  const leftCol = document.getElementById('mp3LeftCol');
+  if (mp3InitiatedFromDetail && window.innerWidth <= 768) {
+    leftCol.classList.add('hidden-mobile');
+  } else {
+    leftCol.classList.remove('hidden-mobile');
+  }
+
+  // 왼쪽 교재 목록 렌더
+  document.getElementById('mp3BookList').innerHTML = `
+    <div class="mp3-book-item active">
+      <div class="mp3-book-thumb">
+        ${book.img ? `<img src="${book.img}" alt="">` : '📚'}
+      </div>
+      <div class="mp3-book-info">
+        <div class="mp3-book-item-title">${book.title}</div>
+        <div class="mp3-book-item-meta">${book.cat==='elementary'?'초등':book.cat==='middle'?'중학':'고등'} · ${book.area||''}</div>
+      </div>
+    </div>
+    ${mp3InitiatedFromDetail ? '<div class="mp3-auto-badge">✔ 교재 상세에서 자동 선택됨</div>' : ''}
+  `;
+
+  // 제목 업데이트
+  document.getElementById('mp3NowTitle').textContent = book.title;
+  document.getElementById('mp3TrackCount').textContent = '전체 ' + mp3Tracks.length + '개';
+  renderMp3TrackList();
+  document.getElementById('mp3SelectHint').style.display = 'none';
+  document.getElementById('mp3Player').style.display = 'block';
+  mp3PlayTrack(0);
+}
+
+function generateDemoTracks(book) {
+  const units = ['문장의 구조', '품사의 이해', '시제 기초', '시제 심화', '동사의 종류', '조동사', '수동태', '부정사', '동명사', '분사'];
+  return Array.from({length: Math.min(10, units.length)}, (_, i) => ({
+    no: i + 1,
+    title: `Track ${String(i+1).padStart(2,'0')} — Unit ${i+1}. ${units[i]}`,
+    file: '',
+    duration: 120 + Math.floor(Math.random() * 120)
+  }));
+}
+
+function renderMp3TrackList() {
+  document.getElementById('mp3TrackList').innerHTML = mp3Tracks.map((t, i) =>
+    `<div class="mp3-track-item${i === mp3CurIdx ? ' playing' : ''}" onclick="mp3PlayTrack(${i})">
+      <span class="mp3-track-no">${i === mp3CurIdx ? '▶' : t.no}</span>
+      <span class="mp3-track-name">${t.title}</span>
+      <span class="mp3-track-dur">${fmt(t.duration)}</span>
+    </div>`
+  ).join('');
+}
+
+function mp3PlayTrack(idx) {
+  if (!mp3Tracks.length) return;
+  mp3CurIdx = idx;
+  const t = mp3Tracks[idx];
+  document.getElementById('mp3NowTrack').textContent = t.title;
+  document.getElementById('mp3ProgFill').style.width = '0%';
+  document.getElementById('mp3CurTime').textContent = '0:00';
+  document.getElementById('mp3DurTime').textContent = fmt(t.duration);
+  renderMp3TrackList();
+  const audio = document.getElementById('mp3Audio');
+  if (t.file) {
+    audio.src = t.file;
+    audio.play();
+    mp3UpdatePlayIcon(true);
+    audio.ontimeupdate = () => {
+      const pct = audio.duration ? (audio.currentTime / audio.duration * 100) : 0;
+      document.getElementById('mp3ProgFill').style.width = pct + '%';
+      document.getElementById('mp3CurTime').textContent = fmt(audio.currentTime);
+    };
+    audio.onended = () => mp3Next();
+  } else {
+    mp3UpdatePlayIcon(false);
+  }
+}
+
+function mp3UpdatePlayIcon(playing) {
+  document.getElementById('mp3PlayIcon').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+
+function mp3TogglePlay() {
+  const audio = document.getElementById('mp3Audio');
+  if (!audio.src) return;
+  if (audio.paused) { audio.play(); mp3UpdatePlayIcon(true); }
+  else { audio.pause(); mp3UpdatePlayIcon(false); }
+}
+
+function mp3Prev() { if (mp3CurIdx > 0) mp3PlayTrack(mp3CurIdx - 1); }
+function mp3Next() { if (mp3CurIdx < mp3Tracks.length - 1) mp3PlayTrack(mp3CurIdx + 1); }
+
+// 스터디존 하위탭 자동 선택 + 기본 초기화 — 모든 데이터 선언 이후 실행
+(function(){
+  const _initTab = getParam('tab') || 'materials';
+  const _initStab = getParam('stab');
+  if (_initTab === 'study') {
+    const targetStab = _initStab || 'vocab';
+    const stabBtn = document.querySelector(`[data-stab="${targetStab}"]`);
+    if (stabBtn) switchStudyTab(stabBtn);
+    else initVocaList(); // 기본 어휘출제마법사
+  }
+})();
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.cs-nav-link').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('[id^="panel-"]').forEach(p=>p.style.display='none');
+  if(el) el.classList.add('active');
+  const panel = document.getElementById(`panel-${tab}`);
+  if(panel) panel.style.display='';
+}
+
+// 영어 커리큘럼 레벨 탭 전환 (자료실 > 큐레이션)
+function setCurricLevel(btn, level) {
+  document.querySelectorAll('#curricCharTabs .curric-char-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.curric-group').forEach(group => {
+    group.style.display = (level === 'all' || group.dataset.level === level) ? '' : 'none';
+  });
+}
+
+function downloadFile(name) { Toast.show(`"${name}" 다운로드가 시작됩니다.`,'success'); }
+
+// ── 교재 자료실 (실제 BOOKS 기반 자동 생성) ──
+const _CLAB = {elementary:'초등', middle:'중학', high:'고등'};
+
+function _matTypes(book) {
+  const rows = [
+    {type:'정오표',  label:'정오표',          login:false, stream:false},
+    {type:'정답지',  label:'정답 및 해석',     login:false, stream:false},
+  ];
+  if (book.subject === '영어') {
+    rows.push({type:'MP3',     label:'MP3 바로 듣기', login:false, stream:true});
+    rows.push({type:'MP3파일', label:'MP3 파일',      login:true,  stream:false});
+  }
+  rows.push({type:'PDF', label:'본문 (PDF)', login:true, stream:false});
+  return rows;
+}
+
+const ALL_MATS = [];
+BOOKS.filter(book => book.type !== '교과서').forEach(book => {
+  _matTypes(book).forEach(m => {
+    ALL_MATS.push({
+      bookId:    book.id,
+      bookTitle: book.title,
+      fullTitle: `${book.title} — ${m.label}`,
+      type:      m.type,
+      cat:       _CLAB[book.cat],
+      date:      book.date || '2026.01.01',
+      login:     m.login,
+      stream:    m.stream,
+    });
+  });
+});
+
+function renderMaterials(list) {
+  if (!list.length) {
+    document.getElementById('materialsBody').innerHTML =
+      '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">해당 자료가 없습니다.</td></tr>';
+    return;
+  }
+  document.getElementById('materialsBody').innerHTML = list.map((r, i) => {
+    const idx = ALL_MATS.indexOf(r);
+    const btnText = r.stream ? '▶ 듣기' : '⬇ 받기';
+    return `
+      <tr style="cursor:pointer;" onclick="location.href='book-detail.html?id=${r.bookId}'"
+          onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''">
+        <td style="color:var(--muted);text-align:center;">${i+1}</td>
+        <td style="font-weight:600;color:var(--navy);">${r.fullTitle}</td>
+        <td><span style="background:var(--bg2);padding:2px 7px;border-radius:3px;font-size:11px;font-weight:600;white-space:nowrap;display:inline-block;">${r.type}</span></td>
+        <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${r.cat}</td>
+        <td style="color:var(--muted);font-size:12px;white-space:nowrap;">${r.date}</td>
+        <td style="text-align:center;white-space:nowrap;" onclick="event.stopPropagation()">
+          <button onclick="matDownload(${idx})"
+            style="background:var(--navy);color:white;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:700;">${btnText}</button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function matDownload(idx) {
+  const r = ALL_MATS[idx];
+  if (r.login && localStorage.getItem('isLoggedIn') !== 'true') {
+    document.getElementById('_matLoginOv')?.remove();
+    const ov = document.createElement('div');
+    ov.id = '_matLoginOv';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    ov.innerHTML = `
+      <div style="background:#fff;border-radius:14px;padding:36px 32px;max-width:320px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.18);">
+        <div style="font-size:36px;margin-bottom:12px;">🔒</div>
+        <div style="font-size:16px;font-weight:800;color:#1a2e44;margin-bottom:8px;">로그인이 필요합니다</div>
+        <div style="font-size:13px;color:#888;margin-bottom:24px;line-height:1.7;">본문 PDF · MP3 파일은<br>로그인 후 이용하실 수 있습니다.</div>
+        <div style="display:flex;gap:10px;">
+          <button onclick="document.getElementById('_matLoginOv').remove()"
+            style="flex:1;padding:12px;border:1.5px solid #ddd;border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;color:#555;">닫기</button>
+          <button onclick="localStorage.setItem('redirectAfterLogin',location.href);location.href='login.html';"
+            style="flex:1;padding:12px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">로그인 바로가기</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e => { if (e.target === ov) ov.remove(); });
+    return;
+  }
+  if (r.stream) {
+    openMp3Modal(r.bookTitle, r.bookId);
+    return;
+  }
+  Toast.show(`"${r.fullTitle}" 다운로드가 시작됩니다.`, 'success');
+}
+
+// ── MP3 플레이어 (교재 자료실 바로 듣기) ──
+const MP3_TRACKS = {
+  16:[{lesson:'Lesson 1 - All about Me',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1']},{lesson:'Lesson 2 - Think Wise, Stay Safe',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2']},{lesson:'Lesson 3 - Wonderful Stories from School',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3']},{lesson:'Lesson 4 - Make a Difference in Our Community',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4']}],
+  17:[{lesson:'Lesson 1 - Technology in Our Lives',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1']},{lesson:'Lesson 2 - Nature and Environment',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2']},{lesson:'Lesson 3 - Culture and Tradition',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3']},{lesson:'Lesson 4 - Dreams and Future',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4']}],
+  18:[{lesson:'Lesson 1 - Global Issues',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1']},{lesson:'Lesson 2 - Science & Art',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2']},{lesson:'Lesson 3 - Media & Society',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3']},{lesson:'Lesson 4 - Future Careers',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4']}],
+  1:[{lesson:'Chapter 1 - Short Vowels',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 2 - Long Vowels',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 3 - Consonants',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 4 - Blends',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']}],
+  2:[{lesson:'Chapter 1 - Digraphs',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 2 - Diphthongs',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 3 - R-Controlled',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 4 - Silent Letters',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']}],
+  19:[{lesson:'Chapter 1 - Vowel Teams',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 2 - Sight Words',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 3 - Word Families',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']},{lesson:'Chapter 4 - Review',tracks:['Vocabulary List','Listen & Chant','Story Time',"Let's Practice",'Wrap Up']}],
+  20:[{lesson:'Unit 1 - Animals',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 2 - Nature',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 3 - People',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 4 - Science',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']}],
+  21:[{lesson:'Unit 1 - Culture',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 2 - History',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 3 - Technology',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 4 - Society',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']}],
+  22:[{lesson:'Unit 1 - Environment',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 2 - Art & Music',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 3 - Sports',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']},{lesson:'Unit 4 - Future',tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up']}],
+  6:[{lesson:'Day 01–05',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 06–10',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 11–15',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 16–20',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 21–25',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']}],
+  7:[{lesson:'Day 01–05',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 06–10',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 11–15',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 16–20',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 21–25',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']}],
+  8:[{lesson:'Day 01–05',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 06–10',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 11–15',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 16–20',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']},{lesson:'Day 21–25',tracks:['Word List','Example Sentences A','Example Sentences B','Review Test']}],
+  23:[{lesson:'Lesson 1',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1']},{lesson:'Lesson 2',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2']},{lesson:'Lesson 3',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3']},{lesson:'Lesson 4',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4']}],
+  24:[{lesson:'Unit 1',tracks:['Word List','Example Sentences A','Review Test']},{lesson:'Unit 2',tracks:['Word List','Example Sentences A','Review Test']},{lesson:'Unit 3',tracks:['Word List','Example Sentences A','Review Test']},{lesson:'Unit 4',tracks:['Word List','Example Sentences A','Review Test']}],
+  25:[{lesson:'Chapter 1',tracks:['Vocabulary List','구문 학습','Reading Test','Wrap Up']},{lesson:'Chapter 2',tracks:['Vocabulary List','구문 학습','Reading Test','Wrap Up']},{lesson:'Chapter 3',tracks:['Vocabulary List','구문 학습','Reading Test','Wrap Up']},{lesson:'Chapter 4',tracks:['Vocabulary List','구문 학습','Reading Test','Wrap Up']}],
+  26:[{lesson:'Unit 1',tracks:['Vocabulary List','유형 분석','Practice Test','Wrap Up']},{lesson:'Unit 2',tracks:['Vocabulary List','유형 분석','Practice Test','Wrap Up']},{lesson:'Unit 3',tracks:['Vocabulary List','유형 분석','Practice Test','Wrap Up']},{lesson:'Unit 4',tracks:['Vocabulary List','유형 분석','Practice Test','Wrap Up']}],
+  27:[{lesson:'Lesson 1',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1']},{lesson:'Lesson 2',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2']},{lesson:'Lesson 3',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3']},{lesson:'Lesson 4',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4']}],
+};
+const _MP3_DEFAULT = [{lesson:'Unit 1',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up']},{lesson:'Unit 2',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up']},{lesson:'Unit 3',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up']},{lesson:'Unit 4',tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up']}];
+
+let _mp3St = {timer:null,elapsed:0,duration:0,speed:1,playing:false,li:-1,ti:-1,trackName:'',lessonName:'',lessons:[]};
+function _mp3Fmt(s){return`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;}
+function _mp3Dur(label){const m={'Vocabulary List':165,'Listen A':210,'Listen B':195,'Watch':240,'Read':135,'Wrap Up':90,'Word List':180,'Example Sentences A':150,'Example Sentences B':150,'Review Test':120,'Vocabulary Preview':155,'Reading Passage A':220,'Reading Passage B':200,'Listening Check':175,'Listen & Chant':130,'Story Time':180};for(const k of Object.keys(m)){if(label.startsWith(k))return m[k];}return 180;}
+function _mp3UI(){const{elapsed,duration,trackName,lessonName,playing}=_mp3St,pct=duration?elapsed/duration*100:0,$=id=>document.getElementById(id);if($('_rNpFill'))$('_rNpFill').style.width=pct+'%';if($('_rNpThumb'))$('_rNpThumb').style.left=`calc(${pct}% - 6px)`;if($('_rNpCur'))$('_rNpCur').textContent=_mp3Fmt(elapsed);if($('_rNpTot'))$('_rNpTot').textContent=_mp3Fmt(duration);if($('_rNpTitle'))$('_rNpTitle').textContent=trackName;if($('_rNpSub'))$('_rNpSub').textContent=lessonName;if($('_rPpBtn'))$('_rPpBtn').textContent=playing?'⏸':'▶';}
+function _mp3Timer(){_mp3St.timer=setInterval(()=>{_mp3St.elapsed+=0.1*_mp3St.speed;if(_mp3St.elapsed>=_mp3St.duration){_mp3St.elapsed=_mp3St.duration;clearInterval(_mp3St.timer);_mp3St.playing=false;_mp3UI();setTimeout(()=>rMp3Next(),600);}else _mp3UI();},100);}
+function rMp3Play(li,ti,btn){_rMp3StopInt();const row=document.getElementById(`_rrow_${li}_${ti}`);if(!row)return;const label=row.querySelector('.mp3-track-label').textContent,lsSpan=document.getElementById(`_rls${li}`)?.querySelector('.mp3-lesson-header span'),lessonName=lsSpan?lsSpan.textContent:'';Object.assign(_mp3St,{elapsed:0,duration:_mp3Dur(label),playing:true,li,ti,trackName:label,lessonName});row.classList.add('playing');btn.textContent='⏸';btn.setAttribute('onclick','rMp3ListToggle(this)');document.getElementById('_rNowPlaying').style.display='flex';_mp3UI();_mp3Timer();}
+function rMp3ListToggle(btn){rMp3MainToggle();}
+function rMp3MainToggle(){if(_mp3St.playing){clearInterval(_mp3St.timer);_mp3St.playing=false;_mp3UI();const row=document.getElementById(`_rrow_${_mp3St.li}_${_mp3St.ti}`);if(row)row.querySelector('.mp3-btn-play').textContent='▶';}else if(_mp3St.elapsed<_mp3St.duration){_mp3St.playing=true;_mp3UI();const row=document.getElementById(`_rrow_${_mp3St.li}_${_mp3St.ti}`);if(row)row.querySelector('.mp3-btn-play').textContent='⏸';_mp3Timer();}}
+function rMp3Seek(e,bar){const rect=bar.getBoundingClientRect();_mp3St.elapsed=Math.max(0,Math.min(_mp3St.duration,(e.clientX-rect.left)/rect.width*_mp3St.duration));_mp3UI();}
+function rMp3SetSpeed(speed){_mp3St.speed=speed;document.querySelectorAll('.mp3-speed-btn').forEach(b=>b.classList.toggle('active',parseFloat(b.dataset.speed)===speed));}
+function rMp3Prev(){const{li,ti,lessons}=_mp3St;if(ti>0){const r=document.getElementById(`_rrow_${li}_${ti-1}`);if(r)rMp3Play(li,ti-1,r.querySelector('.mp3-btn-play'));}else if(li>0){const pl=lessons[li-1].tracks.length-1,r=document.getElementById(`_rrow_${li-1}_${pl}`);if(r)rMp3Play(li-1,pl,r.querySelector('.mp3-btn-play'));}}
+function rMp3Next(){const{li,ti,lessons}=_mp3St;if(!lessons.length)return;if(ti<lessons[li].tracks.length-1){const r=document.getElementById(`_rrow_${li}_${ti+1}`);if(r)rMp3Play(li,ti+1,r.querySelector('.mp3-btn-play'));}else if(li<lessons.length-1){const body=document.getElementById(`_rls${li+1}`)?.querySelector('.mp3-tracks-body');if(body?.style.display==='none')rToggleLesson(li+1);const r=document.getElementById(`_rrow_${li+1}_0`);if(r)rMp3Play(li+1,0,r.querySelector('.mp3-btn-play'));}}
+function _rMp3StopInt(){if(_mp3St.timer){clearInterval(_mp3St.timer);_mp3St.timer=null;}document.querySelectorAll('.mp3-track-row.playing').forEach(r=>{r.classList.remove('playing');const pb=r.querySelector('.mp3-btn-play'),p=r.id.split('_');pb.textContent='▶';pb.setAttribute('onclick',`rMp3Play(${p[2]},${p[3]},this)`);});}
+function rMp3Stop(){_rMp3StopInt();Object.assign(_mp3St,{elapsed:0,duration:0,playing:false,li:-1,ti:-1,trackName:'',lessonName:''});const np=document.getElementById('_rNowPlaying');if(np)np.style.display='none';}
+function rToggleLesson(li){const g=document.getElementById('_rls'+li),body=g.querySelector('.mp3-tracks-body'),arrow=g.querySelector('.mp3-lesson-arrow'),header=g.querySelector('.mp3-lesson-header'),open=body.style.display!=='none';body.style.display=open?'none':'block';arrow.textContent=open?'▼':'▲';header.classList.toggle('open',!open);}
+
+function openMp3Modal(bookTitle, bookId) {
+  const lessons = MP3_TRACKS[bookId] || _MP3_DEFAULT;
+  const ov = document.createElement('div');
+  ov.className = 'modal-overlay';
+  const lessonsHtml = lessons.map((ls,li)=>`
+    <div class="mp3-lesson-group" id="_rls${li}">
+      <div class="mp3-lesson-header ${li===0?'open':''}" onclick="rToggleLesson(${li})">
+        <span>${ls.lesson}</span><span class="mp3-lesson-arrow">${li===0?'▲':'▼'}</span>
+      </div>
+      <div class="mp3-tracks-body" style="display:${li===0?'block':'none'}">
+        ${ls.tracks.map((tr,ti)=>`
+          <div class="mp3-track-row" id="_rrow_${li}_${ti}">
+            <div class="mp3-track-btns">
+              <button class="mp3-btn-play" onclick="rMp3Play(${li},${ti},this)" title="재생">▶</button>
+              <button class="mp3-btn-stop" onclick="rMp3Stop()" title="정지">■</button>
+            </div>
+            <span class="mp3-track-label">${tr}</span>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  ov.innerHTML = `
+    <div class="mp3-unit-modal">
+      <div class="mp3-unit-header"><span>🎧 MP3 바로 듣기</span>
+        <button onclick="rMp3Stop();this.closest('.modal-overlay').remove()">✕</button></div>
+      <div class="mp3-unit-book">${bookTitle}</div>
+      <div class="mp3-unit-list">${lessonsHtml}</div>
+      <div class="mp3-unit-player" id="_rNowPlaying" style="display:none">
+        <div class="mp3-player-row1"><div class="mp3-player-meta">
+          <span class="mp3-np-dot">●</span>
+          <div><div class="mp3-np-title" id="_rNpTitle"></div><div class="mp3-np-sub" id="_rNpSub"></div></div>
+        </div></div>
+        <div class="mp3-player-row2">
+          <span class="mp3-np-cur" id="_rNpCur">0:00</span>
+          <div class="mp3-np-bar" onclick="rMp3Seek(event,this)"><div class="mp3-np-fill" id="_rNpFill"></div><div class="mp3-np-thumb" id="_rNpThumb"></div></div>
+          <span class="mp3-np-tot" id="_rNpTot">0:00</span>
+        </div>
+        <div class="mp3-player-row3">
+          <div class="mp3-ctrl-btns">
+            <button class="mp3-ctrl-btn" onclick="rMp3Prev()">⏮</button>
+            <button class="mp3-ctrl-pp" id="_rPpBtn" onclick="rMp3MainToggle()">⏸</button>
+            <button class="mp3-ctrl-btn" onclick="rMp3Next()">⏭</button>
+          </div>
+          <div class="mp3-speed-wrap">
+            <span class="mp3-speed-label">배속</span>
+            <button class="mp3-speed-btn" data-speed="0.75" onclick="rMp3SetSpeed(0.75)">0.75x</button>
+            <button class="mp3-speed-btn active" data-speed="1" onclick="rMp3SetSpeed(1)">1x</button>
+            <button class="mp3-speed-btn" data-speed="1.25" onclick="rMp3SetSpeed(1.25)">1.25x</button>
+            <button class="mp3-speed-btn" data-speed="1.5" onclick="rMp3SetSpeed(1.5)">1.5x</button>
+            <button class="mp3-speed-btn" data-speed="2" onclick="rMp3SetSpeed(2)">2x</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  _mp3St.lessons = lessons;
+  ov.addEventListener('click', e => { if (e.target === ov) { rMp3Stop(); ov.remove(); } });
+}
+
+const MF = { cat:'', type:'' };
+const MAT_PAGE_SIZE = 10;
+let matCurrentPage = 1;
+let matCurrentSort = 'date';
+let matCurrentList = [];
+const BOOKS_MAP = {};
+BOOKS.forEach(b => { BOOKS_MAP[b.id] = b; });
+
+function mfToggle(pill) {
+  const wasOpen = pill.classList.contains('open');
+  document.querySelectorAll('.hfilter-pill.open').forEach(p => p.classList.remove('open'));
+  if (!wasOpen) pill.classList.add('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.hfilter-pill')) {
+    document.querySelectorAll('#panel-materials .hfilter-pill.open').forEach(p => p.classList.remove('open'));
+  }
+});
+function mfSelect(key, val, label, e) {
+  e.stopPropagation();
+  MF[key] = val;
+  const pill = document.getElementById('mf-' + key);
+  const defaults = { cat:'학년 선택', type:'자료 유형 선택' };
+  pill.querySelector('.hf-label').textContent = label || defaults[key];
+  pill.classList.toggle('selected', !!val);
+  pill.classList.remove('open');
+  pill.querySelectorAll('.hfilter-opt').forEach(o => o.classList.toggle('active', o.dataset.val === val));
+  applyMatFilter();
+}
+function mfReset() {
+  MF.cat = ''; MF.type = '';
+  clearMatBookSearch();
+  ['cat','type'].forEach(k => {
+    const pill = document.getElementById('mf-' + k);
+    const defaults = { cat:'학년 선택', type:'자료 유형 선택' };
+    pill.querySelector('.hf-label').textContent = defaults[k];
+    pill.classList.remove('selected','open');
+    pill.querySelectorAll('.hfilter-opt').forEach(o => o.classList.remove('active'));
+  });
+  applyMatFilter();
+}
+function setMatSort(btn, sort) {
+  document.querySelectorAll('.mat-sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  matCurrentSort = sort;
+  applyMatFilter();
+}
+/* ===== 교재명 검색 자동완성 ===== */
+let matBookSearchQ = '';
+let matSuggestIdx = -1;
+
+function onMatBookSearchInput(val) {
+  matBookSearchQ = val.trim();
+  const clearBtn = document.getElementById('matBookSearchClear');
+  if (clearBtn) clearBtn.style.display = matBookSearchQ ? '' : 'none';
+  renderMatSuggest(matBookSearchQ);
+  applyMatFilter();
+}
+
+function renderMatSuggest(q) {
+  const box = document.getElementById('matBookSuggest');
+  if (!box) return;
+  if (!q) { box.style.display = 'none'; matSuggestIdx = -1; return; }
+  const lq = q.toLowerCase();
+  // 교재명 중복 제거
+  const titles = [...new Set(ALL_MATS.map(m => m.bookTitle))];
+  const matched = titles.filter(t => t.toLowerCase().includes(lq)).slice(0, 8);
+  if (!matched.length) { box.style.display = 'none'; return; }
+  matSuggestIdx = -1;
+  box.innerHTML = matched.map((t, i) => {
+    const hi = t.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi'), s => `<mark>${s}</mark>`);
+    return `<div class="mat-suggest-item" data-idx="${i}" onmousedown="selectMatSuggest('${t.replace(/'/g,"\\'")}')">🔍 ${hi}</div>`;
+  }).join('');
+  box.style.display = '';
+}
+
+function showMatSuggest() {
+  if (matBookSearchQ) renderMatSuggest(matBookSearchQ);
+}
+function hideMatSuggest() {
+  const box = document.getElementById('matBookSuggest');
+  if (box) box.style.display = 'none';
+}
+function selectMatSuggest(title) {
+  const inp = document.getElementById('matBookSearch');
+  if (inp) inp.value = title;
+  matBookSearchQ = title;
+  const clearBtn = document.getElementById('matBookSearchClear');
+  if (clearBtn) clearBtn.style.display = '';
+  hideMatSuggest();
+  applyMatFilter();
+}
+function clearMatBookSearch() {
+  const inp = document.getElementById('matBookSearch');
+  if (inp) inp.value = '';
+  matBookSearchQ = '';
+  const clearBtn = document.getElementById('matBookSearchClear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  hideMatSuggest();
+  applyMatFilter();
+}
+function onMatBookSearchKey(e) {
+  const box = document.getElementById('matBookSuggest');
+  if (!box || box.style.display === 'none') return;
+  const items = box.querySelectorAll('.mat-suggest-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    matSuggestIdx = Math.min(matSuggestIdx + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle('focused', i === matSuggestIdx));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    matSuggestIdx = Math.max(matSuggestIdx - 1, 0);
+    items.forEach((el, i) => el.classList.toggle('focused', i === matSuggestIdx));
+  } else if (e.key === 'Enter' && matSuggestIdx >= 0) {
+    e.preventDefault();
+    selectMatSuggest(items[matSuggestIdx].dataset.title || items[matSuggestIdx].textContent.replace('🔍 ','').trim());
+  } else if (e.key === 'Escape') {
+    hideMatSuggest();
+  }
+}
+
+function applyMatFilter() {
+  const q = matBookSearchQ.toLowerCase();
+  let list = ALL_MATS.filter(m =>
+    (!MF.cat  || m.cat  === MF.cat) &&
+    (!MF.type || m.type === MF.type) &&
+    (!q || m.bookTitle.toLowerCase().includes(q))
+  );
+  if (matCurrentSort === 'date')    list.sort((a,b) => b.date.localeCompare(a.date));
+  if (matCurrentSort === 'alpha')   list.sort((a,b) => a.bookTitle.localeCompare(b.bookTitle,'ko'));
+  if (matCurrentSort === 'popular') list.sort((a,b) => {
+    const bA = BOOKS_MAP[a.bookId]?.badge==='best'?0:1;
+    const bB = BOOKS_MAP[b.bookId]?.badge==='best'?0:1;
+    return bA - bB;
+  });
+  matCurrentList = list;
+  renderMaterials(list, 1);
+}
+function getFileType(type) {
+  if (type==='MP3'||type==='MP3파일') return {label:'zip',cls:'zip'};
+  if (type==='PDF') return {label:'pdf',cls:'pdf'};
+  return {label:'pdf',cls:'pdf'};
+}
+function renderMaterials(list, page) {
+  matCurrentPage = page || 1;
+  const start = (matCurrentPage-1)*MAT_PAGE_SIZE;
+  const pageItems = list.slice(start, start+MAT_PAGE_SIZE);
+  const body = document.getElementById('materialsBody');
+  if (!pageItems.length) {
+    body.innerHTML = '<div class="mat-empty">해당 자료가 없습니다.</div>';
+    document.getElementById('matPagination').innerHTML = '';
+    return;
+  }
+  body.innerHTML = pageItems.map(r => {
+    const book = BOOKS_MAP[r.bookId] || {};
+    const idx  = ALL_MATS.indexOf(r);
+    const ft   = getFileType(r.type);
+    const resName = r.fullTitle.includes(' — ') ? r.fullTitle.split(' — ')[1] : r.fullTitle;
+    return `
+    <div class="mat-row">
+      <div class="mat-col-check"><input type="checkbox" class="mat-item-check" data-idx="${idx}"></div>
+      <div class="mat-col-sep"></div>
+      <div class="mat-col-book">
+        <img src="${book.img||''}" class="mat-cover" onerror="this.style.display='none'">
+        <div class="mat-book-info">
+          <div class="mat-book-title">${book.title||r.bookTitle}</div>
+          <div class="mat-book-desc">${book.desc||''}</div>
+          <div class="mat-book-tags">
+            <span class="mat-tag-author">${book.author||'YBM 편집부'}</span>
+            <span class="mat-tag-date">${book.date||r.date}</span>
+          </div>
+        </div>
+      </div>
+      <div class="mat-col-sep"></div>
+      <div class="mat-col-res">
+        <span class="mat-file-badge mat-file-${ft.cls}">${ft.label}</span>
+        <span class="mat-res-name">${resName}</span>
+      </div>
+      <div class="mat-col-type">${r.type}</div>
+      <div class="mat-col-preview">
+        <button class="mat-icon-btn" onclick="showToast('미리보기 서비스 준비 중입니다.')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
+      <div class="mat-col-dl">
+        <button class="mat-icon-btn mat-dl-btn" onclick="matDownload(${idx})">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  renderMatPagination(list.length, matCurrentPage);
+}
+function renderMatPagination(total, page) {
+  const pages = Math.ceil(total/MAT_PAGE_SIZE);
+  const pg = document.getElementById('matPagination');
+  if (pages<=1){pg.innerHTML='';return;}
+  let html = `<button class="page-btn" onclick="renderMaterials(matCurrentList,1)">«</button>`;
+  html += `<button class="page-btn" onclick="renderMaterials(matCurrentList,${Math.max(1,page-1)})">‹</button>`;
+  const s=Math.max(1,page-4), e=Math.min(pages,s+9);
+  for(let i=s;i<=e;i++) html+=`<button class="page-btn ${i===page?'active':''}" onclick="renderMaterials(matCurrentList,${i})">${i}</button>`;
+  html += `<button class="page-btn" onclick="renderMaterials(matCurrentList,${Math.min(pages,page+1)})">›</button>`;
+  html += `<button class="page-btn" onclick="renderMaterials(matCurrentList,${pages})">»</button>`;
+  pg.innerHTML = html;
+}
+function toggleAllMatChecks(cb) {
+  document.querySelectorAll('.mat-item-check').forEach(c=>c.checked=cb.checked);
+}
+function matBulkDownload() {
+  const checked=[...document.querySelectorAll('.mat-item-check:checked')];
+  if(!checked.length){Toast.show('자료를 선택해주세요.','info');return;}
+  Toast.show(`${checked.length}개 자료를 ZIP으로 다운로드합니다.`,'success');
+}
+function matIndivDownload() {
+  const checked=[...document.querySelectorAll('.mat-item-check:checked')];
+  if(!checked.length){Toast.show('자료를 선택해주세요.','info');return;}
+  Toast.show(`${checked.length}개 자료를 개별 다운로드합니다.`,'success');
+}
+
+renderMaterials(ALL_MATS);
+
+// ── 데일리 외국어 ──
+const DAILY_RES = {
+  en: {
+    badge:'ENGLISH · DAY 1235', lang:'영어', bg:'linear-gradient(135deg,#1565c0,#0d47a1)',
+    word:'hang up', pron:'[hæŋ ʌp]', meaning:'(전화를) 끊다, 전화를 잘못 걸다',
+    ex1:'She accidentally hung up on the wrong person.', ex2:'그녀는 실수로 엉뚱한 사람에게 전화를 끊었다.',
+    history:[
+      {day:'DAY 1234', date:'2026.05.27', word:'Eloquent',    meaning:'웅변적인, 유창한'},
+      {day:'DAY 1233', date:'2026.05.26', word:'Meticulous',  meaning:'꼼꼼한, 세심한'},
+      {day:'DAY 1232', date:'2026.05.25', word:'Resilient',   meaning:'회복력이 있는'},
+      {day:'DAY 1231', date:'2026.05.24', word:'Ambiguous',   meaning:'모호한, 불분명한'},
+      {day:'DAY 1230', date:'2026.05.23', word:'Diligent',    meaning:'성실한, 부지런한'},
+    ]
+  },
+  cn: {
+    badge:'중국어 · DAY 1235', lang:'중국어', bg:'linear-gradient(135deg,#c0392b,#922b21)',
+    word:'过分 (guòfèn)', pron:'guò fèn', meaning:'지나치게, 너무, 심하게',
+    ex1:'你做得太过分了！', ex2:'너무 심한 거 아니에요?',
+    history:[
+      {day:'DAY 1234', date:'2026.05.27', word:'努力 (nǔlì)',     meaning:'열심히, 노력하다'},
+      {day:'DAY 1233', date:'2026.05.26', word:'漂亮 (piàoliang)',meaning:'예쁘다, 아름답다'},
+      {day:'DAY 1232', date:'2026.05.25', word:'认真 (rènzhēn)',  meaning:'진지하다, 성실하다'},
+      {day:'DAY 1231', date:'2026.05.24', word:'方便 (fāngbiàn)', meaning:'편리하다, 편하다'},
+      {day:'DAY 1230', date:'2026.05.23', word:'热情 (rèqíng)',   meaning:'열정적인, 친절한'},
+    ]
+  },
+  jp: {
+    badge:'일본어 · DAY 1231', lang:'일본어', bg:'linear-gradient(135deg,#e65c00,#bf4200)',
+    word:'選ぶ（えらぶ）', pron:'e·ra·bu', meaning:'고르다, 선택하다',
+    ex1:'好きな色を選んでください。', ex2:'좋아하는 색을 골라 주세요.',
+    history:[
+      {day:'DAY 1230', date:'2026.05.27', word:'頑張る（がんばる）',  meaning:'열심히 하다, 노력하다'},
+      {day:'DAY 1229', date:'2026.05.26', word:'楽しむ（たのしむ）', meaning:'즐기다'},
+      {day:'DAY 1228', date:'2026.05.25', word:'覚える（おぼえる）', meaning:'기억하다, 외우다'},
+      {day:'DAY 1227', date:'2026.05.24', word:'始める（はじめる）', meaning:'시작하다'},
+      {day:'DAY 1226', date:'2026.05.23', word:'続ける（つづける）', meaning:'계속하다'},
+    ]
+  }
+};
+
+function renderDaily(lang) {
+  const d = DAILY_RES[lang];
+  document.querySelectorAll('.daily-lang-btn').forEach(b => {
+    const active = b.dataset.lang === lang;
+    b.style.background = active ? 'var(--navy)' : 'var(--bg2)';
+    b.style.color      = active ? 'white' : 'var(--text2)';
+  });
+  document.getElementById('dailyContent').innerHTML = `
+    <div style="background:${d.bg};border-radius:var(--radius-lg);padding:28px 32px;color:white;margin-bottom:16px;cursor:pointer;" onclick="openDailyModal('${lang}')">
+      <div style="font-size:11px;font-weight:700;opacity:.6;margin-bottom:10px;letter-spacing:1.5px;">TODAY'S WORD</div>
+      <div style="font-size:32px;font-weight:900;margin-bottom:4px;">${d.word}</div>
+      <div style="font-size:14px;opacity:.65;margin-bottom:12px;">${d.pron}</div>
+      <div style="font-size:16px;opacity:.9;margin-bottom:8px;">${d.meaning}</div>
+      <div style="font-size:13px;opacity:.65;font-style:italic;">"${d.ex1}"</div>
+      <div style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;">🔊 발음 · 예문 자세히 보기 ›</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;">
+      ${d.history.map((h, i) => `
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 18px;background:white;${i > 0 ? 'border-top:1px solid var(--border);' : ''}">
+          <span style="font-size:11px;font-weight:700;color:var(--muted);min-width:72px;">${h.day}</span>
+          <span style="font-size:14px;font-weight:800;flex:1;">${h.word}</span>
+          <span style="font-size:13px;color:var(--muted);flex:1;">${h.meaning}</span>
+          <span style="font-size:11px;color:var(--border);">${h.date}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+function openDailyModal(lang) {
+  const d = DAILY_RES[lang];
+  document.getElementById('dailyModalHeader').style.background = d.bg;
+  document.getElementById('dailyModalBadge').textContent   = d.badge;
+  document.getElementById('dailyModalLang').textContent    = d.lang;
+  document.getElementById('dailyModalWord').textContent    = d.word;
+  document.getElementById('dailyModalPron').textContent    = d.pron;
+  document.getElementById('dailyModalMeaning').textContent = d.meaning;
+  document.getElementById('dailyModalEx1').textContent     = d.ex1;
+  document.getElementById('dailyModalEx2').textContent     = d.ex2;
+  document.getElementById('dailyModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeDailyModal() {
+  document.getElementById('dailyModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeDailyModal(); closeVideoModal(); } });
+
+renderDaily('en');
+
+// ── 교재 활용법 ──
+const HOWTO_VIDEOS = [
+  {id:1, bookId:16, title:'[수업운영팁] 2022개정 교육 과정에 대한 모든 것, 다 알려드림! 교강사 필수 시청',
+   desc:'2022개정 교육 과정의 핵심 변화와 수업 적용 포인트를 전문가가 쉽게 설명합니다.',
+   bg:'linear-gradient(135deg,#1565c0,#0d47a1)', emoji:'📗', views:'713', date:'2025-02-28', duration:'12:34', tags:['writing','고등','문법']},
+  {id:2, bookId:17, title:'[수업운영팁] 중등 문법 로드맵부터 수업팁까지! 모든걸 다 담았다',
+   desc:'중학교 영문법 전 과정 로드맵과 차별화된 수업 노하우를 공개합니다.',
+   bg:'linear-gradient(135deg,#6d1c7b,#4a1260)', emoji:'📘', views:'330', date:'2025-02-14', duration:'10:52', tags:['grammar','중등','문법']},
+  {id:3, bookId:18, title:'[수업운영팁] I Love Reading으로 독해 수업 완벽 세팅하기',
+   desc:'리딩 교재 구성과 지도 순서, 오답 관리까지 한 번에 정리해 드립니다.',
+   bg:'linear-gradient(135deg,#c62828,#8e0000)', emoji:'📕', views:'528', date:'2025-01-30', duration:'14:07', tags:['reading','독해','elt']},
+  {id:4, bookId:1, title:'[수업운영팁] Phonics NOW! 파닉스 수업 완벽 활용법',
+   desc:'AR 기반 파닉스 학습 시스템과 수업 도입 포인트를 단계별로 안내합니다.',
+   bg:'linear-gradient(135deg,#e65c00,#bf4200)', emoji:'🎒', views:'421', date:'2025-01-20', duration:'8:20', tags:['phonics','초등','파닉스']},
+  {id:5, bookId:6, title:'[수업운영팁] Booster Voca로 50일 완성 어휘 학습법',
+   desc:'반복 학습 시스템을 활용해 50일 안에 필수 어휘를 완성하는 전략을 공개합니다.',
+   bg:'linear-gradient(135deg,#2e7d32,#1b5e20)', emoji:'📚', views:'289', date:'2025-01-10', duration:'9:15', tags:['voca','어휘','중등']},
+  {id:6, bookId:20, title:'[수업운영팁] Benchmark Reading으로 읽기 습관 만들기',
+   desc:'균형 잡힌 픽션·논픽션 활용으로 영어 읽기 습관을 형성하는 방법을 소개합니다.',
+   bg:'linear-gradient(135deg,#00838f,#005f68)', emoji:'📖', views:'198', date:'2024-12-28', duration:'7:48', tags:['readers','reading','초등']},
+  {id:7, bookId:3, title:'[수업운영팁] 중학영어 듣기모의고사 100% 활용 전략',
+   desc:'듣기 수업에서 실전 감각을 높이는 반복 훈련법과 오답 패턴 분석.',
+   bg:'linear-gradient(135deg,#1a237e,#283593)', emoji:'🎧', views:'412', date:'2024-12-15', duration:'11:22', tags:['듣기','중등','elt']},
+  {id:8, bookId:5, title:'[수업운영팁] 고등 독해 수능 기출 분석 및 수업 적용법',
+   desc:'수능 기출 지문 유형별 분석과 교실 수업 연계 방법을 상세히 다룹니다.',
+   bg:'linear-gradient(135deg,#37474f,#263238)', emoji:'📝', views:'631', date:'2024-12-01', duration:'13:05', tags:['고등','독해','reading']},
+];
+
+const HW_ALL_TAGS = ['#전체','#elt','#grammar','#phonics','#readers','#reading','#voca','#writing','#고등','#독해','#듣기','#문법','#쓰기','#어휘','#중등','#초등','#파닉스','#학원'];
+let hwActiveTag = '#전체';
+let hwSearchQ = '';
+
+function initHowtoIntro() {
+  // 태그 렌더링
+  document.getElementById('hwTags').innerHTML = HW_ALL_TAGS.map(t =>
+    `<button class="hw-tag${t===hwActiveTag?' active':''}" onclick="setHwTag('${t}')">${t}</button>`
+  ).join('');
+  applyHwFilter();
+}
+
+function setHwTag(tag) {
+  hwActiveTag = tag;
+  document.querySelectorAll('#hwTags .hw-tag').forEach(b => b.classList.toggle('active', b.textContent===tag));
+  applyHwFilter();
+}
+
+function applyHwFilter() {
+  hwSearchQ = (document.getElementById('hwSearchInput')?.value || '').trim().toLowerCase();
+  const filtered = HOWTO_VIDEOS.filter(v => {
+    const tagMatch = hwActiveTag==='#전체' || v.tags.some(t=>'#'+t===hwActiveTag);
+    const qMatch = !hwSearchQ || v.title.toLowerCase().includes(hwSearchQ) || v.desc.toLowerCase().includes(hwSearchQ);
+    return tagMatch && qMatch;
+  });
+  document.getElementById('hwCount').innerHTML = `전체 <strong>${filtered.length}</strong>건`;
+  document.getElementById('hwList').innerHTML = filtered.length ? filtered.map(v => `
+    <div class="hw-list-item" onclick="openVideoModal(${v.id})">
+      <div class="hw-list-thumb">
+        <div class="hw-list-thumb-bg" style="background:${v.bg};">${v.emoji}</div>
+        <div class="hw-list-play"><span>▶</span></div>
+        <div class="hw-list-duration">${v.duration}</div>
+      </div>
+      <div class="hw-list-body">
+        <div class="hw-list-title">${v.title}</div>
+        <div class="hw-list-desc">${v.desc}</div>
+        <div class="hw-list-meta">등록일 : ${v.date}</div>
+      </div>
+      <div class="hw-list-views">👁 : ${v.views}</div>
+    </div>`).join('') : '<div class="gb-empty">검색 결과가 없습니다.</div>';
+}
+
+// ── 큐레이션 ──
+const CURATION_DATA = [
+  {id:1, title:'초등 영어 첫 시작! 파닉스부터 리딩까지 단계별 로드맵', cat:'초등', tags:['파닉스','리딩'], bg:'linear-gradient(135deg,#ff6b35,#f7c59f)', emoji:'👧', date:'2025.03.10', views:'1.2k'},
+  {id:2, title:'중학교 1학년을 위한 영문법 핵심 정리 & 추천 교재', cat:'중등', tags:['grammar','문법'], bg:'linear-gradient(135deg,#1a3a6e,#2e6db4)', emoji:'🧑‍🎒', date:'2025.03.05', views:'987'},
+  {id:3, title:'수능 독해 D-100, 지금 당장 시작해야 할 학습 전략', cat:'고등', tags:['독해','수능'], bg:'linear-gradient(135deg,#c62828,#8e0000)', emoji:'👩‍🎓', date:'2025.02.28', views:'2.3k'},
+  {id:4, title:'어휘력 없이 영어 실력 없다! 단계별 어휘 교재 추천', cat:'전체', tags:['voca','어휘'], bg:'linear-gradient(135deg,#2e7d32,#388e3c)', emoji:'📚', date:'2025.02.20', views:'1.8k'},
+  {id:5, title:'원어민처럼 듣고 말하기! 리스닝·스피킹 교재 큐레이션', cat:'초등', tags:['듣기','speaking'], bg:'linear-gradient(135deg,#00838f,#006064)', emoji:'🎧', date:'2025.02.14', views:'756'},
+  {id:6, title:'쓰기 실력 향상을 위한 Writing 교재 3종 비교 분석', cat:'중등', tags:['writing','쓰기'], bg:'linear-gradient(135deg,#6d1c7b,#7b1fa2)', emoji:'✍️', date:'2025.02.07', views:'634'},
+  {id:7, title:'학원 원장님 추천! 신학기 베스트셀러 교재 모음', cat:'전체', tags:['학원','베스트'], bg:'linear-gradient(135deg,#e65c00,#bf4200)', emoji:'🏆', date:'2025.01.30', views:'3.1k'},
+  {id:8, title:'ELT 교재 완벽 가이드 — 레벨별 추천 커리큘럼', cat:'전체', tags:['elt','readers'], bg:'linear-gradient(135deg,#1565c0,#0d47a1)', emoji:'🌍', date:'2025.01.22', views:'1.4k'},
+  {id:9, title:'고등 문법 완성! Grammar 교재 레벨업 전략', cat:'고등', tags:['grammar','고등'], bg:'linear-gradient(135deg,#37474f,#263238)', emoji:'📖', date:'2025.01.15', views:'891'},
+];
+
+const CUR_ALL_TAGS = ['#전체','#초등','#중등','#고등','#elt','#grammar','#voca','#reading','#듣기','#writing','#파닉스','#학원'];
+let curActiveTag = '#전체';
+let curSearchQ = '';
+
+function initCuration() {
+  document.getElementById('curTags').innerHTML = CUR_ALL_TAGS.map(t =>
+    `<button class="hw-tag${t===curActiveTag?' active':''}" onclick="setCurTag('${t}')">${t}</button>`
+  ).join('');
+  applyCurFilter();
+}
+
+function setCurTag(tag) {
+  curActiveTag = tag;
+  document.querySelectorAll('#curTags .hw-tag').forEach(b => b.classList.toggle('active', b.textContent===tag));
+  applyCurFilter();
+}
+
+function applyCurFilter() {
+  curSearchQ = (document.getElementById('curSearchInput')?.value || '').trim().toLowerCase();
+  const filtered = CURATION_DATA.filter(c => {
+    const rawCat = '#'+c.cat;
+    const tagMatch = curActiveTag==='#전체' || rawCat===curActiveTag || c.tags.some(t=>'#'+t===curActiveTag);
+    const qMatch = !curSearchQ || c.title.toLowerCase().includes(curSearchQ);
+    return tagMatch && qMatch;
+  });
+  document.getElementById('curCount').innerHTML = `전체 <strong>${filtered.length}</strong>건`;
+  document.getElementById('curGrid').innerHTML = filtered.length ? filtered.map(c => `
+    <div class="cur-card">
+      <div class="cur-card-img" style="background:${c.bg};">
+        <span>${c.emoji}</span>
+        <span class="cur-card-badge">${c.cat}</span>
+      </div>
+      <div class="cur-card-body">
+        <div class="cur-card-title">${c.title}</div>
+        <div class="cur-card-tags">${c.tags.map(t=>`<span class="cur-card-tag">#${t}</span>`).join('')}</div>
+        <div class="cur-card-meta"><span>${c.date}</span><span>👁 ${c.views}</span></div>
+      </div>
+    </div>`).join('') : '<div class="gb-empty" style="grid-column:1/-1">검색 결과가 없습니다.</div>';
+}
+
+function setCur2School(btn, school) {
+  document.querySelectorAll('.cur2-school-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.cur2-group').forEach(g => g.style.display = 'none');
+  btn.classList.add('active');
+  document.querySelector(`.cur2-group[data-school="${school}"]`).style.display = '';
+}
+
+function initCuration() {
+  // 학교급 탭 초기화 — 초등 기본 표시
+  document.querySelectorAll('.cur2-group').forEach(g => g.style.display = 'none');
+  const defaultGroup = document.querySelector('.cur2-group[data-school="elementary"]');
+  if (defaultGroup) defaultGroup.style.display = '';
+  const defaultTab = document.querySelector('.cur2-school-tab[data-school="elementary"]');
+  if (defaultTab) {
+    document.querySelectorAll('.cur2-school-tab').forEach(b => b.classList.remove('active'));
+    defaultTab.classList.add('active');
+  }
+}
+
+function switchHowtoTab(btn) {
+  const htab = btn.dataset.htab;
+  document.querySelectorAll('#panel-howto .study-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.howto-panel').forEach(p => p.style.display = 'none');
+  btn.classList.add('active');
+  document.getElementById('htab-' + htab).style.display = 'block';
+  if (htab === 'intro') initHowtoIntro();
+  if (htab === 'curation') initCuration();
+}
+
+function openVideoModal(id) {
+  const v = HOWTO_VIDEOS.find(x => x.id === id);
+  if (!v) return;
+  document.getElementById('videoModalTitle').textContent = v.title;
+  document.getElementById('videoModalDesc').textContent  = v.desc;
+  document.getElementById('videoModalPlayer').style.background = v.bg;
+  document.getElementById('videoModalBookLink').value = 'book-detail.html?id=' + v.bookId;
+  document.getElementById('videoModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// panel-howto 열릴 때 초기화
+const _origSwitchTab = switchTab;
+switchTab = function(tab, el) {
+  _origSwitchTab(tab, el);
+  if (tab === 'howto') initHowtoIntro();
+};
+
+// 최초 진입 시 howto 탭이면 초기화 (모든 const 선언 이후 실행)
+if ((getParam('tab') || 'materials') === 'howto') initHowtoIntro();
+</script>
+</body>
+</html>

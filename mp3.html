@@ -1,0 +1,644 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MP3 바로듣기 - YBM북스</title>
+  <style>
+    :root {
+      --navy: #1a2e44;
+      --blue: #1565c0;
+      --red:  #e53935;
+      --bg:   #f5f6f8;
+      --border: #e0e0e0;
+      --text: #1a2e44;
+      --muted: #888;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 헤더 */
+    .mp3-header {
+      background: var(--navy);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .mp3-header-logo {
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      opacity: 0.7;
+    }
+    .mp3-header-divider { opacity: 0.3; }
+    .mp3-header-title {
+      font-size: 15px;
+      font-weight: 800;
+      flex: 1;
+    }
+
+    /* 교재 정보 */
+    .mp3-book-info {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .mp3-book-cover {
+      width: 52px;
+      height: 68px;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #eee;
+    }
+    .mp3-book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .mp3-book-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .mp3-book-meta {}
+    .mp3-book-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .mp3-book-author {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .mp3-track-count {
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* 트랙 리스트 */
+    .mp3-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 120px;
+    }
+
+    .mp3-lesson-group {
+      margin-bottom: 4px;
+    }
+    .mp3-lesson-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 20px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      user-select: none;
+    }
+    .mp3-lesson-header.open {
+      background: #eef2ff;
+      color: var(--blue);
+    }
+    .mp3-lesson-arrow { font-size: 11px; color: var(--muted); transition: transform .2s; }
+    .mp3-lesson-header.open .mp3-lesson-arrow { color: var(--blue); }
+
+    .mp3-tracks-body { background: #fafafa; }
+    .mp3-track-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 12px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .mp3-track-row:active { background: #f0f4ff; }
+    .mp3-track-row.playing { background: #fff8e1; }
+
+    .mp3-track-num {
+      font-size: 12px;
+      color: var(--muted);
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .mp3-track-row.playing .mp3-track-num { color: var(--blue); }
+
+    .mp3-track-label {
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+    }
+    .mp3-track-row.playing .mp3-track-label {
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .mp3-track-duration {
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .mp3-play-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: white;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+    .mp3-track-row.playing .mp3-play-btn {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    /* 하단 플레이어 */
+    .mp3-player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navy);
+      color: white;
+      padding: 14px 20px 20px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+    }
+    .mp3-player.visible { display: flex; }
+
+    .mp3-player-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mp3-np-dot {
+      color: #4fc3f7;
+      font-size: 8px;
+      animation: mp3blink 1.2s infinite;
+    }
+    @keyframes mp3blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .mp3-np-title { font-size: 14px; font-weight: 700; line-height: 1.3; }
+    .mp3-np-sub   { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+    .mp3-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mp3-np-time { font-size: 11px; color: rgba(255,255,255,.6); white-space: nowrap; min-width: 32px; }
+    .mp3-np-time.right { text-align: right; }
+    .mp3-np-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,.2);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .mp3-np-bar:active { height: 8px; }
+    .mp3-np-fill {
+      height: 100%;
+      background: #4fc3f7;
+      border-radius: 2px;
+      width: 0;
+      transition: width .1s linear;
+    }
+
+    .mp3-ctrl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mp3-ctrl-btns {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .mp3-ctrl-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.8);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .mp3-ctrl-pp {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      color: var(--navy);
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mp3-speed-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .mp3-speed-label { font-size: 11px; color: rgba(255,255,255,.5); margin-right: 2px; }
+    .mp3-speed-btn {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: none;
+      color: rgba(255,255,255,.6);
+      cursor: pointer;
+    }
+    .mp3-speed-btn.active {
+      background: rgba(255,255,255,.2);
+      color: white;
+      border-color: rgba(255,255,255,.5);
+    }
+
+    /* 에러/로딩 */
+    .mp3-error {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .mp3-error-icon { font-size: 48px; }
+    .mp3-error-title { font-size: 16px; font-weight: 700; color: var(--text); }
+    .mp3-error-desc { font-size: 13px; line-height: 1.6; }
+    .mp3-error-btn {
+      margin-top: 8px;
+      padding: 10px 24px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div class="mp3-header">
+  <button onclick="history.back()" style="background:rgba(255,255,255,.15);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">←</button>
+  <span class="mp3-header-title">🎧 MP3 바로듣기</span>
+</div>
+
+<!-- 교재 정보 -->
+<div class="mp3-book-info" id="bookInfo" style="display:none">
+  <div class="mp3-book-cover" id="bookCover"></div>
+  <div class="mp3-book-meta">
+    <div class="mp3-book-name" id="bookName"></div>
+    <div class="mp3-book-author" id="bookAuthor"></div>
+    <div class="mp3-track-count" id="trackCount"></div>
+  </div>
+</div>
+
+<!-- 트랙 리스트 -->
+<div class="mp3-list" id="mp3List"></div>
+
+<!-- 에러 -->
+<div class="mp3-error" id="mp3Error" style="display:none">
+  <div class="mp3-error-icon">😢</div>
+  <div class="mp3-error-title">교재를 찾을 수 없습니다</div>
+  <div class="mp3-error-desc">QR코드가 올바른지 확인하거나<br>YBM북스 홈페이지에서 교재를 검색해보세요.</div>
+  <a href="books.html" class="mp3-error-btn">교재 목록 보기</a>
+</div>
+
+<!-- 하단 플레이어 -->
+<div class="mp3-player" id="mp3Player">
+  <div class="mp3-player-info">
+    <span class="mp3-np-dot">●</span>
+    <div>
+      <div class="mp3-np-title" id="npTitle"></div>
+      <div class="mp3-np-sub"   id="npSub"></div>
+    </div>
+  </div>
+  <div class="mp3-progress-row">
+    <span class="mp3-np-time" id="npCur">0:00</span>
+    <div class="mp3-np-bar" id="npBar" onclick="seek(event, this)">
+      <div class="mp3-np-fill" id="npFill"></div>
+    </div>
+    <span class="mp3-np-time right" id="npTot">0:00</span>
+  </div>
+  <div class="mp3-ctrl-row">
+    <div class="mp3-ctrl-btns">
+      <button class="mp3-ctrl-btn" onclick="playPrev()" title="이전">⏮</button>
+      <button class="mp3-ctrl-pp" id="ppBtn" onclick="togglePlay()">⏸</button>
+      <button class="mp3-ctrl-btn" onclick="playNext()" title="다음">⏭</button>
+    </div>
+    <div class="mp3-speed-wrap">
+      <span class="mp3-speed-label">배속</span>
+      <button class="mp3-speed-btn" data-speed="0.75" onclick="setSpeed(0.75)">0.75x</button>
+      <button class="mp3-speed-btn active" data-speed="1"    onclick="setSpeed(1)">1x</button>
+      <button class="mp3-speed-btn" data-speed="1.25" onclick="setSpeed(1.25)">1.25x</button>
+      <button class="mp3-speed-btn" data-speed="1.5"  onclick="setSpeed(1.5)">1.5x</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js?v=3"></script>
+<script>
+const MP3_TRACKS = {
+  16: [
+    { lesson:'Lesson 1 - All about Me',                    tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1'] },
+    { lesson:'Lesson 2 - Think Wise, Stay Safe',           tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2'] },
+    { lesson:'Lesson 3 - Wonderful Stories from School',   tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3'] },
+    { lesson:'Lesson 4 - Make a Difference in Our Community', tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4'] },
+  ],
+  17: [
+    { lesson:'Lesson 1 - Technology in Our Lives',  tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1'] },
+    { lesson:'Lesson 2 - Nature and Environment',   tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2'] },
+    { lesson:'Lesson 3 - Culture and Tradition',    tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3'] },
+    { lesson:'Lesson 4 - Dreams and Future',        tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4'] },
+  ],
+  18: [
+    { lesson:'Lesson 1 - Global Issues',    tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_1'] },
+    { lesson:'Lesson 2 - Science & Art',    tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_2'] },
+    { lesson:'Lesson 3 - Media & Society',  tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_3'] },
+    { lesson:'Lesson 4 - Future Careers',   tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up_4'] },
+  ],
+  1: [
+    { lesson:'Chapter 1 - Short Vowels',   tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 2 - Long Vowels',    tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 3 - Consonants',     tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 4 - Blends',         tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+  ],
+  2: [
+    { lesson:'Chapter 1 - Digraphs',       tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 2 - Diphthongs',     tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 3 - R-Controlled',   tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 4 - Silent Letters', tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+  ],
+  19: [
+    { lesson:'Chapter 1 - Vowel Teams',    tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 2 - Sight Words',    tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 3 - Word Families',  tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+    { lesson:'Chapter 4 - Review',         tracks:['Vocabulary List','Listen & Chant','Story Time','Let\'s Practice','Wrap Up'] },
+  ],
+  20: [
+    { lesson:'Unit 1 - Animals',      tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 2 - Nature',       tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 3 - People',       tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 4 - Science',      tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+  ],
+  21: [
+    { lesson:'Unit 1 - Culture',      tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 2 - History',      tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 3 - Technology',   tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 4 - Society',      tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+  ],
+  22: [
+    { lesson:'Unit 1 - Environment',  tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 2 - Art & Music',  tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 3 - Sports',       tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+    { lesson:'Unit 4 - Future',       tracks:['Vocabulary Preview','Reading Passage A','Reading Passage B','Listening Check','Wrap Up'] },
+  ],
+  6: [
+    { lesson:'Day 01–05',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 06–10',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 11–15',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 16–20',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 21–25',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+  ],
+  7: [
+    { lesson:'Day 01–05',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 06–10',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 11–15',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 16–20',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 21–25',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+  ],
+  8: [
+    { lesson:'Day 01–05',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 06–10',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 11–15',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 16–20',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+    { lesson:'Day 21–25',   tracks:['Word List','Example Sentences A','Example Sentences B','Review Test'] },
+  ],
+};
+const MP3_DEFAULT = [
+  { lesson:'Unit 1', tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up'] },
+  { lesson:'Unit 2', tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up'] },
+  { lesson:'Unit 3', tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up'] },
+  { lesson:'Unit 4', tracks:['Vocabulary List','Listen A','Listen B','Watch','Read','Wrap Up'] },
+];
+
+// ── 초기화 ──
+const params  = new URLSearchParams(location.search);
+const bookId  = parseInt(params.get('id'));
+const book    = BOOKS.find(b => b.id === bookId);
+const lessons = MP3_TRACKS[bookId] || MP3_DEFAULT;
+
+let state = { timer:null, elapsed:0, duration:0, speed:1, playing:false, li:-1, ti:-1 };
+
+function fmt(s) { return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; }
+function dur(label) {
+  const map = {
+    'Vocabulary List':165,'Vocabulary Preview':155,
+    'Listen A':210,'Listen B':195,'Watch':240,'Read':135,
+    'Word List':180,'Example Sentences A':150,'Example Sentences B':150,'Review Test':120,
+    'Reading Passage A':220,'Reading Passage B':200,'Listening Check':175,
+    'Listen & Chant':130,'Story Time':180,"Let's Practice":120,
+  };
+  for (const k of Object.keys(map)) { if (label.startsWith(k)) return map[k]; }
+  return 180;
+}
+
+// 교재 정보 렌더
+if (!book) {
+  document.getElementById('mp3Error').style.display = 'flex';
+} else {
+  document.getElementById('bookInfo').style.display = 'flex';
+  document.title = `MP3 바로듣기 - ${book.title}`;
+
+  const cover = document.getElementById('bookCover');
+  cover.innerHTML = book.img
+    ? `<img src="${book.img}" alt="${book.title}">`
+    : `<div class="mp3-book-cover-placeholder">📚</div>`;
+
+  document.getElementById('bookName').textContent   = book.title;
+  document.getElementById('bookAuthor').textContent = `${book.author} · ${book.publisher || 'YBM'}`;
+
+  const totalTracks = lessons.reduce((acc, ls) => acc + ls.tracks.length, 0);
+  document.getElementById('trackCount').textContent = `총 ${lessons.length}개 단원 · ${totalTracks}개 트랙`;
+
+  // 트랙 리스트 렌더
+  let trackIdx = 0;
+  const listEl = document.getElementById('mp3List');
+  listEl.innerHTML = lessons.map((ls, li) => `
+    <div class="mp3-lesson-group" id="lg${li}">
+      <div class="mp3-lesson-header ${li === 0 ? 'open' : ''}" onclick="toggleLesson(${li})">
+        <span>${ls.lesson}</span>
+        <span class="mp3-lesson-arrow">${li === 0 ? '▲' : '▼'}</span>
+      </div>
+      <div class="mp3-tracks-body" style="display:${li === 0 ? 'block' : 'none'}">
+        ${ls.tracks.map((tr, ti) => {
+          const idx = trackIdx++;
+          return `
+          <div class="mp3-track-row" id="tr${li}_${ti}" onclick="playTrack(${li}, ${ti})">
+            <span class="mp3-track-num">${idx + 1}</span>
+            <span class="mp3-track-label">${tr}</span>
+            <span class="mp3-track-duration">${fmt(dur(tr))}</span>
+            <button class="mp3-play-btn" id="pb${li}_${ti}">▶</button>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleLesson(li) {
+  const group  = document.getElementById('lg' + li);
+  const body   = group.querySelector('.mp3-tracks-body');
+  const arrow  = group.querySelector('.mp3-lesson-arrow');
+  const header = group.querySelector('.mp3-lesson-header');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.textContent  = isOpen ? '▼' : '▲';
+  header.classList.toggle('open', !isOpen);
+}
+
+function updateUI() {
+  const pct = state.duration ? state.elapsed / state.duration * 100 : 0;
+  document.getElementById('npFill').style.width = pct + '%';
+  document.getElementById('npCur').textContent  = fmt(state.elapsed);
+  document.getElementById('npTot').textContent  = fmt(state.duration);
+  document.getElementById('npTitle').textContent = state.trackName  || '';
+  document.getElementById('npSub').textContent   = state.lessonName || '';
+  document.getElementById('ppBtn').textContent   = state.playing ? '⏸' : '▶';
+}
+
+function startTimer() {
+  state.timer = setInterval(() => {
+    state.elapsed += 0.1 * state.speed;
+    if (state.elapsed >= state.duration) {
+      state.elapsed = state.duration;
+      clearInterval(state.timer); state.playing = false;
+      updateUI();
+      setTimeout(() => playNext(), 600);
+    } else { updateUI(); }
+  }, 100);
+}
+
+function stopTimer() {
+  if (state.timer) { clearInterval(state.timer); state.timer = null; }
+}
+
+function clearPlaying() {
+  document.querySelectorAll('.mp3-track-row.playing').forEach(r => {
+    r.classList.remove('playing');
+    const btn = r.querySelector('.mp3-play-btn');
+    if (btn) btn.textContent = '▶';
+  });
+}
+
+function playTrack(li, ti) {
+  stopTimer();
+  clearPlaying();
+  const row = document.getElementById(`tr${li}_${ti}`);
+  if (!row) return;
+  const label      = row.querySelector('.mp3-track-label').textContent;
+  const lsHeader   = document.getElementById('lg' + li)?.querySelector('.mp3-lesson-header span');
+  const lessonName = lsHeader ? lsHeader.textContent : '';
+  Object.assign(state, { elapsed:0, duration:dur(label), playing:true, li, ti, trackName:label, lessonName });
+  row.classList.add('playing');
+  row.querySelector('.mp3-play-btn').textContent = '⏸';
+  document.getElementById('mp3Player').classList.add('visible');
+  updateUI();
+  startTimer();
+
+  // 레슨 펼치기
+  const body = document.getElementById('lg' + li)?.querySelector('.mp3-tracks-body');
+  if (body?.style.display === 'none') toggleLesson(li);
+
+  // 스크롤
+  setTimeout(() => row.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+}
+
+function togglePlay() {
+  if (state.playing) {
+    stopTimer(); state.playing = false; updateUI();
+    const row = document.getElementById(`tr${state.li}_${state.ti}`);
+    if (row) row.querySelector('.mp3-play-btn').textContent = '▶';
+  } else if (state.elapsed < state.duration) {
+    state.playing = true; updateUI();
+    const row = document.getElementById(`tr${state.li}_${state.ti}`);
+    if (row) row.querySelector('.mp3-play-btn').textContent = '⏸';
+    startTimer();
+  }
+}
+
+function playPrev() {
+  const { li, ti } = state;
+  if (ti > 0) playTrack(li, ti - 1);
+  else if (li > 0) playTrack(li - 1, lessons[li - 1].tracks.length - 1);
+}
+
+function playNext() {
+  const { li, ti } = state;
+  if (!lessons.length) return;
+  if (ti < lessons[li].tracks.length - 1) playTrack(li, ti + 1);
+  else if (li < lessons.length - 1) playTrack(li + 1, 0);
+}
+
+function seek(e, bar) {
+  const rect = bar.getBoundingClientRect();
+  state.elapsed = Math.max(0, Math.min(state.duration,
+    (e.clientX - rect.left) / rect.width * state.duration));
+  updateUI();
+}
+
+function setSpeed(s) {
+  state.speed = s;
+  document.querySelectorAll('.mp3-speed-btn').forEach(b =>
+    b.classList.toggle('active', parseFloat(b.dataset.speed) === s));
+}
+</script>
+</body>
+</html>
