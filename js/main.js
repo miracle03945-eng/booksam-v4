@@ -2,8 +2,10 @@
    북샘 - 공통 JS
    ============================================= */
 
-// 시리즈 패널 (books.html에서 오버라이드됨; 다른 페이지에서는 무동작)
-function openSeriesPanel() {}
+// 시리즈 패널 (books.html에서 오버라이드됨; 다른 페이지에서는 books.html로 이동)
+function openSeriesPanel() {
+  window.location.href = 'books.html?openSeries=1';
+}
 function toggleSeriesPanel() {}
 
 // 카트 상태 (localStorage)
@@ -1210,3 +1212,145 @@ function openImageModal(imgPath, title) {
     if (e.key === 'Escape') { ov.remove(); document.removeEventListener('keydown', esc); }
   });
 }
+
+// 채널톡 플로팅 버튼 (모든 페이지 공통)
+(function() {
+  var btn = document.createElement('div');
+  btn.id = 'ch-plugin-fake';
+  btn.innerHTML = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2C7.373 2 2 7.149 2 13.5c0 2.97 1.14 5.676 3.008 7.718L3.5 25.5l5.02-1.64A11.93 11.93 0 0014 25c6.627 0 12-5.149 12-11.5S20.627 2 14 2z" fill="white"/><circle cx="9" cy="14" r="1.8" fill="#FF6D2D"/><circle cx="14" cy="14" r="1.8" fill="#FF6D2D"/><circle cx="19" cy="14" r="1.8" fill="#FF6D2D"/></svg>';
+  btn.style.cssText = 'position:fixed;bottom:40px;right:40px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#FF7744 0%,#FF4E1A 100%);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(255,100,40,.45);z-index:9999;transition:transform .2s,box-shadow .2s;';
+  btn.addEventListener('mouseenter', function(){ this.style.transform='scale(1.08)'; this.style.boxShadow='0 6px 28px rgba(255,100,40,.55)'; });
+  btn.addEventListener('mouseleave', function(){ this.style.transform='scale(1)'; this.style.boxShadow='0 4px 20px rgba(255,100,40,.45)'; });
+  btn.addEventListener('click', function(){
+    var toast = document.getElementById('ch-toast');
+    if (toast) { toast.remove(); return; }
+    var t = document.createElement('div');
+    t.id = 'ch-toast';
+    t.textContent = '준비 중입니다.';
+    t.style.cssText = 'position:fixed;bottom:92px;right:24px;background:#1a2e44;color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;animation:chFadeIn .2s ease;pointer-events:none;font-family:Pretendard,"Noto Sans KR",sans-serif;';
+    document.body.appendChild(t);
+    setTimeout(function(){ if(t.parentNode) t.remove(); }, 2200);
+  });
+  var style = document.createElement('style');
+  style.textContent = '@keyframes chFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}';
+  document.head.appendChild(style);
+  document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(btn); });
+  if (document.readyState !== 'loading') document.body.appendChild(btn);
+})();
+
+// 최근 본 교재 플로팅
+(function () {
+  var STORE_KEY = 'ybm_recent_books';
+  var MAX = 5;
+
+  function getRecent() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function saveRecent(list) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  }
+  function recordBook(id) {
+    if (!id) return;
+    var book = (typeof BOOKS !== 'undefined') ? BOOKS.find(function(b){ return String(b.id) === String(id); }) : null;
+    if (!book) return;
+    var list = getRecent().filter(function(b){ return String(b.id) !== String(id); });
+    list.unshift({ id: book.id, title: book.title, img: book.img });
+    if (list.length > MAX) list = list.slice(0, MAX);
+    saveRecent(list);
+    refreshUI();
+  }
+
+  var params = new URLSearchParams(location.search);
+  var currentId = params.get('id');
+  if (currentId && location.pathname.indexOf('book-detail') !== -1) {
+    document.addEventListener('DOMContentLoaded', function(){ recordBook(currentId); });
+  }
+
+  document.addEventListener('click', function (e) {
+    var card = e.target.closest('[data-id]');
+    if (card) recordBook(card.dataset.id);
+  }, true);
+
+  function injectStyle() {
+    if (document.getElementById('rcnt-float-style')) return;
+    var s = document.createElement('style');
+    s.id = 'rcnt-float-style';
+    s.textContent = [
+      '#rcnt-float{position:fixed;bottom:108px;right:40px;z-index:9998;display:none;}',
+      '#rcnt-float.visible{display:block;animation:rcntAppear .25s ease;}',
+      '@keyframes rcntAppear{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}',
+      '#rcnt-float-btn{width:56px;height:56px;border-radius:50%;overflow:hidden;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.22);border:2.5px solid #fff;background:#f0f4f8;transition:transform .2s,box-shadow .2s;}',
+      '#rcnt-float-btn img{width:100%;height:100%;object-fit:cover;display:block;}',
+      '#rcnt-float-btn:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(0,0,0,.28);}',
+      '#rcnt-panel{position:fixed;bottom:176px;right:40px;width:220px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9997;overflow:hidden;display:none;flex-direction:column;}',
+      '#rcnt-panel.open{display:flex;animation:rcntSlide .18s ease;}',
+      '@keyframes rcntSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}',
+      '#rcnt-panel-head{padding:12px 14px 10px;font-size:12px;font-weight:700;color:#1a2e44;border-bottom:1px solid #eef0f3;font-family:Pretendard,"Noto Sans KR",sans-serif;display:flex;justify-content:space-between;align-items:center;}',
+      '#rcnt-panel-head button{background:none;border:none;font-size:14px;cursor:pointer;color:#aaa;line-height:1;padding:0;}',
+      '.rcnt-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background .15s;text-decoration:none;}',
+      '.rcnt-item:hover{background:#f5f7fb;}',
+      '.rcnt-item-img{width:36px;height:46px;object-fit:cover;border-radius:4px;flex-shrink:0;border:1px solid #e8eaf0;}',
+      '.rcnt-item-title{font-size:12px;font-weight:600;color:#1a2e44;line-height:1.4;font-family:Pretendard,"Noto Sans KR",sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  function refreshUI() {
+    var list = getRecent();
+    var wrap = document.getElementById('rcnt-float');
+    var btn = document.getElementById('rcnt-float-btn');
+    var panel = document.getElementById('rcnt-panel');
+    if (!wrap || !btn || !panel) return;
+
+    if (list.length === 0) {
+      wrap.classList.remove('visible');
+      panel.classList.remove('open');
+      return;
+    }
+
+    btn.innerHTML = '<img src="' + list[0].img + '" alt="최근 본 교재">';
+    wrap.classList.add('visible');
+
+    panel.innerHTML = '<div id="rcnt-panel-head">최근 본 교재 <button id="rcnt-close">✕</button></div>'
+      + list.map(function(b){
+          return '<a class="rcnt-item" href="book-detail.html?id=' + b.id + '"><img class="rcnt-item-img" src="' + b.img + '" alt=""><span class="rcnt-item-title">' + b.title + '</span></a>';
+        }).join('');
+
+    document.getElementById('rcnt-close').addEventListener('click', function(e){
+      e.stopPropagation();
+      panel.classList.remove('open');
+    });
+  }
+
+  function buildUI() {
+    if (document.getElementById('rcnt-float')) return;
+    injectStyle();
+
+    var panel = document.createElement('div');
+    panel.id = 'rcnt-panel';
+    document.body.appendChild(panel);
+
+    var wrap = document.createElement('div');
+    wrap.id = 'rcnt-float';
+    wrap.innerHTML = '<div id="rcnt-float-btn"></div>';
+    document.body.appendChild(wrap);
+
+    refreshUI();
+
+    document.getElementById('rcnt-float-btn').addEventListener('click', function(e){
+      e.stopPropagation();
+      panel.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e){
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target.id !== 'rcnt-float-btn' && !document.getElementById('rcnt-float-btn').contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildUI);
+  } else {
+    buildUI();
+  }
+})();

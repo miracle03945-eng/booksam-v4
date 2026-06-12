@@ -215,7 +215,7 @@ body.hero-page .gnb-bar.gnb-scrolled{
   box-shadow:none !important;
 }
 body.hero-page .gnb-link{color:rgba(255,255,255,.9);}
-body.hero-page .gnb-link:hover,body.hero-page .gnb-link.active{color:white;opacity:.85;}
+body.hero-page .gnb-link:hover{color:white;opacity:.85;}
 body.hero-page .gnb-all{color:rgba(255,255,255,.9);}
 body.hero-page .hamburger{color:white;}
 body.hero-page .util-logo .logo-mark{color:white;text-shadow:0 1px 8px rgba(0,0,0,.18);}
@@ -296,7 +296,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   border-bottom:2px solid transparent;
   margin-bottom:-2px;
 }
-.gnb-link:hover,.gnb-link.active{color:var(--red);border-bottom-color:var(--red);}
+.gnb-link:hover{color:var(--red);border-bottom-color:var(--red);}
 
 /* GNB 드롭다운: 모바일 비활성 */
 .gnb-item{position:relative;}
@@ -401,6 +401,14 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 .mega-col .mega-sub-link:hover{color:var(--red);padding-left:18px;}
 .mega-col .mega-sub-link:hover::before{background:var(--red);}
 
+/* 메가메뉴 안에서 gnb-subflyout: 인라인 목록으로 표시 */
+.mega-col .gnb-subflyout{display:block;position:static;background:transparent;border:none;border-radius:0;box-shadow:none;padding:0;min-width:0;}
+.mega-col .gnb-sub-group > .mega-group-title::after{content:'' !important;}
+.mega-col .gnb-flyout-link{font-size:15px;color:#333;text-decoration:none;padding:7px 0 7px 14px;display:block;font-weight:400;border-bottom:none;transition:color .12s,padding-left .1s;position:relative;}
+.mega-col .gnb-flyout-link::before{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:3px;height:3px;border-radius:50%;background:#ccc;transition:background .12s;}
+.mega-col .gnb-flyout-link:hover{color:var(--red);padding-left:18px;}
+.mega-col .gnb-flyout-link:hover::before{background:var(--red);}
+
 /* 하단 배너 */
 .mega-footer{
   background:#f8f9fb;
@@ -500,13 +508,13 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   padding-bottom:8px;
   border-bottom:2px solid var(--border);
   display:flex;align-items:center;gap:6px;
-  width:100%;
+  width:100%;justify-content:space-between;
 }
 .best-cat-row:nth-child(1) .best-cat-label{border-bottom-color:#1a4fa0;}
 .best-cat-row:nth-child(1) .best-cat-label::before{content:'초등';display:none;}
 .best-cat-row:nth-child(2) .best-cat-label{border-bottom-color:var(--red);}
 .best-cat-row:nth-child(3) .best-cat-label{border-bottom-color:#2e7d32;}
-.best-cat-books{grid-template-columns:repeat(5,1fr)!important;gap:var(--sp-3)!important;}
+.best-cat-books{grid-template-columns:repeat(4,1fr)!important;gap:var(--sp-3)!important;}
 
 .new-col #new-spotlight{display:flex;flex-direction:column;}
 .new-col .nsc-card{display:flex;flex-direction:column;}
@@ -514,62 +522,45 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 
 /* ── 큐레이션 버튼 ── */
 .curation-btn{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:14px;
   margin-top:var(--sp-4);
-  padding:12px 16px;
-  background:#f8f9fb;border:1px solid var(--border);border-radius:10px;
-  text-decoration:none;color:var(--navy);
-  transition:background .15s,box-shadow .15s,transform .15s;
+  padding:20px 20px;
+  background:linear-gradient(120deg,#1a2e44 0%,#1e3a5f 100%);
+  border:none;border-radius:10px;
+  text-decoration:none;color:white;
+  box-shadow:0 4px 16px rgba(26,46,68,.25);
+  transition:box-shadow .15s,transform .15s,filter .15s;
 }
-.curation-btn:hover{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.08);transform:translateY(-1px);}
-.curation-btn-label{font-size:14px;font-weight:800;white-space:nowrap;}
-.curation-btn-desc{font-size:12px;color:var(--muted);flex:1;}
-.curation-btn-arrow{font-size:15px;color:var(--red);font-weight:700;flex-shrink:0;}
+.curation-btn:hover{box-shadow:0 8px 24px rgba(26,46,68,.38);transform:translateY(-2px);filter:brightness(1.08);}
+.curation-btn-inner{display:flex;flex-direction:column;gap:6px;flex:1;}
+.curation-btn-label{font-size:16px;font-weight:800;white-space:nowrap;color:white;}
+.curation-btn-desc{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;}
+.curation-btn-arrow{font-size:20px;color:rgba(255,255,255,.7);font-weight:400;flex-shrink:0;}
 
 /* ── 홍보 배너 슬롯 ── */
 .promo-banner-slot{margin-top:var(--sp-5);}
 .promo-banner-eyebrow{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:var(--sp-3);}
-.promo-banner-card{
-  display:block;position:relative;overflow:hidden;
-  border-radius:14px;text-decoration:none;
-  min-height:110px;
-  transition:transform .2s,box-shadow .2s;
-}
-.promo-banner-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.18);}
-.promo-banner-bg{
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,#0d1b2a 0%,#1a3a6e 60%,#1a4fa0 100%);
-}
-.promo-banner-bg::after{
-  content:'';position:absolute;inset:0;
-  background:url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='20' r='55' fill='rgba(255,255,255,.04)'/%3E%3Ccircle cx='10' cy='100' r='40' fill='rgba(255,255,255,.03)'/%3E%3C/svg%3E") right top / cover no-repeat;
-}
-.promo-banner-body{position:relative;padding:18px 16px 16px;}
-.promo-banner-tag{
-  display:inline-block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
-  background:rgba(255,255,255,.18);color:#fff;
-  padding:3px 8px;border-radius:4px;margin-bottom:8px;
-}
-.promo-banner-title{font-size:15px;font-weight:800;color:#fff;line-height:1.45;margin-bottom:10px;}
-.promo-banner-cta{font-size:12px;font-weight:700;color:rgba(255,255,255,.75);}
-.promo-banner-card--2{margin-top:var(--sp-3);}
-.promo-banner-bg--2{background:linear-gradient(135deg,#1a0a2e 0%,#4a1a6e 60%,#7b2fa0 100%);}
+.promo-banner-img-link{display:block;border-radius:14px;overflow:hidden;text-decoration:none;margin-bottom:var(--sp-3);transition:transform .2s,box-shadow .2s;}
+.promo-banner-img-link:last-child{margin-bottom:0;}
+.promo-banner-img-link:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.15);}
+.promo-banner-img{display:block;width:100%;height:auto;}
 
 /* ── 신간 스포트라이트 카드 ── */
 .nsc-card{
   background:white;border:1px solid var(--border);border-radius:16px;
   overflow:hidden;cursor:pointer;
   transition:box-shadow .2s,transform .2s;
+  display:flex;flex-direction:column;height:479px;
 }
 .nsc-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.12);transform:translateY(-3px);}
 .nsc-cover-wrap{
   position:relative;
   background:linear-gradient(160deg,#f0f4ff 0%,#e8effe 100%);
   display:flex;align-items:center;justify-content:center;
-  padding:24px 20px 20px;min-height:170px;
+  padding:24px 20px 20px;height:286px;overflow:hidden;flex-shrink:0;
 }
 .nsc-cover-img{
-  height:190px;width:auto;object-fit:contain;
+  height:241px;width:auto;object-fit:contain;
   border-radius:4px;box-shadow:0 12px 36px rgba(0,0,0,.18);
   display:block;
 }
@@ -582,10 +573,10 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   font-size:12px;font-weight:800;padding:4px 10px;
   border-radius:4px;letter-spacing:1px;
 }
-.nsc-body{padding:14px 16px 16px;}
+.nsc-body{padding:14px 16px 16px;overflow:hidden;}
 .nsc-meta-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px;}
 .nsc-date{font-size:12px;color:var(--muted);white-space:nowrap;}
-.nsc-title{font-size:15px;font-weight:800;color:#1a2e44;line-height:1.4;margin-bottom:4px;}
+.nsc-title{font-size:15px;font-weight:800;color:#1a2e44;line-height:1.4;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .nsc-author{font-size:13px;color:var(--muted);margin-bottom:8px;}
 .nsc-desc{
   font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;
@@ -1245,7 +1236,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 .cur-card-meta{font-size:12px;color:#bbb;display:flex;justify-content:space-between;}
 @media(max-width:768px){.cur-grid{grid-template-columns:1fr;}.hw-list-thumb{width:120px;height:80px;}.hw-list-title{font-size:14px;}.hw-search input{width:120px;}}
 @media(min-width:769px) and (max-width:1024px){.cur-grid{grid-template-columns:repeat(2,1fr);}}
-/* ===== 어휘출제마법사 ===== */
+/* ===== 온라인어휘학습기 ===== */
 /* 정렬 툴바 */
 .voca-sort-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;margin-top:16px;flex-wrap:wrap;gap:8px;}
 .voca-search-inline{display:flex;align-items:center;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:white;padding:0 10px;}
@@ -1476,6 +1467,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 /* ── 로그인 필요 자료 카드 ── */
 .material-card.mat-locked{background:#f8f8f8;border-color:#e0e0e0;color:#aaa;}
 .material-card.mat-locked .mat-icon{color:#bbb;}
+.mat-dl-icon{width:15px;height:15px;min-width:15px;min-height:15px;flex-shrink:0;color:#aaa;margin-left:auto;display:block;}
 .mat-lock-badge{font-size:11px;font-weight:700;color:#fff;background:#bbb;border-radius:10px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-left:auto;}
 
 /* ─────────── CART ─────────── */
@@ -1898,7 +1890,6 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 
   /* 공통 hover */
   body.hero-page .gnb-link:hover,
-  body.hero-page .gnb-link.active{opacity:.75;}
 
   /* GNB 컬러 전환 애니메이션 */
   body.hero-page .gnb-all,body.hero-page .gnb-link,
@@ -2012,7 +2003,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
     border-radius:0 0 10px 10px;
     box-shadow:0 12px 36px rgba(0,0,0,.14);
     z-index:200;
-    overflow:hidden;
+    overflow:visible;
   }
 
   /* hero-page: 드롭다운은 항상 흰 카드 */
@@ -2055,6 +2046,14 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   }
   .gnb-dropdown .mega-group-title:hover{color:var(--red);background:#fff5f5;}
   .gnb-dropdown .mega-group-title:hover::after{color:var(--red);transform:translateX(3px);}
+
+  /* 자료실 플라이아웃 서브메뉴 */
+  .gnb-dropdown .gnb-sub-group{position:relative;}
+  .gnb-subflyout{display:none;position:absolute;left:100%;top:0;background:white;border-top:3px solid var(--red);border-radius:0 0 10px 10px;box-shadow:8px 12px 28px rgba(0,0,0,.13);min-width:160px;z-index:300;padding:4px 0 8px;}
+  .gnb-sub-group:hover .gnb-subflyout{display:block;}
+  .gnb-flyout-link{display:block;font-size:14px;color:#333;padding:10px 18px;text-decoration:none;border-bottom:1px solid #f5f5f5;transition:color .12s,background .12s;white-space:nowrap;}
+  .gnb-flyout-link:last-child{border-bottom:none;}
+  .gnb-flyout-link:hover{color:var(--red);background:#fff5f5;}
 
   /* ── 메가메뉴 (☰ 호버) 개선 ── */
   .mega-menu{
@@ -2118,7 +2117,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   /* Book grids */
   .book-grid{grid-template-columns:repeat(5,1fr) !important;gap:var(--sp-5) !important;}
   .book-grid-4{grid-template-columns:repeat(5,1fr);gap:var(--sp-4);}
-  .best-cat-books{grid-template-columns:repeat(5,1fr) !important;gap:var(--sp-3) !important;}
+  .best-cat-books{grid-template-columns:repeat(4,1fr) !important;gap:var(--sp-3) !important;}
 
   /* Book cards */
   .book-info{padding:12px 14px 6px;}

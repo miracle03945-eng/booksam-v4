@@ -176,29 +176,27 @@
           </div>
           <div class="dropdown-body">
             <a href="resources.html?tab=materials" class="mega-group-title">교재자료실</a>
-            <a href="resources.html?tab=study&stab=vocab" class="mega-group-title">스터디존</a>
-            <a href="resources.html?tab=study&stab=vocab" class="mega-sub-link mega-only">어휘출제마법사</a>
-            <a href="resources.html?tab=study&stab=grammar" class="mega-sub-link mega-only">문법예문뱅크</a>
-            <a href="resources.html?tab=study&stab=daily" class="mega-sub-link mega-only">데일리외국어</a>
-            <a href="resources.html?tab=study&stab=mp3" class="mega-sub-link mega-only">MP3 바로듣기</a>
-            <a href="resources.html?tab=howto" class="mega-group-title">교재활용법</a>
-            <a href="resources.html?tab=howto" class="mega-sub-link mega-only">교재소개 및 활용방법</a>
-            <a href="resources.html?tab=howto" class="mega-sub-link mega-only">큐레이션</a>
+            <div class="gnb-sub-group">
+              <a href="resources.html?tab=study&stab=vocab" class="mega-group-title">스터디존</a>
+              <div class="gnb-subflyout">
+                <a href="resources.html?tab=study&stab=vocab" class="gnb-flyout-link">온라인어휘학습기</a>
+                <a href="resources.html?tab=study&stab=grammar" class="gnb-flyout-link">문법예문뱅크</a>
+                <a href="resources.html?tab=study&stab=daily" class="gnb-flyout-link">데일리외국어</a>
+                <a href="resources.html?tab=study&stab=mp3" class="gnb-flyout-link">MP3 바로듣기</a>
+              </div>
+            </div>
+            <div class="gnb-sub-group">
+              <a href="resources.html?tab=howto" class="mega-group-title">교재활용법</a>
+              <div class="gnb-subflyout">
+                <a href="resources.html?tab=howto" class="gnb-flyout-link">교재소개 및 활용방법</a>
+                <a href="resources.html?tab=howto" class="gnb-flyout-link">큐레이션</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="gnb-item" data-cat="events">
         <a href="events.html" class="gnb-link">이벤트</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--red);">
-            <span class="dropdown-cat-icon">🎁</span>
-            <span class="dropdown-cat-label">이벤트</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="events.html?status=ongoing" class="mega-group-title">진행중인 이벤트</a>
-            <a href="events.html?status=ended" class="mega-group-title">종료된 이벤트</a>
-          </div>
-        </div>
       </div>
       <a href="https://www.ybmbooks.com/" target="_blank" class="gnb-toeic-btn">토익·단행본 <span>↗</span></a>
     </div>
@@ -241,31 +239,6 @@
           </div>
           <div id="matBookSuggest" class="mat-suggest-box" style="display:none;"></div>
         </div>
-        <div class="hfilter-section" style="margin-bottom:20px;">
-          <div class="hfilter-pills">
-            <div class="hfilter-pill" id="mf-cat" onclick="mfToggle(this)">
-              <span class="hf-label">학년 선택</span><span class="pill-arrow">▼</span>
-              <div class="hfilter-dropdown" id="mfd-cat">
-                <div class="hfilter-opt" data-val="" onclick="mfSelect('cat','','학년 선택',event)">전체</div>
-                <div class="hfilter-opt" data-val="초등" onclick="mfSelect('cat','초등','초등',event)">초등</div>
-                <div class="hfilter-opt" data-val="중학" onclick="mfSelect('cat','중학','중학',event)">중학</div>
-                <div class="hfilter-opt" data-val="고등" onclick="mfSelect('cat','고등','고등',event)">고등</div>
-              </div>
-            </div>
-            <div class="hfilter-pill" id="mf-type" onclick="mfToggle(this)">
-              <span class="hf-label">자료 유형 선택</span><span class="pill-arrow">▼</span>
-              <div class="hfilter-dropdown" id="mfd-type">
-                <div class="hfilter-opt" data-val="" onclick="mfSelect('type','','자료 유형 선택',event)">전체</div>
-                <div class="hfilter-opt" data-val="정오표" onclick="mfSelect('type','정오표','정오표',event)">정오표</div>
-                <div class="hfilter-opt" data-val="정답지" onclick="mfSelect('type','정답지','정답 및 해석',event)">정답 및 해석</div>
-                <div class="hfilter-opt" data-val="MP3" onclick="mfSelect('type','MP3','MP3 바로 듣기',event)">MP3 바로 듣기</div>
-                <div class="hfilter-opt" data-val="MP3파일" onclick="mfSelect('type','MP3파일','MP3 파일',event)">MP3 파일</div>
-                <div class="hfilter-opt" data-val="PDF" onclick="mfSelect('type','PDF','본문 PDF',event)">본문 PDF</div>
-              </div>
-            </div>
-            <button class="hfilter-reset" onclick="mfReset()">✕ 초기화</button>
-          </div>
-        </div>
         <!-- 정렬 + 검색 툴바 -->
         <div class="mat-toolbar">
           <div class="mat-sort-btns">
@@ -304,12 +277,12 @@
         <h2 class="cs-content-title">📖 스터디존</h2>
         <!-- 하위 탭 -->
         <div class="study-tabs">
-          <button class="study-tab active" data-stab="vocab" onclick="switchStudyTab(this)"><span class="stab-icon">✨</span>어휘출제마법사</button>
+          <button class="study-tab active" data-stab="vocab" onclick="switchStudyTab(this)"><span class="stab-icon">✨</span>온라인어휘학습기</button>
           <button class="study-tab" data-stab="grammar" onclick="switchStudyTab(this)"><span class="stab-icon">📖</span>문법예문뱅크</button>
           <button class="study-tab" data-stab="daily" onclick="switchStudyTab(this)"><span class="stab-icon">🌐</span>데일리외국어</button>
           <button class="study-tab" data-stab="mp3" onclick="switchStudyTab(this)"><span class="stab-icon">🎧</span>MP3 바로듣기</button>
         </div>
-        <!-- 어휘출제마법사 -->
+        <!-- 온라인어휘학습기 -->
         <div id="stab-vocab" class="study-panel active">
           <!-- 검색바 -->
           <div class="gb-search-bar">
@@ -1237,12 +1210,12 @@
   </div>
 </div>
 
-<!-- 어휘출제마법사 위저드 모달 -->
+<!-- 온라인어휘학습기 위저드 모달 -->
 <div id="vocaWizardModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.55);align-items:center;justify-content:center;">
   <div class="vwiz-wrap">
     <!-- 헤더 -->
     <div class="vwiz-header">
-      <span class="vwiz-title">어휘출제마법사</span>
+      <span class="vwiz-title">온라인어휘학습기</span>
       <span class="vwiz-sep">|</span>
       <span class="vwiz-step-num">① <strong id="vwizStepNum">1</strong>/3</span>
       <button class="vwiz-close" onclick="closeVocaWizard()">✕</button>
@@ -1362,7 +1335,7 @@
   </div>
 </div>
 
-<script src="js/main.js?v=3"></script>
+<script src="js/main.js?v=5"></script>
 <script>
 const initTab = getParam('tab') || 'materials';
 switchTab(initTab, document.querySelector(`[data-tab="${initTab}"]`));
@@ -1374,7 +1347,7 @@ if (initTab === 'curation') {
   if (levelBtn) setCurricLevel(levelBtn, initLevel);
 }
 
-// 스터디존 하위탭 자동 선택 + 어휘출제마법사 초기화 → 하단 IIFE에서 처리
+// 스터디존 하위탭 자동 선택 + 온라인어휘학습기 초기화 → 하단 IIFE에서 처리
 
 /* ===== 데일리외국어 ===== */
 const LANG_INFO = {
@@ -1832,7 +1805,7 @@ function closeDlCard() {
   document.body.style.overflow = '';
 }
 
-/* ===== 어휘출제마법사 ===== */
+/* ===== 온라인어휘학습기 ===== */
 const VOCA_PAGE_SIZE = 10;
 let vocaFilter = {cat:'', q:''};
 let vocaSort = 'date';
@@ -1917,7 +1890,7 @@ function renderVocaList() {
           <span class="voca-tag">${b.date||''}</span>
         </div>
       </div>
-      <button class="voca-start-btn" onclick="openVocaWizard(${b.id})">✏ 어휘출제 마법사 시작하기</button>
+      <button class="voca-start-btn" onclick="openVocaWizard(${b.id})">✏ 온라인어휘학습기 시작하기</button>
     </div>
   `).join('');
 
@@ -2503,7 +2476,7 @@ function mp3Next() { if (mp3CurIdx < mp3Tracks.length - 1) mp3PlayTrack(mp3CurId
     const targetStab = _initStab || 'vocab';
     const stabBtn = document.querySelector(`[data-stab="${targetStab}"]`);
     if (stabBtn) switchStudyTab(stabBtn);
-    else initVocaList(); // 기본 어휘출제마법사
+    else initVocaList(); // 기본 온라인어휘학습기
   }
 })();
 
@@ -2538,7 +2511,6 @@ function _matTypes(book) {
     rows.push({type:'MP3',     label:'MP3 바로 듣기', login:false, stream:true});
     rows.push({type:'MP3파일', label:'MP3 파일',      login:true,  stream:false});
   }
-  rows.push({type:'PDF', label:'본문 (PDF)', login:true, stream:false});
   return rows;
 }
 
@@ -2594,7 +2566,7 @@ function matDownload(idx) {
       <div style="background:#fff;border-radius:14px;padding:36px 32px;max-width:320px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.18);">
         <div style="font-size:36px;margin-bottom:12px;">🔒</div>
         <div style="font-size:16px;font-weight:800;color:#1a2e44;margin-bottom:8px;">로그인이 필요합니다</div>
-        <div style="font-size:13px;color:#888;margin-bottom:24px;line-height:1.7;">본문 PDF · MP3 파일은<br>로그인 후 이용하실 수 있습니다.</div>
+        <div style="font-size:13px;color:#888;margin-bottom:24px;line-height:1.7;">MP3 파일은<br>로그인 후 이용하실 수 있습니다.</div>
         <div style="display:flex;gap:10px;">
           <button onclick="document.getElementById('_matLoginOv').remove()"
             style="flex:1;padding:12px;border:1.5px solid #ddd;border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;color:#555;">닫기</button>
@@ -3193,7 +3165,14 @@ switchTab = function(tab, el) {
 };
 
 // 최초 진입 시 howto 탭이면 초기화 (모든 const 선언 이후 실행)
-if ((getParam('tab') || 'materials') === 'howto') initHowtoIntro();
+if ((getParam('tab') || 'materials') === 'howto') {
+  initHowtoIntro();
+  const initSub = getParam('sub');
+  if (initSub) {
+    const subBtn = document.querySelector(`[data-htab="${initSub}"]`);
+    if (subBtn) switchHowtoTab(subBtn);
+  }
+}
 </script>
 </body>
 </html>

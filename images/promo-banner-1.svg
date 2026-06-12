@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f4f8"/>
+      <stop offset="100%" stop-color="#e4ecf4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="600" height="200" rx="14" fill="url(#bg)"/>
+  <!-- 왼쪽 포인트 라인 -->
+  <rect x="0" y="0" width="6" height="200" rx="3" fill="#1a7abf" opacity="0.7"/>
+
+  <!-- 장식 원 -->
+  <circle cx="530" cy="30"  r="90" fill="#1a7abf" opacity="0.05"/>
+  <circle cx="570" cy="170" r="60" fill="#1a7abf" opacity="0.04"/>
+
+  <!-- 계열사 태그 -->
+  <rect x="20" y="20" width="64" height="22" rx="5" fill="#1a7abf" opacity="0.15"/>
+  <text x="52" y="35" font-size="11" font-weight="700" fill="#1a5c9a"
+        font-family="'Noto Sans KR','Malgun Gothic',sans-serif" text-anchor="middle">계열사 소식</text>
+
+  <!-- 계열사 브랜드명 -->
+  <text x="20" y="76" font-family="Arial Black,sans-serif" font-size="17" font-weight="900" fill="#1a2e44">YBM 어학원</text>
+
+  <!-- 이벤트 내용 -->
+  <text x="20" y="108" font-family="'Noto Sans KR','Malgun Gothic',sans-serif"
+        font-size="21" font-weight="900" fill="#1a2e44">수강 등록 시</text>
+  <text x="20" y="136" font-family="'Noto Sans KR','Malgun Gothic',sans-serif"
+        font-size="21" font-weight="900" fill="#1a2e44">YBM 교재 증정!</text>
+
+  <!-- 서브 텍스트 -->
+  <text x="20" y="160" font-family="'Noto Sans KR','Malgun Gothic',sans-serif"
+        font-size="12" fill="#6a7e92">첫 등록 회원 대상 · 선착순 300명 · 교재 선택 가능</text>
+
+  <!-- CTA + 기간 -->
+  <text x="20" y="182" font-family="'Noto Sans KR','Malgun Gothic',sans-serif"
+        font-size="12" font-weight="700" fill="#1a7abf">자세히 보기 →</text>
+  <text x="580" y="182" font-family="'Noto Sans KR','Malgun Gothic',sans-serif"
+        font-size="11" fill="#8a9aaa" text-anchor="end">~2025.07.31</text>
+
+  <!-- 우측 아이콘 -->
+  <text x="500" y="125" font-size="64" text-anchor="middle" font-family="sans-serif">🏫</text>
+</svg>
