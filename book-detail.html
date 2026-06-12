@@ -404,8 +404,8 @@ const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 // ── 제공 서비스 데이터 ──
 const services = [
   { id:'mp3-stream',    title:'MP3 바로 듣기',    type:'streaming', loginRequired:false },
-  { id:'vocab-wizard',  title:'온라인어휘학습기',   type:'vocab',     loginRequired:false },
-  { id:'grammar-bank',  title:'문법예문뱅크',      type:'external',  loginRequired:false, url:'resources.html?tab=study&stab=grammar' },
+  { id:'vocab-wizard',  title:'온라인어휘학습기',   type:'vocab',     loginRequired:true },
+  { id:'grammar-bank',  title:'문법예문뱅크',      type:'external',  loginRequired:true,  url:'resources.html?tab=study&stab=grammar' },
 ];
 
 // ── 부가자료 데이터 ──
@@ -456,7 +456,17 @@ function openLoginAlert(mat) {
     </div>`;
   document.body.appendChild(ov);
   document.getElementById('_loginConfirm').onclick = () => {
-    localStorage.setItem('redirectAfterLogin', location.pathname + location.search);
+    let redirectUrl;
+    if (mat.type === 'vocab') {
+      const bk = BOOKS.find(b => b.id === parseInt(getParam('id')));
+      const bookId = bk ? bk.id : '';
+      redirectUrl = `resources.html?tab=study&stab=vocab&vocaBook=${bookId}`;
+    } else if (mat.type === 'external' && mat.url) {
+      redirectUrl = mat.url;
+    } else {
+      redirectUrl = location.pathname + location.search;
+    }
+    localStorage.setItem('redirectAfterLogin', redirectUrl);
     localStorage.setItem('pendingMaterialId',    mat.id);
     localStorage.setItem('pendingMaterialTitle', mat.title);
     location.href = 'login.html';
@@ -870,11 +880,14 @@ if (!book) {
     .filter(Boolean).map(t => `<span class="detail-tag">${t}</span>`).join('');
 
   // 제공 서비스 카드
-  const servicesHtml = services.map(m => `
-    <button class="material-card" onclick="handleMaterialClick('${m.id}')">
+  const servicesHtml = services.map(m => {
+    const locked = m.loginRequired && !isLoggedIn;
+    return `<button class="material-card${locked ? ' mat-locked' : ''}" onclick="handleMaterialClick('${m.id}')">
       ${MAT_ICONS[m.id]}
       <span class="mat-label">${m.title}</span>
-    </button>`).join('');
+      ${locked ? '<span class="mat-lock-badge">🔒 로그인</span>' : ''}
+    </button>`;
+  }).join('');
 
   // 부가자료 카드
   const matsHtml = materials.map(m => {
