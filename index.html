@@ -225,6 +225,24 @@
       .hs-arrow{width:36px;height:36px;}
       .hs-dots{right:16px;bottom:14px;}
     }
+    /* ─── 이벤트 슬라이드 템플릿 ─── */
+    .hs-slide--event .hs-inner{justify-content:center;text-align:center;flex-direction:column;align-items:center;gap:0;padding:0 60px;}
+    .hs-event-eyebrow{font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:14px;}
+    .hs-event-title{font-size:34px;font-weight:900;color:white;line-height:1.25;margin-bottom:12px;letter-spacing:-.5px;text-shadow:0 2px 16px rgba(0,0,0,.22);}
+    .hs-event-title em{font-style:normal;background:linear-gradient(90deg,#FFD700,#FF9500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hs-event-desc{font-size:15px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:28px;}
+    .hs-event-period{display:inline-block;font-size:12px;font-weight:700;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 14px;margin-bottom:24px;}
+    .hs-event-btns{display:flex;gap:12px;justify-content:center;}
+    .hs-event-btn-p{background:white;color:#1a2e44;border:none;padding:12px 32px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+    .hs-event-btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.18);}
+    .hs-event-btn-o{background:transparent;color:white;border:2px solid rgba(255,255,255,.6);padding:10px 28px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+    .hs-event-btn-o:hover{border-color:white;background:rgba(255,255,255,.12);}
+    @media(max-width:768px){
+      .hs-slide--event .hs-inner{padding:0 20px;}
+      .hs-event-title{font-size:22px;}
+      .hs-event-btns{flex-direction:column;gap:8px;}
+      .hs-event-btn-p,.hs-event-btn-o{width:100%;text-align:center;}
+    }
   </style>
 </head>
 <body>
@@ -434,22 +452,66 @@
       </div>
     </div>
 
-    <!-- Slide 2: Booster Voca -->
-    <div class="hs-slide" data-theme="dark">
-      <div class="hs-inner">
+    <!-- Slide 2: 신규 오픈 이벤트 -->
+    <div class="hs-slide" data-theme="dark" style="background:linear-gradient(135deg,#1a3a5c 0%,#1e4976 50%,#153d6b 100%);">
+      <div class="hs-inner" style="position:relative;">
         <div class="hs-text">
-          <div class="hs-tags"><span class="hs-tag">중학</span><span class="hs-tag-acc purple">어휘</span></div>
-          <h1 class="hs-title">50일로 끝내는 중학 영단어 마스터<br><em>부스터 보카 시리즈</em></h1>
-          <p class="hs-desc">최신 교육과정 반영, 내신·수능 대비<br>중학 필수 영단어를 단계별로 완성하세요</p>
+          <div class="hs-tags">
+            <span class="hs-tag" style="background:rgba(255,215,0,.2);border-color:rgba(255,215,0,.5);color:#FFD700;">🎉 신규 오픈</span>
+            <span class="hs-tag-acc" style="background:rgba(255,215,0,.9);color:#1a0550;">EVENT</span>
+          </div>
+          <h1 class="hs-title">YBM 북스 새롭게 오픈!<br><em style="-webkit-text-fill-color:transparent;background:linear-gradient(90deg,#FFD700,#FFA500);-webkit-background-clip:text;background-clip:text;">오픈 기념 특별 이벤트</em></h1>
+          <p class="hs-desc" style="color:rgba(255,255,255,.88);">교재 구매 고객 전원 <strong style="color:#FFD700;">쿠폰 증정</strong> &amp; 추첨을 통해<br><strong style="color:#FFD700;">스타벅스 기프티콘</strong> · <strong style="color:#FFD700;">도서상품권</strong> 선물!</p>
           <div class="hs-btns">
-            <button class="hs-btn-p" onclick="location.href='book-detail.html?id=6'">교재 자세히 보기</button>
-            <button class="hs-btn-o" onclick="location.href='resources.html?tab=curation&amp;level=middle'">내 맞춤 플랜 찾기</button>
+            <button class="hs-btn-p" style="background:#FFD700;color:#1a0550;" onclick="location.href='events.html'">이벤트 참여하기</button>
+            <button class="hs-btn-o" onclick="location.href='events.html'">자세히 보기</button>
           </div>
         </div>
-        <div class="hs-books">
-          <img src="images/booster-voca-basic.png" class="hs-bk hs-bk1" alt="Booster Voca 기본">
-          <img src="images/booster-voca-power.png" class="hs-bk hs-bkm" alt="Booster Voca 실력">
-          <img src="images/booster-voca-complete.png" class="hs-bk hs-bk3" alt="Booster Voca 완성">
+        <div class="hs-books" style="flex:0 0 320px;align-items:center;justify-content:center;">
+          <svg width="280" height="240" viewBox="0 0 280 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 배경 빛 효과 -->
+            <ellipse cx="140" cy="200" rx="110" ry="20" fill="rgba(255,215,0,0.12)"/>
+            <!-- 선물 상자 몸통 -->
+            <rect x="60" y="120" width="160" height="100" rx="8" fill="url(#boxGrad)"/>
+            <!-- 상자 뚜껑 -->
+            <rect x="50" y="100" width="180" height="30" rx="6" fill="url(#lidGrad)"/>
+            <!-- 리본 세로 -->
+            <rect x="128" y="100" width="24" height="120" rx="4" fill="url(#ribbonGrad)"/>
+            <!-- 리본 가로 -->
+            <rect x="50" y="108" width="180" height="14" rx="4" fill="url(#ribbonGrad)"/>
+            <!-- 리본 나비 왼쪽 -->
+            <ellipse cx="108" cy="100" rx="30" ry="16" fill="url(#ribbonGrad)" transform="rotate(-25 108 100)"/>
+            <!-- 리본 나비 오른쪽 -->
+            <ellipse cx="172" cy="100" rx="30" ry="16" fill="url(#ribbonGrad)" transform="rotate(25 172 100)"/>
+            <!-- 리본 중심 -->
+            <circle cx="140" cy="100" r="12" fill="url(#ribbonGrad)"/>
+            <circle cx="140" cy="100" r="6" fill="#FFD700"/>
+            <!-- 별 장식들 -->
+            <text x="30" y="90" font-size="22" fill="#FFD700" opacity="0.9">✦</text>
+            <text x="230" y="80" font-size="16" fill="#FFD700" opacity="0.7">✦</text>
+            <text x="220" y="150" font-size="12" fill="#FFD700" opacity="0.6">✦</text>
+            <text x="40" y="160" font-size="14" fill="#FFD700" opacity="0.5">✦</text>
+            <text x="200" y="55" font-size="24" fill="rgba(255,215,0,0.8)">🎊</text>
+            <text x="50" y="55" font-size="20" fill="rgba(255,215,0,0.8)">🎁</text>
+            <!-- 쿠폰 라벨 -->
+            <rect x="72" y="138" width="136" height="64" rx="6" fill="rgba(255,255,255,0.12)"/>
+            <text x="140" y="162" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,0.7)" font-family="Pretendard,sans-serif">전원 증정</text>
+            <text x="140" y="182" text-anchor="middle" font-size="14" font-weight="900" fill="#FFD700" font-family="Pretendard,sans-serif">할인 쿠폰 + 경품 추첨</text>
+            <defs>
+              <linearGradient id="boxGrad" x1="60" y1="120" x2="220" y2="220" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4A1D96"/>
+                <stop offset="100%" stop-color="#2D0A6E"/>
+              </linearGradient>
+              <linearGradient id="lidGrad" x1="50" y1="100" x2="230" y2="130" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#5B21B6"/>
+                <stop offset="100%" stop-color="#3B0E8C"/>
+              </linearGradient>
+              <linearGradient id="ribbonGrad" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#FFD700"/>
+                <stop offset="100%" stop-color="#FFA500"/>
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
       </div>
     </div>
@@ -520,17 +582,17 @@
         </div>
         <span class="shortcut-label">MP3 바로듣기</span>
       </a>
-      <a href="#" class="shortcut-item" onclick="openFinderModal(event)">
-        <div class="shortcut-icon c-green">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-        </div>
-        <span class="shortcut-label">나에게 맞는<br>교재 찾기</span>
-      </a>
       <a href="resources.html?tab=study&stab=vocab" class="shortcut-item">
         <div class="shortcut-icon c-red">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <span class="shortcut-label">온라인어휘학습기</span>
+      </a>
+      <a href="#" class="shortcut-item" onclick="openFinderModal(event)">
+        <div class="shortcut-icon c-green">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <span class="shortcut-label">나에게 맞는<br>교재 찾기</span>
       </a>
       <a href="events.html" class="shortcut-item">
         <div class="shortcut-icon c-orange">
