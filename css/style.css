@@ -1410,7 +1410,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 .material-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1px solid #e8e8e8;border-radius:8px;cursor:pointer;transition:all .15s;font-size:13px;color:#333;font-weight:600;font-family:inherit;text-align:left;}
 .material-card:hover{border-color:#bbb;background:#fafafa;box-shadow:0 2px 8px rgba(0,0,0,.07);}
 .mat-icon{width:20px;height:20px;flex-shrink:0;color:#666;}
-.mat-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.mat-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;}
 .detail-action-row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;}
 .btn-detail-wish{background:white;border:1.5px solid #ddd;border-radius:8px;padding:0 var(--sp-4);font-size:20px;cursor:pointer;transition:all .15s;color:#bbb;flex-shrink:0;}
 .btn-detail-wish:hover{border-color:#f48fb1;color:#e91e63;}

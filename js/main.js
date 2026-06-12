@@ -227,18 +227,18 @@ const BOOKS = [
     img: 'images/booster-voca-complete.png', publisher: 'YBM', date: '2024.01.01',
     desc: '50일로 끝내는 중등 필수 영단어 1200! 수능 기초까지 완성하는 최고 수준의 어휘 학습.' },
   { id: 16, cat: 'middle', type: '참고서', subject: '영어', area: '독해', title: 'I Love Reading Level 1 (2025)',
-    author: '북샘 편집부', price: 13500, originalPrice: 15000, badge: 'best',
-    img: 'images/ilove-reading-1.png', publisher: '북샘 교육출판', date: '2025.02.01',
+    author: 'YBM 편집부', price: 13500, originalPrice: 15000, badge: 'best',
+    img: 'images/ilove-reading-1.png', publisher: 'YBM 교육출판', date: '2025.02.01',
     kyoboUrl: 'https://product.kyobobook.co.kr/detail/S000218082162',
     desc: '2025 개정 교육과정을 완벽 반영한 중학 영어 독해 시리즈.', tags: ['베스트셀러', '중학독해', 'MP3'] },
   { id: 17, cat: 'middle', type: '참고서', subject: '영어', area: '독해', title: 'I Love Reading Level 2 (2025)',
-    author: '북샘 편집부', price: 13500, originalPrice: 15000, badge: 'new',
-    img: 'images/ilove-reading-2.png', publisher: '북샘 교육출판', date: '2025.02.01',
+    author: 'YBM 편집부', price: 13500, originalPrice: 15000, badge: 'new',
+    img: 'images/ilove-reading-2.png', publisher: 'YBM 교육출판', date: '2025.02.01',
     kyoboUrl: 'https://product.kyobobook.co.kr/detail/S000218082160',
     desc: '다양한 유형의 지문과 심화 독해 전략으로 수준 높은 독해 능력을 키웁니다.', tags: ['신규', '중학독해', 'MP3'] },
   { id: 18, cat: 'middle', type: '참고서', subject: '영어', area: '독해', title: 'I Love Reading Level 3 (2025)',
-    author: '북샘 편집부', price: 13500, originalPrice: 15000, badge: 'new',
-    img: 'images/ilove-reading-3.png', publisher: '북샘 교육출판', date: '2025.02.01',
+    author: 'YBM 편집부', price: 13500, originalPrice: 15000, badge: 'new',
+    img: 'images/ilove-reading-3.png', publisher: 'YBM 교육출판', date: '2025.02.01',
     desc: '실전 수준의 지문과 독해 전략으로 내신 최고 등급을 목표로 합니다.', tags: ['중학독해', 'MP3'] },
 
   // ── 초등 교과서 / 평가문제집 ──
@@ -655,7 +655,7 @@ function renderBookCard(book) {
         <div class="book-title">${book.title}</div>
         <div class="book-list-meta">
           <span>${book.author}</span>
-          <span>${book.publisher || '북샘 교육출판'}</span>
+          <span>${book.publisher || 'YBM 교육출판'}</span>
           ${book.date ? `<span>${book.date}</span>` : ''}
         </div>
         <div class="book-mat-icon-row">
@@ -694,7 +694,7 @@ function renderListCard(book) {
         <div class="book-list-title">${book.title}</div>
         <div class="book-list-meta">
           <span>${book.author}</span>
-          <span>${book.publisher || '북샘 교육출판'}</span>
+          <span>${book.publisher || 'YBM 교육출판'}</span>
           ${book.date ? `<span>${book.date}</span>` : ''}
         </div>
         ${book.desc ? `<div class="book-list-desc">${book.desc}</div>` : ''}
