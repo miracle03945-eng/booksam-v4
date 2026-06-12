@@ -698,6 +698,12 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
   grid-template-columns:repeat(2,1fr) !important;
   gap:var(--sp-3) !important;
 }
+/* 연관 도서: 작은 카드 */
+#relatedBooks{grid-template-columns:repeat(3,1fr) !important;gap:var(--sp-2) !important;}
+#relatedBooks .book-list-meta,
+#relatedBooks .book-mat-icon-row{display:none;}
+#relatedBooks .book-card-title{font-size:11px;-webkit-line-clamp:2;}
+#relatedBooks .book-info{padding:8px 8px 6px;}
 .book-grid-4{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-3);}
 
 /* ─────────── BOOK CARD ─────────── */
@@ -2122,6 +2128,7 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 
   /* Book grids */
   .book-grid{grid-template-columns:repeat(5,1fr) !important;gap:var(--sp-5) !important;}
+  #relatedBooks{grid-template-columns:repeat(6,1fr) !important;gap:var(--sp-3) !important;}
   .book-grid-4{grid-template-columns:repeat(5,1fr);gap:var(--sp-4);}
   .best-cat-books{grid-template-columns:repeat(4,1fr) !important;gap:var(--sp-3) !important;}
 
