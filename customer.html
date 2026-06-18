@@ -33,10 +33,9 @@
     <div class="header-search">
       <div class="search-wrap">
         <input type="text" class="search-input" placeholder="교재명을 입력해주세요.  ex)booster, 부스터">
-        <button class="search-btn" onclick="var q=this.closest('.search-wrap').querySelector('.search-input').value;location.href='books.html'+(q?'?q='+encodeURIComponent(q):'');"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+        <button class="search-btn" onclick="openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
       </div>
     </div>
-    <button class="util-bar-series-btn" onclick="openSeriesPanel()">📚 시리즈 보기</button>
     </div>
     <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="util-bar-ytutpr">
       <span class="ytutpr-label">Y튜터</span>
@@ -274,6 +273,7 @@
 </footer>
 
 <script src="js/main.js?v=5"></script>
+<script src="js/search-modal.js?v=1"></script>
 <script>
 // ── 마이페이지 nav: 로그인 시에만 표시 ──
 if (localStorage.getItem('isLoggedIn') === 'true') {
