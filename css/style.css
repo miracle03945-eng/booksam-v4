@@ -2114,22 +2114,10 @@ span.gnb-link{cursor:default;}
     content:'›';font-size:17px;color:#ccc;line-height:1;
     transition:color .12s,transform .15s;
   }
-  /* 하위 sub-link를 가진 group-title은 화살표 제거 */
-  .gnb-dropdown .mega-group-title:has(+ .mega-sub-link)::after{content:'';}
   .gnb-dropdown .mega-group-title:hover{color:var(--red);background:#fff5f5;}
   .gnb-dropdown .mega-group-title:hover::after{color:var(--red);transform:translateX(3px);}
 
-  /* GNB 드롭다운 내 sub-link 표시 */
-  .gnb-dropdown .mega-sub-link{
-    display:block;font-size:13px;color:#666;
-    padding:8px 18px 8px 28px;text-decoration:none;
-    border-bottom:1px solid #f9f9f9;
-    transition:color .12s,background .12s;white-space:nowrap;
-  }
-  .gnb-dropdown .mega-sub-link:last-child{border-bottom:none;}
-  .gnb-dropdown .mega-sub-link:hover{color:var(--red);background:#fff5f5;padding-left:32px;}
-
-  /* 자료실 플라이아웃 서브메뉴 (레거시) */
+  /* 자료실 플라이아웃 서브메뉴 */
   .gnb-dropdown .gnb-sub-group{position:relative;}
   .gnb-subflyout{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s,visibility .18s;position:absolute;left:100%;top:0;background:white;border-top:3px solid var(--red);border-radius:0 0 10px 10px;box-shadow:8px 12px 28px rgba(0,0,0,.13);min-width:160px;z-index:300;padding:4px 0 8px;}
   .gnb-sub-group:hover .gnb-subflyout{opacity:1;visibility:visible;pointer-events:auto;}
