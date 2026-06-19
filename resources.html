@@ -460,13 +460,13 @@
                   <p><strong>교재를 먼저 선택해주세요</strong><br>왼쪽에서 교재를 선택하면<br>MP3 트랙 목록이 여기에 표시됩니다</p>
                 </div>
                 <div id="mp3Player" style="display:none;">
-                  <!-- 현재 재생 -->
+                  <!-- 고정 플레이어 영역 -->
                   <div class="mp3-now-card">
                     <div class="mp3-now-label">지금 재생 중</div>
                     <div class="mp3-now-title" id="mp3NowTitle">—</div>
                     <div class="mp3-now-track" id="mp3NowTrack">—</div>
                     <div class="mp3-prog-bar">
-                      <div class="mp3-prog-bg">
+                      <div class="mp3-prog-bg" onclick="mp3Seek(event,this)" style="cursor:pointer;">
                         <div class="mp3-prog-fill" id="mp3ProgFill" style="width:0%"></div>
                       </div>
                       <div class="mp3-prog-time">
@@ -477,17 +477,33 @@
                     <audio id="mp3Audio"></audio>
                     <div class="mp3-controls">
                       <button class="mp3-ctrl-btn" onclick="mp3Prev()" aria-label="이전 트랙">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                      </button>
+                      <button class="mp3-ctrl-btn mp3-skip-btn" onclick="mp3Skip(-10)" aria-label="10초 뒤로 이동">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V2L8 6l4 4V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/><text x="12" y="15" font-size="5.5" text-anchor="middle" fill="white" stroke="none" font-weight="800">10</text></svg>
                       </button>
                       <button class="mp3-ctrl-btn mp3-play-btn" id="mp3PlayBtn" onclick="mp3TogglePlay()" aria-label="재생/일시정지">
                         <svg id="mp3PlayIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                       </button>
+                      <button class="mp3-ctrl-btn mp3-skip-btn" onclick="mp3Skip(10)" aria-label="10초 앞으로 이동">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V2l4 4-4 4V7c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6h2c0 4.4-3.6 8-8 8S4 17.4 4 13s3.6-8 8-8z"/><text x="12" y="15" font-size="5.5" text-anchor="middle" fill="white" stroke="none" font-weight="800">10</text></svg>
+                      </button>
                       <button class="mp3-ctrl-btn" onclick="mp3Next()" aria-label="다음 트랙">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8z"/><rect x="16" y="6" width="2" height="12"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8z"/><rect x="16" y="6" width="2" height="12"/></svg>
                       </button>
                     </div>
+                    <!-- 배속 선택 -->
+                    <div class="mp3-speed-row">
+                      <span class="mp3-speed-label">배속</span>
+                      <div class="mp3-speed-btns">
+                        <button class="mp3-speed-btn active" data-speed="1" onclick="mp3SetSpeed(1)">1.0x</button>
+                        <button class="mp3-speed-btn" data-speed="1.25" onclick="mp3SetSpeed(1.25)">1.25x</button>
+                        <button class="mp3-speed-btn" data-speed="1.5" onclick="mp3SetSpeed(1.5)">1.5x</button>
+                        <button class="mp3-speed-btn" data-speed="2" onclick="mp3SetSpeed(2)">2.0x</button>
+                      </div>
+                    </div>
                   </div>
-                  <!-- 트랙 목록 -->
+                  <!-- 독립 스크롤 트랙 목록 -->
                   <div class="mp3-tracklist-header">
                     <span>트랙 목록</span>
                     <span id="mp3TrackCount" class="mp3-track-cnt-badge"></span>
@@ -2387,7 +2403,7 @@ function selectMp3Book(book) {
   document.getElementById('mp3TrackCount').textContent = '전체 ' + mp3Tracks.length + '개';
   renderMp3TrackList();
   document.getElementById('mp3SelectHint').style.display = 'none';
-  document.getElementById('mp3Player').style.display = 'block';
+  document.getElementById('mp3Player').style.display = 'flex';
   mp3PlayTrack(0);
 }
 
@@ -2451,6 +2467,30 @@ function mp3TogglePlay() {
 
 function mp3Prev() { if (mp3CurIdx > 0) mp3PlayTrack(mp3CurIdx - 1); }
 function mp3Next() { if (mp3CurIdx < mp3Tracks.length - 1) mp3PlayTrack(mp3CurIdx + 1); }
+
+function mp3Skip(sec) {
+  const audio = document.getElementById('mp3Audio');
+  if (!audio.src) return;
+  audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + sec));
+}
+
+function mp3SetSpeed(rate) {
+  const audio = document.getElementById('mp3Audio');
+  audio.playbackRate = rate;
+  document.querySelectorAll('#mp3Player .mp3-speed-btn').forEach(b =>
+    b.classList.toggle('active', parseFloat(b.dataset.speed) === rate)
+  );
+}
+
+function mp3Seek(event, bar) {
+  const audio = document.getElementById('mp3Audio');
+  if (!audio.src || !audio.duration) return;
+  const rect = bar.getBoundingClientRect();
+  const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+  audio.currentTime = ratio * audio.duration;
+  document.getElementById('mp3ProgFill').style.width = (ratio * 100) + '%';
+  document.getElementById('mp3CurTime').textContent = fmt(audio.currentTime);
+}
 
 // 스터디존 하위탭 자동 선택 + 기본 초기화 — 모든 데이터 선언 이후 실행
 (function(){
