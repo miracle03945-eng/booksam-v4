@@ -1017,8 +1017,13 @@ body.hero-page .topbar-ytutpr{color:white;background:rgba(255,255,255,.26);borde
 .mat-file-zip{background:var(--navy);color:white;}
 .mat-file-pdf{background:#c0392b;color:white;}
 .mat-res-name{font-size:13px;color:var(--text);line-height:1.4;}
-/* 자료유형 */
-.mat-col-type{font-size:12px;color:var(--muted);text-align:center;padding:0 4px;}
+/* 자료유형 필터 바 */
+.mat-type-filter{display:flex;align-items:center;gap:12px;padding:12px 0 14px;border-bottom:1px solid var(--border);margin-bottom:4px;flex-wrap:wrap;}
+.mat-type-label{font-size:13px;font-weight:700;color:#333;white-space:nowrap;min-width:48px;}
+.mat-type-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.mat-type-pill{padding:5px 13px;font-size:12px;font-weight:600;border:1px solid #ddd;border-radius:20px;background:white;cursor:pointer;font-family:inherit;color:#555;transition:all .15s;}
+.mat-type-pill:hover{border-color:#1a2e44;color:#1a2e44;}
+.mat-type-pill.active{background:#1a2e44;color:white;border-color:#1a2e44;}
 /* 미리보기·다운로드 */
 .mat-col-preview,.mat-col-dl{display:flex;justify-content:center;align-items:center;}
 .mat-icon-btn{background:none;border:none;cursor:pointer;color:#aaa;padding:6px;border-radius:4px;transition:color .15s;display:flex;align-items:center;justify-content:center;}

@@ -225,6 +225,22 @@
           </div>
           <input type="hidden" id="matSearchInput">
         </div>
+        <!-- 자료유형 필터 -->
+        <div class="mat-type-filter">
+          <span class="mat-type-label">자료유형</span>
+          <div class="mat-type-pills">
+            <button class="mat-type-pill active" onclick="setMatType(this,'')">전체</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'정오표')">정오표</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'정답&해설')">정답&해설</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'MP3')">MP3</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'보충문제')">보충문제</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'본문파일')">본문파일</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'강의용PPT')">강의용PPT</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'워크시트')">워크시트</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'기타')">기타</button>
+            <button class="mat-type-pill" onclick="setMatType(this,'수업동영상')">수업동영상</button>
+          </div>
+        </div>
         <!-- 테이블 헤더 -->
         <div class="mat-table">
           <div class="mat-table-head">
@@ -233,7 +249,6 @@
             <div class="mat-col-book">교재명</div>
             <div class="mat-col-sep"></div>
             <div class="mat-col-res">자료명</div>
-            <div class="mat-col-type">자료유형</div>
             <div class="mat-col-preview">미리보기</div>
             <div class="mat-col-dl">다운로드</div>
           </div>
@@ -2832,11 +2847,23 @@ function onMatBookSearchKey(e) {
   }
 }
 
+const TYPE_FILTER_MAP = {
+  '정답&해설': ['정답지', '정답 및 해석', '정답&해설'],
+  'MP3': ['MP3', 'MP3파일'],
+};
+
+function setMatType(btn, type) {
+  document.querySelectorAll('.mat-type-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  MF.type = type;
+  applyMatFilter();
+}
+
 function applyMatFilter() {
   const q = matBookSearchQ.toLowerCase();
   let list = ALL_MATS.filter(m =>
     (!MF.cat  || m.cat  === MF.cat) &&
-    (!MF.type || m.type === MF.type) &&
+    (!MF.type || (TYPE_FILTER_MAP[MF.type] ? TYPE_FILTER_MAP[MF.type].includes(m.type) : m.type === MF.type)) &&
     (!q || m.bookTitle.toLowerCase().includes(q))
   );
   if (matCurrentSort === 'date')    list.sort((a,b) => b.date.localeCompare(a.date));
@@ -2889,7 +2916,6 @@ function renderMaterials(list, page) {
         <span class="mat-file-badge mat-file-${ft.cls}">${ft.label}</span>
         <span class="mat-res-name">${resName}</span>
       </div>
-      <div class="mat-col-type">${r.type}</div>
       <div class="mat-col-preview">
         <button class="mat-icon-btn" onclick="showToast('미리보기 서비스 준비 중입니다.')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
