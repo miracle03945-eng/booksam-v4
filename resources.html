@@ -182,6 +182,7 @@
               <div class="gnb-subflyout">
                 <a href="resources.html?tab=howto" class="gnb-flyout-link">교재소개 및 활용방법</a>
                 <a href="resources.html?tab=howto&sub=curation" class="gnb-flyout-link">큐레이션</a>
+                <a href="resources.html?tab=howto&sub=finder" class="gnb-flyout-link">나에게 맞는 교재 찾기</a>
               </div>
             </div>
           </div>
@@ -536,6 +537,7 @@
         <div class="study-tabs">
           <button class="study-tab active" data-htab="intro" onclick="switchHowtoTab(this)"><span class="stab-icon">🎬</span>교재소개 및 활용방법</button>
           <button class="study-tab" data-htab="curation" onclick="switchHowtoTab(this)"><span class="stab-icon">⭐</span>큐레이션</button>
+          <button class="study-tab" data-htab="finder" onclick="switchHowtoTab(this)"><span class="stab-icon">🔍</span>나에게 맞는 교재 찾기</button>
         </div>
 
         <!-- ① 교재소개 및 활용방법 -->
@@ -758,6 +760,15 @@
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+
+        <!-- ③ 나에게 맞는 교재 찾기 -->
+        <div id="htab-finder" class="howto-panel">
+          <div style="width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+            <iframe src="https://miracle03945-eng.github.io/booksam-textbook-finder/"
+              style="width:100%;height:700px;border:none;display:block;"
+              title="나에게 맞는 교재 찾기"></iframe>
           </div>
         </div>
       </div>
