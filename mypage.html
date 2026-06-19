@@ -16,10 +16,9 @@
   .mp-tab.active{background:#c0392b;color:white;}
   .mp-tab:not(.active):hover{background:#f5f5f5;color:#c0392b;}
 
-  /* ── 환영 메시지 ── */
+  /* ── 홈 환영 ── */
   .mp-welcome{background:white;border:1px solid #e0e0e0;border-radius:6px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
   .mp-welcome-left{display:flex;align-items:center;gap:12px;}
-  .mp-badge{background:#1a2e44;color:white;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;}
   .mp-welcome-name{font-size:18px;font-weight:700;color:#1a1a1a;}
   .mp-welcome-link{font-size:13px;color:#555;text-decoration:none;font-weight:600;}
   .mp-welcome-link:hover{color:#c0392b;text-decoration:underline;}
@@ -35,13 +34,8 @@
   .mp-card-plus{width:28px;height:28px;background:#1a2e44;color:white;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:18px;font-weight:300;text-decoration:none;line-height:1;flex-shrink:0;transition:background .15s;}
   .mp-card-plus:hover{background:#0d1b2a;}
 
-  /* ── 주문/장바구니 요약 ── */
+  /* ── 주문요약 카드 ── */
   .mp-summary-body{padding:18px 20px;}
-  .mp-point-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
-  .mp-point-label{font-size:14px;font-weight:700;color:#333;}
-  .mp-point-badge{background:#1a2e44;color:white;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px;}
-  .mp-gift-btn{margin-left:auto;background:#1a2e44;color:white;border:none;padding:7px 15px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;display:flex;align-items:center;gap:4px;}
-  .mp-gift-btn:hover{background:#0d1b2a;}
   .mp-summary-items{display:flex;gap:12px;}
   .mp-summary-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;padding:28px 8px;border-radius:6px;border:1px solid #f0f0f0;transition:all .15s;background:#fafafa;}
   .mp-summary-item:hover{border-color:#c0392b;background:#fff8f7;}
@@ -55,19 +49,18 @@
   .mp-notice-item:last-child{border-bottom:none;}
   .mp-notice-badge{font-size:11px;font-weight:700;color:#666;border:1px solid #ccc;padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
   .mp-notice-title{flex:1;color:#333;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .mp-notice-title:hover{color:#c0392b;}
   .mp-notice-date{font-size:12px;color:#bbb;white-space:nowrap;flex-shrink:0;}
 
-  /* ── 관심 교재 빈 상태 ── */
+  /* ── 관심교재 홈카드 ── */
   .mp-empty{padding:40px 20px;text-align:center;color:#aaa;font-size:14px;}
   .mp-empty-icon{color:#c0392b;margin-right:4px;}
   .mp-fav-grid{display:flex;flex-wrap:wrap;gap:16px;padding:20px;}
-  .mp-fav-card{width:100px;text-align:center;cursor:pointer;text-decoration:none;}
+  .mp-fav-card{width:100px;text-align:center;text-decoration:none;}
   .mp-fav-card:hover .mp-fav-img{box-shadow:0 4px 12px rgba(0,0,0,.15);}
   .mp-fav-img{width:100px;height:130px;object-fit:cover;border-radius:4px;border:1px solid #e0e0e0;display:block;margin-bottom:6px;}
-  .mp-fav-title{font-size:12px;color:#333;font-weight:600;line-height:1.3;word-break:break-all;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .mp-fav-title{font-size:12px;color:#333;font-weight:600;line-height:1.3;}
 
-  /* ── 자료 목록 공통 ── */
+  /* ── 자료 목록 (홈) ── */
   .mp-mat-list{list-style:none;margin:0;padding:0;}
   .mp-mat-item{display:flex;align-items:center;gap:8px;padding:10px 20px;border-bottom:1px solid #f8f8f8;font-size:13px;}
   .mp-mat-item:last-child{border-bottom:none;}
@@ -82,16 +75,150 @@
   .mp-mat-btn{width:26px;height:26px;border:1px solid #e8e8e8;border-radius:4px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#999;transition:all .15s;padding:0;}
   .mp-mat-btn:hover{border-color:#c0392b;color:#c0392b;}
 
+  /* ════════════════════ 서브페이지 공통 ════════════════════ */
+  .mp-subpage{background:white;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;}
+  .mp-subpage-title{font-size:20px;font-weight:800;color:#1a1a1a;padding:20px 20px 0;margin-bottom:6px;}
+  .mp-total-count{font-size:13px;color:#c0392b;font-weight:600;padding:4px 20px 14px;border-bottom:1px solid #eee;}
+
+  /* 컨트롤 바 */
+  .mp-ctrl-bar{display:flex;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid #eee;background:#fafafa;}
+  .mp-ctrl-chk-label{display:flex;align-items:center;gap:5px;font-size:13px;color:#333;cursor:pointer;}
+  .mp-ctrl-btn{padding:5px 14px;font-size:12px;font-weight:600;border:1px solid #ccc;background:white;border-radius:3px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .mp-ctrl-btn:hover{background:#f0f0f0;}
+  .mp-ctrl-btn-del{border-color:#c0392b;color:#c0392b;}
+  .mp-ctrl-btn-del:hover{background:#c0392b;color:white;}
+  .mp-ctrl-btn-navy{background:#1a2e44;color:white;border-color:#1a2e44;}
+  .mp-ctrl-btn-navy:hover{background:#0d1b2a;}
+  .mp-ctrl-right{margin-left:auto;}
+
+  /* 테이블 */
+  .mp-tbl-wrap{overflow-x:auto;}
+  .mp-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+  .mp-tbl thead th{background:#1a2e44;color:white;padding:12px 14px;font-size:12px;font-weight:600;text-align:center;border-right:1px solid rgba(255,255,255,.12);white-space:nowrap;}
+  .mp-tbl thead th:last-child{border-right:none;}
+  .mp-tbl tbody tr{border-bottom:1px solid #f0f0f0;}
+  .mp-tbl tbody tr:last-child{border-bottom:none;}
+  .mp-tbl tbody td{padding:12px 14px;text-align:center;vertical-align:middle;font-size:13px;}
+  .mp-tbl tbody td.left{text-align:left;}
+  .mp-tbl tbody tr:hover{background:#fafafa;}
+
+  .mp-tbl-badge{font-size:11px;font-weight:700;color:white;padding:2px 6px;border-radius:3px;display:inline-block;text-transform:uppercase;}
+  .mp-tbl-badge.pdf{background:#c0392b;}
+  .mp-tbl-badge.xlsx{background:#217346;}
+  .mp-tbl-badge.zip{background:#888;}
+
+  .mp-icon-btn{background:none;border:none;cursor:pointer;color:#aaa;padding:4px;transition:color .15s;}
+  .mp-icon-btn:hover{color:#c0392b;}
+  .mp-icon-btn svg{display:block;}
+
+  /* 페이지네이션 */
+  .mp-pagination{display:flex;justify-content:center;gap:4px;padding:16px;}
+  .mp-page-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid #e0e0e0;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#555;text-decoration:none;transition:all .15s;}
+  .mp-page-btn.active{border-color:#c0392b;color:#c0392b;}
+  .mp-page-btn:hover:not(.active){background:#f5f5f5;}
+
+  /* 빈 상태 */
+  .mp-empty-state{padding:48px 20px;text-align:center;color:#aaa;font-size:13px;border:none;}
+  .mp-empty-icon2{color:#c0392b;margin-right:4px;}
+
+  /* ── 주문내역 ── */
+  .mp-inner-tabs{display:flex;margin:0 20px 0;border-bottom:2px solid #1a2e44;}
+  .mp-inner-tab{padding:10px 20px;font-size:13px;font-weight:600;color:#666;cursor:pointer;border:1px solid #e0e0e0;border-bottom:none;background:#f5f5f5;margin-right:3px;border-radius:4px 4px 0 0;user-select:none;}
+  .mp-inner-tab.active{background:#1a2e44;color:white;border-color:#1a2e44;}
+  .mp-inner-tab:not(.active):hover{background:#e8e8e8;}
+
+  .mp-date-filter{display:flex;align-items:center;gap:8px;padding:12px 20px;background:#f8f8f8;border-bottom:1px solid #e8e8e8;flex-wrap:wrap;}
+  .mp-date-label{font-size:13px;font-weight:700;color:#333;white-space:nowrap;}
+  .mp-period-btn{padding:5px 13px;font-size:12px;font-weight:600;border:1px solid #ccc;background:white;border-radius:3px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .mp-period-btn:hover,.mp-period-btn.active{background:#1a2e44;color:white;border-color:#1a2e44;}
+  .mp-date-inp{padding:5px 10px;border:1px solid #ccc;border-radius:3px;font-size:12px;font-family:inherit;width:110px;}
+  .mp-date-sep{color:#888;font-size:13px;}
+  .mp-srch-btn{padding:5px 18px;background:#1a2e44;color:white;border:none;border-radius:3px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mp-srch-btn:hover{background:#0d1b2a;}
+
+  .mp-order-count{padding:10px 20px;font-size:13px;color:#333;border-bottom:1px solid #eee;}
+  .mp-order-count strong{color:#c0392b;}
+
+  .mp-notes{margin:14px 20px;padding:12px 16px;background:#fafafa;border:1px solid #eee;border-radius:4px;font-size:12px;color:#555;line-height:1.8;}
+  .mp-notes .mp-red{color:#c0392b;}
+
+  .mp-order-flow-section{margin:0 20px 20px;border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;}
+  .mp-oflow-tabs{display:flex;background:#f5f5f5;border-bottom:1px solid #e0e0e0;}
+  .mp-oflow-tab{padding:10px 20px;font-size:13px;font-weight:600;color:#666;cursor:pointer;border-right:1px solid #e0e0e0;}
+  .mp-oflow-tab:last-child{border-right:none;}
+  .mp-oflow-tab.active{background:white;color:#1a2e44;font-weight:800;}
+  .mp-flow-steps{display:flex;align-items:flex-start;justify-content:center;padding:20px 16px 8px;gap:0;}
+  .mp-flow-step{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:80px;}
+  .mp-flow-icon{width:56px;height:56px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#bbb;}
+  .mp-flow-label{font-size:12px;color:#555;font-weight:600;text-align:center;white-space:nowrap;}
+  .mp-flow-arr{color:#ccc;font-size:22px;padding:18px 6px 0;flex-shrink:0;}
+  .mp-cancel-label{font-size:11px;color:#aaa;text-align:center;padding:4px 20px 12px;display:flex;align-items:center;gap:4px;}
+  .mp-cancel-arr{font-size:16px;color:#ccc;}
+
+  .mp-order-info{margin:0 20px 20px;padding:14px 16px;background:#fafafa;border:1px solid #e8e8e8;border-radius:4px;}
+  .mp-order-info-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px;}
+  .mp-order-info ul{margin:0;padding-left:16px;font-size:12px;color:#555;line-height:1.9;}
+
+  /* ── 장바구니 ── */
+  .mp-steps-bar{display:flex;align-items:stretch;border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:20px;}
+  .mp-step-item{display:flex;align-items:center;gap:8px;padding:14px 20px;font-size:13px;font-weight:600;color:#aaa;flex:1;background:#f8f8f8;}
+  .mp-step-item.active{color:white;background:#c0392b;}
+  .mp-step-divider{width:1px;background:#e0e0e0;flex-shrink:0;}
+
+  .mp-cart-section{border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:16px;}
+  .mp-cart-sec-title{padding:12px 16px;font-size:15px;font-weight:700;border-bottom:1px solid #e0e0e0;background:#fafafa;}
+  .mp-cart-ctrl{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #eee;}
+
+  .mp-qty-wrap{display:flex;align-items:center;border:1px solid #ccc;border-radius:3px;overflow:hidden;display:inline-flex;}
+  .mp-qty-btn{width:28px;height:28px;border:none;background:#f5f5f5;cursor:pointer;font-size:14px;line-height:1;font-family:inherit;}
+  .mp-qty-btn:hover{background:#e8e8e8;}
+  .mp-qty-val{width:36px;height:28px;border:none;border-left:1px solid #ccc;border-right:1px solid #ccc;text-align:center;font-size:13px;font-weight:700;background:white;font-family:inherit;}
+
+  .mp-buy-btn{padding:5px 14px;background:#1a2e44;color:white;border:none;border-radius:3px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+  .mp-buy-btn:hover{background:#0d1b2a;}
+
+  .mp-price-red{color:#c0392b;font-weight:700;}
+  .mp-del-btn{background:none;border:none;cursor:pointer;color:#bbb;font-size:16px;line-height:1;padding:4px;transition:color .15s;}
+  .mp-del-btn:hover{color:#c0392b;}
+
+  .mp-cart-total-section{border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:16px;}
+  .mp-cart-total-title{padding:14px 16px;font-size:15px;font-weight:800;border-bottom:2px solid #1a2e44;}
+  .mp-cart-total-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;}
+  .mp-cart-total-cell{padding:20px 10px;text-align:center;border-right:1px solid #eee;}
+  .mp-cart-total-cell:last-child{border-right:none;}
+  .mp-cart-total-op{display:flex;align-items:center;justify-content:center;font-size:22px;color:#ccc;border-right:1px solid #eee;}
+  .mp-cart-total-label{font-size:12px;color:#888;margin-bottom:8px;}
+  .mp-cart-total-val{font-size:20px;font-weight:800;color:#1a1a1a;}
+  .mp-cart-total-sub{font-size:11px;color:#aaa;margin-top:4px;}
+  .mp-cart-total-val.red{color:#c0392b;}
+
+  .mp-cart-footer{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;padding:0 20px 20px;}
+  .mp-cart-footer-notes{font-size:12px;color:#666;line-height:1.9;}
+  .mp-order-now-btn{padding:16px 48px;background:#1a2e44;color:white;border:none;border-radius:4px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .mp-order-now-btn:hover{background:#0d1b2a;}
+
+  /* ── 관심교재 서브 ── */
+  .mp-fav-page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:20px;padding:20px;}
+  .mp-fav-page-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;text-decoration:none;}
+  .mp-fav-page-item:hover .mp-fav-page-img{box-shadow:0 4px 14px rgba(0,0,0,.15);transform:translateY(-2px);}
+  .mp-fav-page-img{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid #e0e0e0;border-radius:4px;transition:all .2s;}
+  .mp-fav-page-title{font-size:12px;font-weight:600;color:#333;text-align:center;line-height:1.4;word-break:break-all;}
+  .mp-fav-cb-row{display:flex;align-items:center;gap:6px;}
+  .mp-fav-cb{cursor:pointer;}
+
   /* ── 반응형 ── */
   @media(max-width:900px){
     .mp-row{grid-template-columns:1fr;}
-    .mp-tabs{flex-wrap:wrap;}
-    .mp-tab{flex:0 0 auto;min-width:33.33%;border-bottom:1px solid #e0e0e0;}
+    .mp-cart-total-grid{grid-template-columns:1fr;gap:0;}
+    .mp-cart-total-op{display:none;}
+    .mp-cart-total-cell{border-right:none;border-bottom:1px solid #eee;padding:12px;}
+    .mp-flow-steps{flex-wrap:wrap;justify-content:flex-start;}
   }
   @media(max-width:480px){
     .mypage-container{padding:12px;}
-    .mp-tab{min-width:50%;}
-    .mp-welcome-name{font-size:15px;}
+    .mp-tabs{flex-wrap:wrap;}
+    .mp-tab{min-width:33.33%;border-bottom:1px solid #e0e0e0;}
+    .mp-cart-total-grid{grid-template-columns:1fr 1fr;}
   }
   </style>
 </head>
@@ -124,12 +251,12 @@
       </div>
     </div>
     <div class="search-series-group">
-    <div class="header-search">
-      <div class="search-wrap">
-        <input type="text" class="search-input" placeholder="교재명을 입력해주세요.  ex)booster, 부스터">
-        <button class="search-btn" onclick="openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <div class="header-search">
+        <div class="search-wrap">
+          <input type="text" class="search-input" placeholder="교재명을 입력해주세요.  ex)booster, 부스터">
+          <button class="search-btn" onclick="openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </div>
@@ -140,214 +267,340 @@
     <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="gnb-logo-shortcut">Y튜터 <span class="sc-arrow">↗</span></a>
     <button class="gnb-all"><span class="hamburger">☰</span></button>
     <div class="gnb-nav">
-      <div class="gnb-item" data-cat="elementary">
-        <a href="books.html?cat=elementary" class="gnb-link">초등</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--elem);">
-            <span class="dropdown-cat-icon">🎒</span>
-            <span class="dropdown-cat-label">초등</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="books.html?cat=elementary&type=참고서" class="mega-group-title">참고서</a>
-            <a href="books.html?cat=elementary&type=참고서&subject=영어" class="mega-sub-link">영어</a>
-            <a href="books.html?cat=elementary&type=참고서&subject=수학" class="mega-sub-link">수학</a>
-            <a href="books.html?cat=elementary&type=ELT" class="mega-group-title">ELT</a>
-            <a href="books.html?cat=elementary&type=교과서" class="mega-group-title">교과서</a>
-            <a href="books.html?cat=elementary&type=교과서" class="mega-sub-link">교과서, 지도서</a>
-            <a href="books.html?cat=elementary&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a>
-            <a href="books.html?cat=elementary&type=자료집" class="mega-sub-link">자료집, 교구재</a>
-            <a href="books.html?cat=elementary&type=일반" class="mega-group-title">일반 · 수험서</a>
-          </div>
-        </div>
-      </div>
-      <div class="gnb-item" data-cat="middle">
-        <a href="books.html?cat=middle" class="gnb-link">중학</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--mid);">
-            <span class="dropdown-cat-icon">📚</span>
-            <span class="dropdown-cat-label">중학</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="books.html?cat=middle&type=참고서" class="mega-group-title">참고서</a>
-            <a href="books.html?cat=middle&type=참고서&subject=영어" class="mega-sub-link">영어</a>
-            <a href="books.html?cat=middle&type=참고서&subject=수학" class="mega-sub-link">수학</a>
-            <a href="books.html?cat=middle&type=ELT" class="mega-group-title">ELT</a>
-            <a href="books.html?cat=middle&type=교과서" class="mega-group-title">교과서</a>
-            <a href="books.html?cat=middle&type=교과서" class="mega-sub-link">교과서, 지도서</a>
-            <a href="books.html?cat=middle&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a>
-            <a href="books.html?cat=middle&type=자료집" class="mega-sub-link">자료집, 교구재</a>
-            <a href="books.html?cat=middle&type=일반" class="mega-group-title">일반 · 수험서</a>
-          </div>
-        </div>
-      </div>
-      <div class="gnb-item" data-cat="high">
-        <a href="books.html?cat=high" class="gnb-link">고등</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--high);">
-            <span class="dropdown-cat-icon">🎓</span>
-            <span class="dropdown-cat-label">고등</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="books.html?cat=high&type=참고서" class="mega-group-title">참고서</a>
-            <a href="books.html?cat=high&type=참고서&subject=영어" class="mega-sub-link">영어</a>
-            <a href="books.html?cat=high&type=참고서&subject=수학" class="mega-sub-link">수학</a>
-            <a href="books.html?cat=high&type=ELT" class="mega-group-title">ELT</a>
-            <a href="books.html?cat=high&type=교과서" class="mega-group-title">교과서</a>
-            <a href="books.html?cat=high&type=교과서" class="mega-sub-link">교과서, 지도서</a>
-            <a href="books.html?cat=high&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a>
-            <a href="books.html?cat=high&type=자료집" class="mega-sub-link">자료집, 교구재</a>
-            <a href="books.html?cat=high&type=일반" class="mega-group-title">일반 · 수험서</a>
-          </div>
-        </div>
-      </div>
-      <div class="gnb-item" data-cat="resources">
-        <a href="resources.html" class="gnb-link">자료실</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--res);">
-            <span class="dropdown-cat-icon">📂</span>
-            <span class="dropdown-cat-label">자료실</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="resources.html?tab=materials" class="mega-group-title">교재자료실</a>
-            <div class="gnb-sub-group">
-              <a href="resources.html?tab=study&stab=vocab" class="mega-group-title">스터디존</a>
-              <div class="gnb-subflyout">
-                <a href="resources.html?tab=study&stab=vocab" class="gnb-flyout-link">어휘출제마법사</a>
-                <a href="resources.html?tab=study&stab=grammar" class="gnb-flyout-link">문법예문뱅크</a>
-                <a href="resources.html?tab=study&stab=daily" class="gnb-flyout-link">데일리외국어</a>
-                <a href="resources.html?tab=study&stab=mp3" class="gnb-flyout-link">MP3 바로듣기</a>
-              </div>
-            </div>
-            <div class="gnb-sub-group">
-              <a href="resources.html?tab=howto" class="mega-group-title">교재활용법</a>
-              <div class="gnb-subflyout">
-                <a href="resources.html?tab=howto" class="gnb-flyout-link">교재소개 및 활용방법</a>
-                <a href="resources.html?tab=howto&sub=curation" class="gnb-flyout-link">큐레이션</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="gnb-item" data-cat="events">
-        <a href="events.html" class="gnb-link">이벤트</a>
-        <div class="gnb-dropdown">
-          <div class="dropdown-cat" style="background:var(--red);">
-            <span class="dropdown-cat-icon">🎁</span>
-            <span class="dropdown-cat-label">이벤트</span>
-          </div>
-          <div class="dropdown-body">
-            <a href="events.html?status=ongoing" class="mega-group-title">진행중인 이벤트</a>
-            <a href="events.html?status=ended" class="mega-group-title">종료된 이벤트</a>
-          </div>
-        </div>
-      </div>
+      <div class="gnb-item" data-cat="elementary"><a href="books.html?cat=elementary" class="gnb-link">초등</a><div class="gnb-dropdown"><div class="dropdown-cat" style="background:var(--elem);"><span class="dropdown-cat-icon">🎒</span><span class="dropdown-cat-label">초등</span></div><div class="dropdown-body"><a href="books.html?cat=elementary&type=참고서" class="mega-group-title">참고서</a><a href="books.html?cat=elementary&type=참고서&subject=영어" class="mega-sub-link">영어</a><a href="books.html?cat=elementary&type=참고서&subject=수학" class="mega-sub-link">수학</a><a href="books.html?cat=elementary&type=ELT" class="mega-group-title">ELT</a><a href="books.html?cat=elementary&type=교과서" class="mega-group-title">교과서</a><a href="books.html?cat=elementary&type=교과서" class="mega-sub-link">교과서, 지도서</a><a href="books.html?cat=elementary&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a><a href="books.html?cat=elementary&type=자료집" class="mega-sub-link">자료집, 교구재</a><a href="books.html?cat=elementary&type=일반" class="mega-group-title">일반 · 수험서</a></div></div></div>
+      <div class="gnb-item" data-cat="middle"><a href="books.html?cat=middle" class="gnb-link">중학</a><div class="gnb-dropdown"><div class="dropdown-cat" style="background:var(--mid);"><span class="dropdown-cat-icon">📚</span><span class="dropdown-cat-label">중학</span></div><div class="dropdown-body"><a href="books.html?cat=middle&type=참고서" class="mega-group-title">참고서</a><a href="books.html?cat=middle&type=참고서&subject=영어" class="mega-sub-link">영어</a><a href="books.html?cat=middle&type=참고서&subject=수학" class="mega-sub-link">수학</a><a href="books.html?cat=middle&type=ELT" class="mega-group-title">ELT</a><a href="books.html?cat=middle&type=교과서" class="mega-group-title">교과서</a><a href="books.html?cat=middle&type=교과서" class="mega-sub-link">교과서, 지도서</a><a href="books.html?cat=middle&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a><a href="books.html?cat=middle&type=자료집" class="mega-sub-link">자료집, 교구재</a><a href="books.html?cat=middle&type=일반" class="mega-group-title">일반 · 수험서</a></div></div></div>
+      <div class="gnb-item" data-cat="high"><a href="books.html?cat=high" class="gnb-link">고등</a><div class="gnb-dropdown"><div class="dropdown-cat" style="background:var(--high);"><span class="dropdown-cat-icon">🎓</span><span class="dropdown-cat-label">고등</span></div><div class="dropdown-body"><a href="books.html?cat=high&type=참고서" class="mega-group-title">참고서</a><a href="books.html?cat=high&type=참고서&subject=영어" class="mega-sub-link">영어</a><a href="books.html?cat=high&type=참고서&subject=수학" class="mega-sub-link">수학</a><a href="books.html?cat=high&type=ELT" class="mega-group-title">ELT</a><a href="books.html?cat=high&type=교과서" class="mega-group-title">교과서</a><a href="books.html?cat=high&type=교과서" class="mega-sub-link">교과서, 지도서</a><a href="books.html?cat=high&type=평가문제집" class="mega-sub-link">평가문제집, 자습서, 해설서</a><a href="books.html?cat=high&type=자료집" class="mega-sub-link">자료집, 교구재</a><a href="books.html?cat=high&type=일반" class="mega-group-title">일반 · 수험서</a></div></div></div>
+      <div class="gnb-item" data-cat="resources"><a href="resources.html" class="gnb-link">자료실</a><div class="gnb-dropdown"><div class="dropdown-cat" style="background:var(--res);"><span class="dropdown-cat-icon">📂</span><span class="dropdown-cat-label">자료실</span></div><div class="dropdown-body"><a href="resources.html?tab=materials" class="mega-group-title">교재자료실</a><div class="gnb-sub-group"><a href="resources.html?tab=study&stab=vocab" class="mega-group-title">스터디존</a><div class="gnb-subflyout"><a href="resources.html?tab=study&stab=vocab" class="gnb-flyout-link">어휘출제마법사</a><a href="resources.html?tab=study&stab=grammar" class="gnb-flyout-link">문법예문뱅크</a><a href="resources.html?tab=study&stab=daily" class="gnb-flyout-link">데일리외국어</a><a href="resources.html?tab=study&stab=mp3" class="gnb-flyout-link">MP3 바로듣기</a></div></div><div class="gnb-sub-group"><a href="resources.html?tab=howto" class="mega-group-title">교재활용법</a><div class="gnb-subflyout"><a href="resources.html?tab=howto" class="gnb-flyout-link">교재소개 및 활용방법</a><a href="resources.html?tab=howto&sub=curation" class="gnb-flyout-link">큐레이션</a></div></div></div></div></div>
+      <div class="gnb-item" data-cat="events"><a href="events.html" class="gnb-link">이벤트</a><div class="gnb-dropdown"><div class="dropdown-cat" style="background:var(--red);"><span class="dropdown-cat-icon">🎁</span><span class="dropdown-cat-label">이벤트</span></div><div class="dropdown-body"><a href="events.html?status=ongoing" class="mega-group-title">진행중인 이벤트</a><a href="events.html?status=ended" class="mega-group-title">종료된 이벤트</a></div></div></div>
       <a href="https://my-first-app-drab-one.vercel.app/" target="_blank" class="gnb-toeic-btn">Y튜터 | 강사 전용 사이트 <span>↗</span></a>
     </div>
     <div class="gnb-util-right">
       <a href="login.html" class="gnb-util-link gnb-login-link">로그인</a>
       <a href="login.html" class="gnb-util-link gnb-join-link">회원가입</a>
       <a href="customer.html" class="gnb-util-link">고객센터</a>
-      <button class="gnb-search-btn" id="gnbSearchToggle" aria-label="검색">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
+      <button class="gnb-search-btn" id="gnbSearchToggle" aria-label="검색"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     </div>
   </div>
 </nav>
 
-<!-- ===================== MYPAGE CONTENT ===================== -->
+<!-- ═══════════════════ MYPAGE ═══════════════════ -->
 <div class="mypage-wrap">
   <div class="mypage-container">
 
-    <!-- 1. 탭 메뉴 -->
+    <!-- 탭 메뉴 -->
     <nav class="mp-tabs">
-      <a href="mypage.html" class="mp-tab active" id="tab-home">홈</a>
+      <a href="mypage.html" class="mp-tab" id="tab-home">홈</a>
       <a href="mypage.html?tab=favorite" class="mp-tab" id="tab-favorite">관심 교재</a>
       <a href="mypage.html?tab=created" class="mp-tab" id="tab-created">내가 만든 자료</a>
       <a href="mypage.html?tab=recent" class="mp-tab" id="tab-recent">최근 본 자료</a>
       <a href="mypage.html?tab=orders" class="mp-tab" id="tab-orders">주문내역</a>
-      <a href="cart.html" class="mp-tab" id="tab-cart">장바구니</a>
+      <a href="mypage.html?tab=cart" class="mp-tab" id="tab-cart">장바구니</a>
       <a href="mypage.html?tab=profile" class="mp-tab" id="tab-profile">개인정보변경</a>
     </nav>
 
-    <!-- 2. 환영 메시지 -->
-    <div class="mp-welcome">
-      <div class="mp-welcome-left">
-        <span class="mp-welcome-name" id="mp-user-name">김유진님 환영합니다.</span>
+    <!-- ─── 홈 패널 ─── -->
+    <div id="panel-home">
+      <div class="mp-welcome">
+        <div class="mp-welcome-left">
+          <span class="mp-welcome-name" id="mp-user-name">김유진님 환영합니다.</span>
+        </div>
+        <a href="mypage.html?tab=profile" class="mp-welcome-link">개인정보변경</a>
       </div>
-      <a href="mypage.html?tab=profile" class="mp-welcome-link">개인정보변경</a>
-    </div>
 
-    <!-- 3. 주문 요약 + 공지사항 -->
-    <div class="mp-row">
-
-      <!-- 좌: 주문/장바구니 요약 -->
-      <div class="mp-card">
-        <div class="mp-summary-body">
-          <div class="mp-summary-items">
-            <a href="mypage.html?tab=orders" class="mp-summary-item">
-              <span class="mp-summary-icon">
-                <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              </span>
-              <span class="mp-summary-label">주문내역</span>
-              <span class="mp-summary-count">내역 0건</span>
-            </a>
-            <a href="cart.html" class="mp-summary-item">
-              <span class="mp-summary-icon">
-                <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><polyline points="9 12 11 14 15 10"/></svg>
-              </span>
-              <span class="mp-summary-label">장바구니</span>
-              <span class="mp-summary-count">1건</span>
-            </a>
+      <div class="mp-row">
+        <div class="mp-card">
+          <div class="mp-summary-body">
+            <div class="mp-summary-items">
+              <a href="mypage.html?tab=orders" class="mp-summary-item">
+                <span class="mp-summary-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+                <span class="mp-summary-label">주문내역</span>
+                <span class="mp-summary-count">내역 0건</span>
+              </a>
+              <a href="mypage.html?tab=cart" class="mp-summary-item">
+                <span class="mp-summary-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><polyline points="9 12 11 14 15 10"/></svg></span>
+                <span class="mp-summary-label">장바구니</span>
+                <span class="mp-summary-count" id="home-cart-count">1건</span>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- 우: 공지사항 -->
-      <div class="mp-card">
-        <div class="mp-card-header">
-          <span class="mp-card-title">공지사항</span>
-          <a href="customer.html?tab=notice" class="mp-card-plus">+</a>
+        <div class="mp-card">
+          <div class="mp-card-header"><span class="mp-card-title">공지사항</span><a href="customer.html?tab=notice" class="mp-card-plus">+</a></div>
+          <ul class="mp-notice-list" id="mp-notice-list"></ul>
         </div>
-        <ul class="mp-notice-list" id="mp-notice-list"></ul>
       </div>
 
+      <div class="mp-card mp-card-full">
+        <div class="mp-card-header"><span class="mp-card-title">관심 교재</span><a href="mypage.html?tab=favorite" class="mp-card-plus">+</a></div>
+        <div id="mp-fav-area"></div>
+      </div>
+
+      <div class="mp-row">
+        <div class="mp-card">
+          <div class="mp-card-header"><span class="mp-card-title">최근 본 자료</span><a href="mypage.html?tab=recent" class="mp-card-plus">+</a></div>
+          <ul class="mp-mat-list" id="mp-recent-list"></ul>
+        </div>
+        <div class="mp-card">
+          <div class="mp-card-header"><span class="mp-card-title">내가 만든 자료</span><a href="mypage.html?tab=created" class="mp-card-plus">+</a></div>
+          <ul class="mp-mat-list" id="mp-created-list"></ul>
+        </div>
+      </div>
     </div>
 
-    <!-- 4. 관심 교재 -->
-    <div class="mp-card mp-card-full">
-      <div class="mp-card-header">
-        <span class="mp-card-title">관심 교재</span>
-        <a href="mypage.html?tab=favorite" class="mp-card-plus">+</a>
+    <!-- ─── 최근 본 자료 패널 ─── -->
+    <div id="panel-recent" style="display:none">
+      <div class="mp-subpage">
+        <div class="mp-subpage-title">최근 본 자료</div>
+        <div class="mp-total-count">전체 <strong id="recent-count">5</strong>건</div>
+        <div class="mp-ctrl-bar">
+          <label class="mp-ctrl-chk-label"><input type="checkbox" id="recent-all-chk" onchange="toggleAllChk('recent-chk')"> 전체선택</label>
+          <button class="mp-ctrl-btn" onclick="Toast.show('선택한 자료를 받습니다.','info')">선택받기</button>
+          <button class="mp-ctrl-btn mp-ctrl-btn-del" onclick="Toast.show('선택한 자료를 삭제합니다.','info')">선택삭제</button>
+          <button class="mp-ctrl-btn mp-ctrl-btn-navy mp-ctrl-right" onclick="Toast.show('ZIP으로 모아받기를 준비 중입니다.','info')">모아받기(ZIP)</button>
+        </div>
+        <div class="mp-tbl-wrap">
+          <table class="mp-tbl">
+            <thead>
+              <tr>
+                <th style="width:40px"><input type="checkbox" id="recent-head-chk" onchange="toggleAllChk('recent-chk',this)"></th>
+                <th style="width:80px"></th>
+                <th>자료명</th>
+                <th>교재명</th>
+                <th style="width:64px">미리보기</th>
+                <th style="width:64px">다운로드</th>
+                <th style="width:48px">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody"></tbody>
+          </table>
+        </div>
+        <div class="mp-pagination" id="recent-pagination"></div>
       </div>
-      <div id="mp-fav-area"></div>
     </div>
 
-    <!-- 5. 최근 본 자료 + 내가 만든 자료 -->
-    <div class="mp-row">
-
-      <!-- 좌: 최근 본 자료 -->
-      <div class="mp-card">
-        <div class="mp-card-header">
-          <span class="mp-card-title">최근 본 자료</span>
-          <a href="mypage.html?tab=recent" class="mp-card-plus">+</a>
+    <!-- ─── 주문내역 패널 ─── -->
+    <div id="panel-orders" style="display:none">
+      <div class="mp-subpage">
+        <div class="mp-subpage-title">주문내역</div>
+        <div style="height:14px"></div>
+        <div class="mp-inner-tabs">
+          <div class="mp-inner-tab active" onclick="switchOrderTab(this,'일반 주문')">일반 주문</div>
+          <div class="mp-inner-tab" onclick="switchOrderTab(this,'사은품 주문')">사은품 주문</div>
+          <div class="mp-inner-tab" onclick="switchOrderTab(this,'행사 접수')">행사 접수</div>
         </div>
-        <ul class="mp-mat-list" id="mp-recent-list"></ul>
+        <div class="mp-date-filter">
+          <span class="mp-date-label">기간선택</span>
+          <button class="mp-period-btn active" onclick="setPeriod(this,'1w')">1주일</button>
+          <button class="mp-period-btn" onclick="setPeriod(this,'1m')">1개월</button>
+          <button class="mp-period-btn" onclick="setPeriod(this,'3m')">3개월</button>
+          <button class="mp-period-btn" onclick="setPeriod(this,'6m')">6개월</button>
+          <input type="date" class="mp-date-inp" id="date-from">
+          <span class="mp-date-sep">~</span>
+          <input type="date" class="mp-date-inp" id="date-to">
+          <button class="mp-srch-btn" onclick="Toast.show('조회 중입니다.','info')">조회</button>
+        </div>
+        <div class="mp-order-count">총 <strong>0</strong>건</div>
+        <div class="mp-tbl-wrap">
+          <table class="mp-tbl">
+            <thead>
+              <tr>
+                <th>주문번호</th>
+                <th>주문일</th>
+                <th>주문내용</th>
+                <th>주문금액/수량</th>
+                <th>주문상태</th>
+                <th>주문관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="mp-empty-state"><span class="mp-empty-icon2">ⓘ</span>주문 내역이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mp-notes">
+          <p>- 배송조회를 누르시면 해당 주문 건의 배송 현황을 조회하실 수 있습니다.</p>
+          <p>- 가상계좌(무통장입금) 후에는 자동 주문취소가 불가하며 배송준비중 이전에 별도로 "취소 요청"으로 담당자 확인 후 주문 취소가 가능합니다.</p>
+          <p class="mp-red">- 주문 건이 배송준비중 상태 이후에는 이용자 주문취소가 불가하며, 구매일로 부터 7일 이내로 1:1 문의를 남겨주시거나, 02-2000-0500으로 연락주시면 환불 처리 도와드리겠습니다.</p>
+          <p class="mp-red">- 환불 요청 시, 상품 회수 및 환불 진행까지는 영업일 기준 7일~10일 소요될 수 있습니다.</p>
+        </div>
+        <div class="mp-order-flow-section">
+          <div class="mp-oflow-tabs">
+            <div class="mp-oflow-tab active">일반 교재</div>
+            <div class="mp-oflow-tab">디지털콘텐츠</div>
+          </div>
+          <div class="mp-flow-steps">
+            <div class="mp-flow-step">
+              <div class="mp-flow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
+              <div class="mp-flow-label">주문접수</div>
+            </div>
+            <div class="mp-flow-arr">›</div>
+            <div class="mp-flow-step">
+              <div class="mp-flow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="mp-flow-label">결제완료</div>
+            </div>
+            <div class="mp-flow-arr">›</div>
+            <div class="mp-flow-step">
+              <div class="mp-flow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+              <div class="mp-flow-label">배송 준비중</div>
+            </div>
+            <div class="mp-flow-arr">›</div>
+            <div class="mp-flow-step">
+              <div class="mp-flow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+              <div class="mp-flow-label">배송중</div>
+            </div>
+            <div class="mp-flow-arr">›</div>
+            <div class="mp-flow-step">
+              <div class="mp-flow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              <div class="mp-flow-label">배송완료</div>
+            </div>
+          </div>
+          <div class="mp-cancel-label"><span class="mp-cancel-arr">←</span> 주문취소 가능 <span class="mp-cancel-arr">→</span></div>
+        </div>
+        <div class="mp-order-info">
+          <div class="mp-order-info-title">주문 및 배송안내</div>
+          <ul>
+            <li>소득공제 대상 도서와 비대상 도서를 동시에 결제 시, 문화비 소득공제 처리가 불가합니다.</li>
+            <li>소득공제를 원하시는 경우 소득공제 대상 도서와 비대상 도서를 구분하여 각각 결제해주시기 바랍니다. (나눠서 결제시 택배비가 각각 부과될 수 있습니다.)</li>
+            <li>법인카드 결제는 문화비 소득공제 적용이 불가합니다.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 장바구니 패널 ─── -->
+    <div id="panel-cart" style="display:none">
+      <!-- Step bar -->
+      <div class="mp-steps-bar">
+        <div class="mp-step-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          STEP 1. 장바구니
+        </div>
+        <div class="mp-step-divider"></div>
+        <div class="mp-step-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          STEP 2. 주문 및 결제
+        </div>
+        <div class="mp-step-divider"></div>
+        <div class="mp-step-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/></svg>
+          STEP 3. 주문 완료
+        </div>
       </div>
 
-      <!-- 우: 내가 만든 자료 -->
-      <div class="mp-card">
-        <div class="mp-card-header">
-          <span class="mp-card-title">내가 만든 자료</span>
-          <a href="mypage.html?tab=created" class="mp-card-plus">+</a>
+      <!-- 일반교재 섹션 -->
+      <div class="mp-cart-section">
+        <div class="mp-cart-sec-title">일반교재 (<span id="cart-book-count">0</span>)</div>
+        <div class="mp-oflow-tabs" style="border-bottom:1px solid #eee;">
+          <div class="mp-oflow-tab active" style="border-right:none">일반 교재</div>
+          <div class="mp-oflow-tab">디지털콘텐츠</div>
         </div>
-        <ul class="mp-mat-list" id="mp-created-list"></ul>
+        <div class="mp-cart-ctrl">
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cart-all-chk" onchange="toggleCartAll(this)"> 선택한 교재</label>
+          <button class="mp-buy-btn" onclick="Toast.show('바로구매 페이지로 이동합니다.','info')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            바로구매
+          </button>
+          <button class="mp-ctrl-btn mp-ctrl-btn-del" onclick="removeSelectedCart()">삭제하기</button>
+        </div>
+        <div class="mp-tbl-wrap">
+          <table class="mp-tbl">
+            <thead>
+              <tr>
+                <th style="width:44px"><input type="checkbox" onchange="toggleCartAll(this)"></th>
+                <th colspan="2" class="left">상품정보</th>
+                <th style="width:90px">정가</th>
+                <th style="width:90px">판매가</th>
+                <th style="width:100px">수량</th>
+                <th style="width:90px">주문선택</th>
+                <th style="width:44px">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="cart-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
+      <!-- 총 주문 금액 -->
+      <div class="mp-cart-total-section">
+        <div class="mp-cart-total-title">총 주문 금액</div>
+        <div class="mp-cart-total-grid">
+          <div class="mp-cart-total-cell"><div class="mp-cart-total-label">총 수량</div><div class="mp-cart-total-val" id="cart-total-qty">0</div></div>
+          <div class="mp-cart-total-op">−</div>
+          <div class="mp-cart-total-cell"><div class="mp-cart-total-label">총 상품금액</div><div class="mp-cart-total-val" id="cart-total-price">0원</div><div class="mp-cart-total-sub">정가 기준</div></div>
+          <div class="mp-cart-total-op">−</div>
+          <div class="mp-cart-total-cell"><div class="mp-cart-total-label">할인금액</div><div class="mp-cart-total-val red" id="cart-discount">0원</div><div class="mp-cart-total-sub">즉시 할인</div></div>
+          <div class="mp-cart-total-op">+</div>
+          <div class="mp-cart-total-cell"><div class="mp-cart-total-label">배송비</div><div class="mp-cart-total-val" id="cart-shipping">0원</div><div class="mp-cart-total-sub">30,000원 이상 주문 시 무료배송</div></div>
+          <div class="mp-cart-total-op">=</div>
+          <div class="mp-cart-total-cell"><div class="mp-cart-total-label">총 주문 금액</div><div class="mp-cart-total-val" id="cart-final">0원</div></div>
+        </div>
+      </div>
+      <div class="mp-cart-footer">
+        <div class="mp-cart-footer-notes">
+          보유하신 쿠폰은 다음 페이지에서 적용됩니다.<br>
+          오후 2시 이전 주문 건에 한해서는 익일 배송될 예정입니다.<br>
+          판매 가능한 재고에 따라 배송시점은 변경될 수 있습니다.
+        </div>
+        <button class="mp-order-now-btn" onclick="location.href='checkout.html'">주문하기</button>
+      </div>
+    </div>
+
+    <!-- ─── 관심 교재 패널 ─── -->
+    <div id="panel-favorite" style="display:none">
+      <div class="mp-subpage">
+        <div class="mp-subpage-title">관심 교재</div>
+        <div class="mp-ctrl-bar">
+          <label class="mp-ctrl-chk-label"><input type="checkbox" id="fav-all-chk" onchange="toggleAllChk('fav-chk')"> 전체선택</label>
+          <button class="mp-ctrl-btn mp-ctrl-btn-del" onclick="removeSelectedFav()">선택삭제</button>
+        </div>
+        <div id="fav-content"></div>
+      </div>
+    </div>
+
+    <!-- ─── 내가 만든 자료 패널 ─── -->
+    <div id="panel-created" style="display:none">
+      <div class="mp-subpage">
+        <div class="mp-subpage-title">내가 만든 자료</div>
+        <div class="mp-total-count">전체 <strong id="created-count">1</strong>건</div>
+        <div class="mp-tbl-wrap">
+          <table class="mp-tbl">
+            <thead>
+              <tr>
+                <th style="width:110px">자료유형</th>
+                <th>자료명</th>
+                <th>교재명</th>
+                <th style="width:110px">작성일</th>
+                <th style="width:110px">다운로드/보기</th>
+                <th style="width:60px">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="created-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 개인정보변경 패널 ─── -->
+    <div id="panel-profile" style="display:none">
+      <div class="mp-subpage" style="padding:24px;">
+        <div class="mp-subpage-title" style="padding:0;margin-bottom:20px;">개인정보변경</div>
+        <div style="max-width:480px;">
+          <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;">이름</label><input type="text" value="김유진" style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:4px;font-size:14px;font-family:inherit;box-sizing:border-box;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'"></div>
+          <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;">이메일</label><input type="email" value="yujin@school.kr" style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:4px;font-size:14px;font-family:inherit;box-sizing:border-box;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'"></div>
+          <div style="margin-bottom:20px;"><label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;">휴대폰</label><input type="tel" value="010-1234-5678" style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:4px;font-size:14px;font-family:inherit;box-sizing:border-box;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'"></div>
+          <div style="background:#f8f9fa;border-radius:4px;padding:16px;margin-bottom:20px;border:1px solid #eee;">
+            <div style="font-size:13px;font-weight:700;margin-bottom:12px;">비밀번호 변경</div>
+            <input type="password" placeholder="현재 비밀번호" style="width:100%;padding:10px 13px;border:1.5px solid #ddd;border-radius:4px;font-size:13px;margin-bottom:8px;box-sizing:border-box;font-family:inherit;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'">
+            <input type="password" placeholder="새 비밀번호" style="width:100%;padding:10px 13px;border:1.5px solid #ddd;border-radius:4px;font-size:13px;margin-bottom:8px;box-sizing:border-box;font-family:inherit;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'">
+            <input type="password" placeholder="새 비밀번호 확인" style="width:100%;padding:10px 13px;border:1.5px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;font-family:inherit;" onfocus="this.style.borderColor='#c0392b'" onblur="this.style.borderColor='#ddd'">
+          </div>
+          <button onclick="Toast.show('개인정보가 저장되었습니다.','success')" style="background:#c0392b;color:white;border:none;padding:13px 32px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">저장하기</button>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
-<!-- ===================== /MYPAGE CONTENT ===================== -->
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -360,10 +613,7 @@
     <div class="footer-corp">
       <div class="footer-ybm-logo">
         <div class="footer-ybm-mark">
-          <svg viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="36" height="28" rx="3" fill="#1a2e44"/>
-            <text x="5" y="20" font-family="Arial Black,sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="-1">YBM</text>
-          </svg>
+          <svg viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="28" rx="3" fill="#1a2e44"/><text x="5" y="20" font-family="Arial Black,sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="-1">YBM</text></svg>
         </div>
         <div class="footer-ybm-name">와이비엠</div>
       </div>
@@ -386,14 +636,6 @@ if (localStorage.getItem('isLoggedIn') !== 'true') {
 }
 
 // ── 더미 데이터 ──
-const mypageUser = {
-  name: '김유진',
-  userType: '학교선생님',
-  point: 320,
-  orderCount: 0,
-  cartCount: 1
-};
-
 const notices = [
   { type:'공지', title:'개인정보처리방침 변경 안내', date:'2026-05-22' },
   { type:'공지', title:'방울 포인트 서비스 종료 및 최종 소진 이벤트 안내', date:'2026-05-08' },
@@ -401,103 +643,349 @@ const notices = [
 ];
 
 const recentMaterials = [
-  { type:'xlsx', title:'BOOSTER VOCA 중등기본 어휘리스트', bookTitle:'BOOSTER VOCA 중...' },
-  { type:'pdf',  title:'Reading Booster 영어독해 모의고사 15회 본책 PDF', bookTitle:'READING BOOSTE...' },
-  { type:'pdf',  title:'문제로 풀자 중학 영문법 L3 본문 (교사용)', bookTitle:'문제로 풀자 중학영문...' },
-  { type:'pdf',  title:'문제로 풀자 중학영문법 L2 본문_교사용 PDF', bookTitle:'문제로 풀자 중학영문...' },
-  { type:'pdf',  title:'문제로 풀자 중학영문법 레벨 1 본책(학생용) PDF', bookTitle:'문제로 풀자 중학영문...' }
+  { type:'pdf',  title:'Reading Booster 10+2 영어독해 모의고사 정답 및 해설', bookTitle:'READING BOOSTER 기본 영어독해 모의고사 10+2회 2nd Edition (2025)' },
+  { type:'pdf',  title:'Reading Booster 10+2회 영어독해 모의고사 본문 PDF', bookTitle:'READING BOOSTER 기본 영어독해 모의고사 10+2회 2nd Edition (2025)' },
+  { type:'zip',  title:'12 BR_Starter 1_Study Plan', bookTitle:'Benchmark Reading Starter 1' },
+  { type:'pdf',  title:'I Love Grammar L1 본책 학생용 PDF', bookTitle:'I Love Grammar Level 1 (2025)' },
+  { type:'pdf',  title:'문제로 풀자 중학영문법 레벨 1 실전문제 PLUS PDF', bookTitle:'문제로 풀자 중학영문법 Level 1 (2024)' }
 ];
 
 const createdMaterials = [
-  { title:'dd', bookTitle:'BOOSTER VOCA 중...' },
-  { title:'ee', bookTitle:'BOOSTER VOCA 중...' },
-  { title:'영단어', bookTitle:'BOOSTER VOCA 중...' },
-  { title:'영단어', bookTitle:'BOOSTER VOCA 중...' },
-  { title:'문장 형식_주어 완전자동사 보어 (S V C)', bookTitle:'' }
+  { type:'시험지', title:'중학 영문법 실전 문제', bookTitle:'문제로 풀자 중학영문법 Level 1', date:'2026-05-15' }
 ];
 
-// ── 유저명 표시 ──
-const savedUser = JSON.parse(localStorage.getItem('booksam_user') || 'null');
-const displayName = (savedUser && savedUser.name) ? savedUser.name : mypageUser.name;
-document.getElementById('mp-user-name').textContent = displayName + '님 환영합니다.';
+// ── 샘플 관심교재 (localStorage에서 읽거나 샘플 사용) ──
+const SAMPLE_FAV_BOOK = {
+  id: 1,
+  title: '(22개정) 초등 영어 자습서&평가문제집 3-1 (김혜리)',
+  img: null,
+  price: 18000
+};
 
 // ── 탭 활성화 ──
-(function() {
-  const param = new URLSearchParams(location.search).get('tab');
-  if (!param) return;
-  document.querySelectorAll('.mp-tab').forEach(t => t.classList.remove('active'));
-  const target = document.getElementById('tab-' + param);
-  if (target) target.classList.add('active');
-  if (['favorite','created','recent','orders','profile'].includes(param)) {
-    Toast.show('준비 중입니다.', 'info');
-  }
-})();
+const currentTab = new URLSearchParams(location.search).get('tab') || 'home';
+document.querySelectorAll('.mp-tab').forEach(t => t.classList.remove('active'));
+const activeTabEl = document.getElementById('tab-' + currentTab);
+if (activeTabEl) activeTabEl.classList.add('active');
 
-// ── 공지사항 렌더 ──
-(function() {
-  const ul = document.getElementById('mp-notice-list');
-  ul.innerHTML = notices.map(n => `
+document.querySelectorAll('[id^="panel-"]').forEach(p => p.style.display = 'none');
+const activePanel = document.getElementById('panel-' + currentTab);
+if (activePanel) activePanel.style.display = '';
+
+// ── 유저명 ──
+const savedUser = JSON.parse(localStorage.getItem('booksam_user') || 'null');
+const displayName = (savedUser && savedUser.name) ? savedUser.name : '김유진';
+const nameEl = document.getElementById('mp-user-name');
+if (nameEl) nameEl.textContent = displayName + '님 환영합니다.';
+
+// ── 공지사항 (홈) ──
+const noticeListEl = document.getElementById('mp-notice-list');
+if (noticeListEl) {
+  noticeListEl.innerHTML = notices.map(n => `
     <li class="mp-notice-item">
       <span class="mp-notice-badge">${n.type}</span>
       <span class="mp-notice-title">${n.title}</span>
       <span class="mp-notice-date">${n.date}</span>
     </li>`).join('');
-})();
+}
 
-// ── 관심 교재 렌더 ──
-(function() {
-  const favBooks = JSON.parse(localStorage.getItem('favoriteBooks') || '[]');
+// ── 관심교재 (홈 카드) ──
+(function(){
   const area = document.getElementById('mp-fav-area');
+  if (!area) return;
+  const wishIds = (typeof Wish !== 'undefined') ? Wish.items : [];
+  const favBooks = (typeof BOOKS !== 'undefined') ? BOOKS.filter(b => wishIds.includes(b.id)) : [];
 
   if (!favBooks.length) {
     area.innerHTML = '<div class="mp-empty"><span class="mp-empty-icon">ⓘ</span>관심교재가 없습니다.</div>';
-    return;
+  } else {
+    area.innerHTML = '<div class="mp-fav-grid">' +
+      favBooks.slice(0,8).map(b => `
+        <a href="book-detail.html?id=${b.id}" class="mp-fav-card">
+          <div class="mp-fav-img" style="background:#f0f2f5;display:flex;align-items:center;justify-content:center;font-size:28px;">${b.img ? `<img src="${b.img}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">` : '📚'}</div>
+          <div class="mp-fav-title">${b.title}</div>
+        </a>`).join('') + '</div>';
   }
-
-  const cards = favBooks.map(b => {
-    const book = (typeof BOOKS !== 'undefined') ? BOOKS.find(bk => bk.id === b) : null;
-    if (!book) return '';
-    return `
-      <a href="book-detail.html?id=${book.id}" class="mp-fav-card">
-        <img class="mp-fav-img" src="${book.img || 'images/placeholder.png'}" alt="${book.title}" onerror="this.style.background='#f0f2f5'">
-        <div class="mp-fav-title">${book.title}</div>
-      </a>`;
-  }).filter(Boolean).join('');
-
-  area.innerHTML = cards
-    ? `<div class="mp-fav-grid">${cards}</div>`
-    : '<div class="mp-empty"><span class="mp-empty-icon">ⓘ</span>관심교재가 없습니다.</div>';
 })();
 
-// ── 최근 본 자료 렌더 ──
-(function() {
+// ── 최근 본 자료 홈 미니 리스트 ──
+(function(){
   const ul = document.getElementById('mp-recent-list');
-  const iconSvg = (label) => `
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
-  const dlSvg = `
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
-
+  if (!ul) return;
+  const iconSearch = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+  const iconDl = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
   ul.innerHTML = recentMaterials.map(m => `
     <li class="mp-mat-item">
       <span class="mp-mat-badge ${m.type}">${m.type}</span>
       <span class="mp-mat-title">${m.title}</span>
       <span class="mp-mat-source">${m.bookTitle}</span>
       <span class="mp-mat-actions">
-        <button class="mp-mat-btn" title="미리보기" onclick="Toast.show('준비 중입니다.','info')">${iconSvg()}</button>
-        <button class="mp-mat-btn" title="다운로드" onclick="Toast.show('준비 중입니다.','info')">${dlSvg}</button>
+        <button class="mp-mat-btn" onclick="Toast.show('준비 중입니다.','info')">${iconSearch}</button>
+        <button class="mp-mat-btn" onclick="Toast.show('준비 중입니다.','info')">${iconDl}</button>
       </span>
     </li>`).join('');
 })();
 
-// ── 내가 만든 자료 렌더 ──
-(function() {
+// ── 내가 만든 자료 홈 미니 리스트 ──
+(function(){
   const ul = document.getElementById('mp-created-list');
+  if (!ul) return;
   ul.innerHTML = createdMaterials.map(m => `
     <li class="mp-mat-item">
-      <span class="mp-mat-badge created">자료</span>
+      <span class="mp-mat-badge created">${m.type}</span>
       <span class="mp-mat-title">${m.title}</span>
       <span class="mp-mat-source">${m.bookTitle}</span>
     </li>`).join('');
+})();
+
+// ══════════════════════════════
+// ── 최근 본 자료 전체 페이지 ──
+// ══════════════════════════════
+function renderRecentPage() {
+  const tbody = document.getElementById('recent-tbody');
+  if (!tbody) return;
+  const iconSearch = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+  const iconDl = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+  const iconX = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+  tbody.innerHTML = recentMaterials.map((m, i) => `
+    <tr>
+      <td><input type="checkbox" class="recent-chk"></td>
+      <td><span class="mp-tbl-badge ${m.type}">${m.type}</span></td>
+      <td class="left">${m.title}</td>
+      <td class="left" style="color:#888;font-size:12px;">${m.bookTitle}</td>
+      <td><button class="mp-icon-btn" onclick="Toast.show('미리보기 준비 중입니다.','info')">${iconSearch}</button></td>
+      <td><button class="mp-icon-btn" onclick="Toast.show('다운로드 준비 중입니다.','info')">${iconDl}</button></td>
+      <td><button class="mp-icon-btn" onclick="this.closest('tr').remove();Toast.show('삭제되었습니다.','info')">${iconX}</button></td>
+    </tr>`).join('');
+
+  // pagination
+  const pg = document.getElementById('recent-pagination');
+  if (pg) {
+    pg.innerHTML = [1,2,3].map(n => `<a href="#" class="mp-page-btn${n===1?' active':''}" onclick="return false">${n}</a>`).join('');
+  }
+}
+if (currentTab === 'recent') renderRecentPage();
+
+// ══════════════════════════════
+// ── 장바구니 전체 페이지 ──
+// ══════════════════════════════
+function fmtPrice(n) { return n.toLocaleString('ko-KR'); }
+
+function renderCartPage() {
+  const tbody = document.getElementById('cart-tbody');
+  if (!tbody) return;
+
+  const items = (typeof Cart !== 'undefined') ? Cart.items : [];
+  const books = (typeof BOOKS !== 'undefined') ? BOOKS : [];
+
+  // 샘플 행 (Cart가 비거나 BOOKS가 없을 때)
+  let rows = [];
+  if (items.length === 0 || books.length === 0) {
+    // 하드코딩 샘플
+    rows = [{
+      id: 'sample',
+      title: '(22개정) 초등 영어 자습서&평가문제집 3-1 (김혜리)',
+      price: 18000,
+      qty: 1,
+      img: null
+    }];
+  } else {
+    rows = items.map(item => {
+      const b = books.find(bk => bk.id === item.id);
+      if (!b) return null;
+      return { id: b.id, title: b.title, price: b.price, qty: item.qty, img: b.img || null };
+    }).filter(Boolean);
+  }
+
+  const iconCard = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`;
+
+  tbody.innerHTML = rows.map((r, i) => {
+    const imgHtml = r.img
+      ? `<img src="${r.img}" style="width:58px;height:78px;object-fit:cover;border:1px solid #e0e0e0;border-radius:3px;">`
+      : `<div style="width:58px;height:78px;background:#f0f2f5;border:1px solid #e0e0e0;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:22px;">📚</div>`;
+    return `
+      <tr data-idx="${i}">
+        <td><input type="checkbox" class="cart-chk" checked></td>
+        <td style="width:70px;padding:12px 8px;">${imgHtml}</td>
+        <td class="left">${r.title}</td>
+        <td>${fmtPrice(r.price)}원</td>
+        <td class="mp-price-red">${fmtPrice(r.price)}원</td>
+        <td>
+          <div class="mp-qty-wrap">
+            <button class="mp-qty-btn" onclick="changeQty(${i},-1)">−</button>
+            <input class="mp-qty-val" id="qty-${i}" value="${r.qty}" readonly>
+            <button class="mp-qty-btn" onclick="changeQty(${i},1)">+</button>
+          </div>
+        </td>
+        <td>
+          <button class="mp-buy-btn" onclick="location.href='checkout.html'">
+            ${iconCard} 바로구매
+          </button>
+        </td>
+        <td><button class="mp-del-btn" onclick="removeCartRow(this)">✕</button></td>
+      </tr>`;
+  }).join('');
+
+  updateCartTotal();
+  document.getElementById('cart-book-count').textContent = rows.length;
+}
+
+function changeQty(idx, delta) {
+  const inp = document.getElementById('qty-' + idx);
+  if (!inp) return;
+  let v = parseInt(inp.value) + delta;
+  if (v < 1) v = 1;
+  inp.value = v;
+  updateCartTotal();
+}
+
+function removeCartRow(btn) {
+  btn.closest('tr').remove();
+  const count = document.querySelectorAll('#cart-tbody tr').length;
+  document.getElementById('cart-book-count').textContent = count;
+  updateCartTotal();
+}
+
+function removeSelectedCart() {
+  document.querySelectorAll('#cart-tbody .cart-chk:checked').forEach(cb => cb.closest('tr').remove());
+  const count = document.querySelectorAll('#cart-tbody tr').length;
+  document.getElementById('cart-book-count').textContent = count;
+  updateCartTotal();
+}
+
+function toggleCartAll(chk) {
+  document.querySelectorAll('#cart-tbody .cart-chk').forEach(c => c.checked = chk.checked);
+}
+
+function updateCartTotal() {
+  let total = 0, qty = 0;
+  document.querySelectorAll('#cart-tbody tr').forEach(tr => {
+    const idx = tr.dataset.idx;
+    const qtyInp = tr.querySelector('.mp-qty-val');
+    const priceCell = tr.querySelectorAll('td')[3];
+    if (!qtyInp || !priceCell) return;
+    const q = parseInt(qtyInp.value) || 0;
+    const p = parseInt(priceCell.textContent.replace(/[^0-9]/g,'')) || 0;
+    qty += q;
+    total += p * q;
+  });
+  const shipping = (total > 0 && total < 30000) ? 3000 : 0;
+  document.getElementById('cart-total-qty').textContent = qty;
+  document.getElementById('cart-total-price').textContent = fmtPrice(total) + '원';
+  document.getElementById('cart-discount').textContent = '0원';
+  document.getElementById('cart-shipping').textContent = fmtPrice(shipping) + '원';
+  document.getElementById('cart-final').textContent = fmtPrice(total + shipping) + '원';
+}
+
+if (currentTab === 'cart') renderCartPage();
+
+// ══════════════════════════════
+// ── 관심 교재 전체 페이지 ──
+// ══════════════════════════════
+function renderFavPage() {
+  const area = document.getElementById('fav-content');
+  if (!area) return;
+
+  const wishIds = (typeof Wish !== 'undefined') ? Wish.items : [];
+  const books = (typeof BOOKS !== 'undefined') ? BOOKS : [];
+  let favBooks = books.filter(b => wishIds.includes(b.id));
+
+  // 샘플 1개 추가 (항상 보이도록)
+  const sampleAlreadyIn = favBooks.some(b => b.id === 1);
+  if (!sampleAlreadyIn) {
+    favBooks = [{ id: 1, title: '(22개정) 초등 영어 자습서&평가문제집 3-1 (김혜리)', price: 18000, img: null }, ...favBooks];
+  }
+
+  if (!favBooks.length) {
+    area.innerHTML = '<div class="mp-empty-state"><span class="mp-empty-icon2">ⓘ</span>관심교재가 없습니다.</div>';
+    return;
+  }
+
+  area.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:20px;padding:20px;">' +
+    favBooks.map(b => {
+      const imgHtml = b.img
+        ? `<img src="${b.img}" style="width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid #e0e0e0;border-radius:4px;">`
+        : `<div style="width:100%;aspect-ratio:3/4;background:#f0f2f5;border:1px solid #e0e0e0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:36px;">📚</div>`;
+      return `
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" class="fav-chk"></div>
+          <a href="book-detail.html?id=${b.id}" style="text-decoration:none;display:block;" title="${b.title}">
+            <div style="transition:transform .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">${imgHtml}</div>
+            <div style="font-size:12px;font-weight:600;color:#333;line-height:1.4;margin-top:6px;word-break:break-all;">${b.title}</div>
+          </a>
+        </div>`;
+    }).join('') + '</div>';
+}
+
+function removeSelectedFav() {
+  document.querySelectorAll('.fav-chk:checked').forEach(cb => cb.closest('div[style]').remove());
+  Toast.show('삭제되었습니다.', 'info');
+}
+
+if (currentTab === 'favorite') renderFavPage();
+
+// ══════════════════════════════
+// ── 내가 만든 자료 전체 페이지 ──
+// ══════════════════════════════
+function renderCreatedPage() {
+  const tbody = document.getElementById('created-tbody');
+  if (!tbody) return;
+  const iconDl = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+  const iconEye = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  const iconX = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+  tbody.innerHTML = createdMaterials.map(m => `
+    <tr>
+      <td>${m.type}</td>
+      <td class="left">${m.title}</td>
+      <td class="left" style="color:#888;">${m.bookTitle}</td>
+      <td>${m.date}</td>
+      <td>
+        <button class="mp-icon-btn" onclick="Toast.show('미리보기 준비 중입니다.','info')">${iconEye}</button>
+        <button class="mp-icon-btn" onclick="Toast.show('다운로드 준비 중입니다.','info')">${iconDl}</button>
+      </td>
+      <td><button class="mp-icon-btn" onclick="this.closest('tr').remove();Toast.show('삭제되었습니다.','info')">${iconX}</button></td>
+    </tr>`).join('');
+
+  const countEl = document.getElementById('created-count');
+  if (countEl) countEl.textContent = createdMaterials.length;
+}
+
+if (currentTab === 'created') renderCreatedPage();
+
+// ── 유틸 ──
+function toggleAllChk(cls, triggerChk) {
+  const chks = document.querySelectorAll('.' + cls);
+  const state = triggerChk ? triggerChk.checked : document.getElementById('recent-all-chk').checked;
+  chks.forEach(c => c.checked = state);
+}
+
+function switchOrderTab(el, name) {
+  document.querySelectorAll('.mp-inner-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setPeriod(btn, period) {
+  document.querySelectorAll('.mp-period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const now = new Date();
+  const to = now.toISOString().split('T')[0];
+  let from = new Date(now);
+  if (period === '1w') from.setDate(from.getDate() - 7);
+  else if (period === '1m') from.setMonth(from.getMonth() - 1);
+  else if (period === '3m') from.setMonth(from.getMonth() - 3);
+  else if (period === '6m') from.setMonth(from.getMonth() - 6);
+  document.getElementById('date-from').value = from.toISOString().split('T')[0];
+  document.getElementById('date-to').value = to;
+}
+
+// 홈 장바구니 건수 업데이트
+(function(){
+  const countEl = document.getElementById('home-cart-count');
+  if (countEl && typeof Cart !== 'undefined') {
+    countEl.textContent = Cart.items.length + '건';
+  }
 })();
 </script>
 </body>
