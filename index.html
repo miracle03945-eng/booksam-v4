@@ -188,18 +188,18 @@
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 6px; padding: 14px 12px 12px; text-decoration: none; color: var(--text);
       border-right: 1px solid var(--border); transition: background .15s, color .15s;
-      max-width: 220px; position: relative;
+      max-width: 220px; position: relative; gap: 10px; padding: 22px 16px 20px;
     }
     .shortcut-item::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
       background: transparent; transition: background .2s;
     }
     .shortcut-item:last-child { border-right: none; }
     .shortcut-item:hover { background: #f7f9ff; color: var(--navy); }
     .shortcut-item:hover::after { background: var(--navy); }
-    .shortcut-item:hover .shortcut-icon { transform: translateY(-2px); }
+    .shortcut-item:hover .shortcut-icon { transform: translateY(-3px); }
     .shortcut-icon {
-      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+      width: 60px; height: 60px; border-radius: 18px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       transition: transform .2s;
     }
@@ -211,15 +211,15 @@
     .shortcut-icon.c-red svg   { stroke: #d93025; }
     .shortcut-icon.c-orange{ background: #fef3e2; }
     .shortcut-icon.c-orange svg{ stroke: #e37400; }
-    .shortcut-icon svg { width: 20px; height: 20px; }
+    .shortcut-icon svg { width: 30px; height: 30px; }
     .shortcut-label {
-      font-size: 14px; font-weight: 400; text-align: center; line-height: 1.35; color: inherit;
+      font-size: 15px; font-weight: 600; text-align: center; line-height: 1.4; color: inherit;
     }
     @media(max-width:768px){
-      .shortcut-item { padding: 16px 6px 14px; gap: 8px; }
-      .shortcut-icon { width: 48px; height: 48px; border-radius: 14px; }
-      .shortcut-icon svg { width: 22px; height: 22px; }
-      .shortcut-label { font-size: 11px; }
+      .shortcut-item { padding: 18px 6px 16px; gap: 8px; }
+      .shortcut-icon { width: 52px; height: 52px; border-radius: 16px; }
+      .shortcut-icon svg { width: 26px; height: 26px; }
+      .shortcut-label { font-size: 12px; }
     }
 
     /* ─── Hero Slider ─── */
