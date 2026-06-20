@@ -420,8 +420,8 @@ span.gnb-link{cursor:default;}
 .mega-col .mega-sub-link:hover{color:var(--red);padding-left:18px;}
 .mega-col .mega-sub-link:hover::before{background:var(--red);}
 
-/* 메가메뉴 안에서 gnb-subflyout: 인라인 목록으로 표시 */
-.mega-col .gnb-subflyout{display:block;position:static;background:transparent;border:none;border-radius:0;box-shadow:none;padding:0;min-width:0;}
+/* 메가메뉴 안에서 gnb-subflyout: 인라인 목록으로 항상 표시 */
+.mega-col .gnb-subflyout{display:block !important;position:static !important;background:transparent !important;border:none !important;border-radius:0 !important;box-shadow:none !important;padding:0 !important;min-width:0 !important;opacity:1 !important;visibility:visible !important;pointer-events:auto !important;}
 .mega-col .gnb-sub-group > .mega-group-title::after{content:'' !important;}
 .mega-col .gnb-flyout-link{font-size:15px;color:#333;text-decoration:none;padding:7px 0 7px 14px;display:block;font-weight:400;border-bottom:none;transition:color .12s,padding-left .1s;position:relative;}
 .mega-col .gnb-flyout-link::before{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:3px;height:3px;border-radius:50%;background:#ccc;transition:background .12s;}
@@ -2121,6 +2121,8 @@ span.gnb-link{cursor:default;}
   .gnb-dropdown .gnb-sub-group{position:relative;}
   .gnb-subflyout{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s,visibility .18s;position:absolute;left:100%;top:0;background:white;border-top:3px solid var(--red);border-radius:0 0 10px 10px;box-shadow:8px 12px 28px rgba(0,0,0,.13);min-width:160px;z-index:300;padding:4px 0 8px;}
   .gnb-sub-group:hover .gnb-subflyout{opacity:1;visibility:visible;pointer-events:auto;}
+  /* 메가메뉴 내 subflyout: 항상 표시 (GNB hover 동작은 위에서 유지) */
+  .mega-col .gnb-subflyout{opacity:1 !important;visibility:visible !important;pointer-events:auto !important;position:static !important;display:block !important;}
   .gnb-flyout-link{display:block;font-size:14px;color:#333;padding:10px 18px;text-decoration:none;border-bottom:1px solid #f5f5f5;transition:color .12s,background .12s;white-space:nowrap;}
   .gnb-flyout-link:last-child{border-bottom:none;}
   .gnb-flyout-link:hover{color:var(--red);background:#fff5f5;}
