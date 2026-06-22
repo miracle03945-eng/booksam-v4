@@ -653,22 +653,13 @@ applyFilter();
 
 <script>
 function closeFloatingBanner() {
-  const banner = document.getElementById('floatingBanner');
-  const overlay = document.getElementById('floatingBannerOverlay');
-  banner.classList.add('hidden');
-  localStorage.setItem('floatingBannerClosed', 'true');
+  document.getElementById('floatingBanner').classList.add('hidden');
 }
 
 function initFloatingBanner() {
-  const overlay = document.getElementById('floatingBannerOverlay');
-  const isClosed = localStorage.getItem('floatingBannerClosed') === 'true';
-  if (!isClosed) {
-    setTimeout(() => {
-      overlay.classList.add('show');
-    }, 1000);
-  } else {
-    document.getElementById('floatingBanner').classList.add('hidden');
-  }
+  setTimeout(() => {
+    document.getElementById('floatingBannerOverlay').classList.add('show');
+  }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', initFloatingBanner);
