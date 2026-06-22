@@ -849,7 +849,187 @@ function checkPendingMaterial() {
 }
 
 // ── 도서 상세 콘텐츠 데이터 (도서 소개 / 목차 템플릿) ──
+// ── 파닉스 NOW 공통 구성 ──
+const _PHONICS_NOW_STRUCTURE = [
+  { title: 'Sound & Letter',  description: '알파벳 글자와 소리를 연결해 파닉스의 기초를 익힙니다.' },
+  { title: 'Word Practice',   description: '대표 단어를 듣고 읽으며 소리와 철자의 관계를 학습합니다.' },
+  { title: 'Activity',        description: '다양한 문제와 활동을 통해 배운 내용을 확인합니다.' },
+  { title: 'Review',          description: '단원별 핵심 내용을 복습하며 학습을 마무리합니다.' }
+];
+
+// ── Benchmark Reading 공통 구성 ──
+const _BENCHMARK_STRUCTURE = [
+  { title: 'Build Background',     description: '배경지식을 활성화하고 읽기 전 준비를 합니다.' },
+  { title: 'Read the Passage',     description: '주제별 지문을 읽으며 내용을 파악합니다.' },
+  { title: 'Check Understanding',  description: '독해 이해도를 확인하는 문제를 풀어봅니다.' },
+  { title: 'Vocabulary & Writing', description: '핵심 어휘와 간단한 쓰기 활동으로 마무리합니다.' }
+];
+
+// ── I Love Reading 공통 구성 ──
+const _ILR_STRUCTURE = [
+  { title: 'Vocabulary Preview',  description: '지문에 나오는 핵심 어휘를 먼저 학습합니다.' },
+  { title: 'Listen & Read',       description: 'MP3를 들으며 지문을 읽고 내용을 파악합니다.' },
+  { title: 'Check Understanding', description: '내용 이해 문제로 독해력을 확인합니다.' },
+  { title: 'Wrap-Up',             description: '문법·어휘·쓰기 활동으로 단원 학습을 마무리합니다.' }
+];
+
+// ── Booster Voca 공통 구성 ──
+const _BOOSTER_VOCA_STRUCTURE = [
+  { title: 'Word List',           description: '하루 20개 단어를 예문과 함께 학습합니다.' },
+  { title: 'Example Sentences',   description: '핵심 예문으로 어휘의 쓰임과 뉘앙스를 익힙니다.' },
+  { title: 'Exercise',            description: '다양한 유형의 문제로 어휘를 완전히 내 것으로 만듭니다.' },
+  { title: 'Review Test',         description: '5일치 학습 후 복습 테스트로 어휘를 점검합니다.' }
+];
+
 const BOOK_DETAIL_CONTENT = {
+
+  // ══════════════════════════════════════════
+  //  Phonics NOW 시리즈 (id 1, 2, 19)
+  // ══════════════════════════════════════════
+  1: {
+    intro: {
+      heading: 'Phonics NOW 시리즈 특징',
+      summary: [
+        'Phonics NOW는 파닉스의 기초부터 단계적으로 익힐 수 있도록 구성된 초등 영어 파닉스 프로그램입니다. AR 기반 체험형 학습과 반복 활동을 통해 알파벳 소리와 단어 읽기 능력을 자연스럽게 기를 수 있습니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '알파벳 소리와 글자 인식을 단계적으로 익히는 파닉스 입문 교재',
+        'AR 기반 체험형 학습으로 학습 흥미와 몰입도 향상',
+        '듣기·읽기·쓰기 활동을 연계하여 파닉스 기본기 강화',
+        '초등 학습자가 스스로 학습하기 쉬운 짧고 명확한 구성'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _PHONICS_NOW_STRUCTURE,
+      introImage: 'images/phonics-now-1-detail.jpg'
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Unit 1. Short Vowels: a', units: [
+          { unit: 'Lesson 1', title: 'Aa — cat, bat, hat', page: 8 },
+          { unit: 'Lesson 2', title: 'Aa — fan, can, man', page: 14 }
+        ]},
+        { title: 'Unit 2. Short Vowels: i', units: [
+          { unit: 'Lesson 3', title: 'Ii — pig, wig, big', page: 20 },
+          { unit: 'Lesson 4', title: 'Ii — fin, pin, bin', page: 26 }
+        ]},
+        { title: 'Unit 3. Short Vowels: o', units: [
+          { unit: 'Lesson 5', title: 'Oo — dog, log, fog', page: 32 },
+          { unit: 'Lesson 6', title: 'Oo — pot, hot, dot', page: 38 }
+        ]},
+        { title: 'Unit 4. Short Vowels: u', units: [
+          { unit: 'Lesson 7', title: 'Uu — bug, mug, jug', page: 44 },
+          { unit: 'Lesson 8', title: 'Uu — run, sun, fun', page: 50 }
+        ]},
+        { title: 'Unit 5. Short Vowels: e', units: [
+          { unit: 'Lesson 9',  title: 'Ee — bed, red, fed', page: 56 },
+          { unit: 'Lesson 10', title: 'Ee — hen, ten, pen', page: 62 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 68 }
+      ]
+    }
+  },
+
+  2: {
+    intro: {
+      heading: 'Phonics NOW 시리즈 특징',
+      summary: [
+        'Phonics NOW 2는 단모음을 익힌 학습자가 장모음과 이중자음을 단계적으로 학습하도록 구성된 파닉스 심화 과정입니다. 체계적인 반복 학습과 AR 기반 활동으로 단어 읽기 능력을 확장합니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '장모음(Long Vowels) 규칙을 체계적으로 학습하는 2단계 교재',
+        'Magic-e 패턴과 모음 조합을 통한 단어 확장 훈련',
+        'AR 기반 체험형 학습으로 자기주도 학습 능력 강화',
+        '읽기·쓰기·말하기 통합 활동으로 파닉스 완성'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _PHONICS_NOW_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Unit 1. Long Vowels: a_e', units: [
+          { unit: 'Lesson 1', title: 'a_e — cake, lake, make', page: 8 },
+          { unit: 'Lesson 2', title: 'a_e — name, game, fame', page: 14 }
+        ]},
+        { title: 'Unit 2. Long Vowels: i_e', units: [
+          { unit: 'Lesson 3', title: 'i_e — bike, like, hike', page: 20 },
+          { unit: 'Lesson 4', title: 'i_e — pine, mine, vine', page: 26 }
+        ]},
+        { title: 'Unit 3. Long Vowels: o_e', units: [
+          { unit: 'Lesson 5', title: 'o_e — bone, cone, home', page: 32 },
+          { unit: 'Lesson 6', title: 'o_e — rose, nose, hose', page: 38 }
+        ]},
+        { title: 'Unit 4. Long Vowels: u_e', units: [
+          { unit: 'Lesson 7', title: 'u_e — cube, tube, mule', page: 44 },
+          { unit: 'Lesson 8', title: 'u_e — cute, mute, tune', page: 50 }
+        ]},
+        { title: 'Unit 5. Consonant Blends', units: [
+          { unit: 'Lesson 9',  title: 'bl, cl, fl, gl, pl', page: 56 },
+          { unit: 'Lesson 10', title: 'br, cr, dr, fr, gr', page: 62 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 68 }
+      ]
+    }
+  },
+
+  19: {
+    intro: {
+      heading: 'Phonics NOW 시리즈 특징',
+      summary: [
+        'Phonics NOW 3는 이중모음과 사이트워드 학습으로 파닉스의 마지막 단계를 완성하는 교재입니다. 독립적인 읽기로 나아가는 데 필요한 고급 파닉스 규칙을 체계적으로 학습합니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '이중모음(Diphthongs)·이중자음(Digraphs) 등 고급 파닉스 규칙 완성',
+        '사이트워드(Sight Words) 학습으로 유창한 읽기 기초 마련',
+        '독립 읽기로 전환하는 단계에 최적화된 교재 구성',
+        'AR 기반 체험형 학습과 리딩 패시지로 실전 독해력 연습'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _PHONICS_NOW_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Unit 1. Vowel Teams: ai, ay', units: [
+          { unit: 'Lesson 1', title: 'ai — rain, tail, mail', page: 8 },
+          { unit: 'Lesson 2', title: 'ay — day, play, stay', page: 14 }
+        ]},
+        { title: 'Unit 2. Vowel Teams: ee, ea', units: [
+          { unit: 'Lesson 3', title: 'ee — tree, bee, feet', page: 20 },
+          { unit: 'Lesson 4', title: 'ea — sea, tea, read', page: 26 }
+        ]},
+        { title: 'Unit 3. Vowel Teams: oa, ow', units: [
+          { unit: 'Lesson 5', title: 'oa — boat, coat, road', page: 32 },
+          { unit: 'Lesson 6', title: 'ow — snow, low, bowl', page: 38 }
+        ]},
+        { title: 'Unit 4. Diphthongs: oi, oy / ou, ow', units: [
+          { unit: 'Lesson 7', title: 'oi, oy — oil, boy, toy', page: 44 },
+          { unit: 'Lesson 8', title: 'ou, ow — out, cow, town', page: 50 }
+        ]},
+        { title: 'Unit 5. Sight Words & Review', units: [
+          { unit: 'Lesson 9',  title: 'Sight Words 1', page: 56 },
+          { unit: 'Lesson 10', title: 'Sight Words 2 & Review', page: 62 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 68 }
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════
+  //  Benchmark Reading 시리즈 (id 20, 21, 22)
+  // ══════════════════════════════════════════
   20: {
     intro: {
       heading: 'Benchmark Reading 시리즈 특징',
@@ -864,12 +1044,7 @@ const BOOK_DETAIL_CONTENT = {
         '다양한 독후 활동(어휘·이해력·쓰기)으로 완전 학습'
       ],
       structureTitle: '[책의 구성]',
-      structure: [
-        { title: 'Build Background',     description: '배경지식을 활성화하고 읽기 전 준비를 합니다.' },
-        { title: 'Read the Passage',     description: '주제별 지문을 읽으며 내용을 파악합니다.' },
-        { title: 'Check Understanding',  description: '독해 이해도를 확인하는 문제를 풀어봅니다.' },
-        { title: 'Vocabulary & Writing', description: '핵심 어휘와 간단한 쓰기 활동으로 마무리합니다.' }
-      ],
+      structure: _BENCHMARK_STRUCTURE,
       introImage: 'images/detail/benchmark-reading-1-1-intro.jpg'
     },
     toc: {
@@ -888,9 +1063,9 @@ const BOOK_DETAIL_CONTENT = {
           { unit: 'Unit 6', title: 'Doing Things Together', page: 36 }
         ]},
         { title: 'Chapter 3. Rules', units: [
-          { unit: 'Unit 7', title: 'Everyday Activities', page: 42 },
-          { unit: 'Unit 8', title: 'Families Have', page: 48 },
-          { unit: 'Unit 9', title: 'Rules at School', page: 54 }
+          { unit: 'Unit 7',  title: 'Everyday Activities', page: 42 },
+          { unit: 'Unit 8',  title: 'Families Have Rules', page: 48 },
+          { unit: 'Unit 9',  title: 'Rules at School', page: 54 }
         ]},
         { title: 'Chapter 4. Animals', units: [
           { unit: 'Unit 10', title: 'Who Is in the Tree?', page: 60 },
@@ -902,31 +1077,396 @@ const BOOK_DETAIL_CONTENT = {
         { title: 'Word List', page: 78 }
       ]
     }
+  },
+
+  21: {
+    intro: {
+      heading: 'Benchmark Reading 시리즈 특징',
+      summary: [
+        'Benchmark Reading 1.2는 다양한 장르의 픽션·논픽션 지문으로 읽기 유창성을 높이고, 어휘력을 자연스럽게 확장하는 초등 영어 리딩 2단계 교재입니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '세계 표준 Benchmark Education 리딩 프로그램 기반',
+        '40 words 수준의 지문으로 독해 능력 단계적 향상',
+        '픽션·논픽션 균형 구성으로 다양한 읽기 경험 제공',
+        '어휘·이해력·쓰기 활동으로 완전 학습 실현'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _BENCHMARK_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [
+        { title: 'Scope and Sequence', page: 4 }
+      ],
+      chapters: [
+        { title: 'Chapter 1. Weather', units: [
+          { unit: 'Unit 1', title: 'Sunny Days', page: 6 },
+          { unit: 'Unit 2', title: 'Rainy Days', page: 12 },
+          { unit: 'Unit 3', title: 'Four Seasons', page: 18 }
+        ]},
+        { title: 'Chapter 2. Food', units: [
+          { unit: 'Unit 4', title: 'My Favorite Food', page: 24 },
+          { unit: 'Unit 5', title: 'Healthy Eating', page: 30 },
+          { unit: 'Unit 6', title: 'Food Around the World', page: 36 }
+        ]},
+        { title: 'Chapter 3. Jobs', units: [
+          { unit: 'Unit 7', title: 'Community Helpers', page: 42 },
+          { unit: 'Unit 8', title: 'What Do They Do?', page: 48 },
+          { unit: 'Unit 9', title: 'My Dream Job', page: 54 }
+        ]},
+        { title: 'Chapter 4. Nature', units: [
+          { unit: 'Unit 10', title: 'Plants Around Us', page: 60 },
+          { unit: 'Unit 11', title: 'Animals in the Wild', page: 66 },
+          { unit: 'Unit 12', title: 'Caring for Nature', page: 72 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 78 }
+      ]
+    }
+  },
+
+  22: {
+    intro: {
+      heading: 'Benchmark Reading 시리즈 특징',
+      summary: [
+        'Benchmark Reading 1.3는 독해 전략과 비판적 사고력을 함께 키우는 Benchmark Reading 1단계 완성편입니다. 심화된 지문과 다양한 독해 활동으로 영어 독서 능력을 최상 수준으로 끌어올립니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '세계 표준 Benchmark Education 리딩 프로그램 기반',
+        '60 words 수준의 심화 지문으로 독해 전략 완성',
+        '비판적 사고력을 키우는 고차원 독해 활동 포함',
+        '초등 영어 독해의 완성 단계로 중학 영어 준비'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _BENCHMARK_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [
+        { title: 'Scope and Sequence', page: 4 }
+      ],
+      chapters: [
+        { title: 'Chapter 1. Science', units: [
+          { unit: 'Unit 1', title: 'Living Things', page: 6 },
+          { unit: 'Unit 2', title: 'Matter and Energy', page: 12 },
+          { unit: 'Unit 3', title: 'Earth and Space', page: 18 }
+        ]},
+        { title: 'Chapter 2. Social Studies', units: [
+          { unit: 'Unit 4', title: 'Communities', page: 24 },
+          { unit: 'Unit 5', title: 'Maps and Places', page: 30 },
+          { unit: 'Unit 6', title: 'History and Culture', page: 36 }
+        ]},
+        { title: 'Chapter 3. Arts & Crafts', units: [
+          { unit: 'Unit 7', title: 'Colors and Shapes', page: 42 },
+          { unit: 'Unit 8', title: 'Music Around the World', page: 48 },
+          { unit: 'Unit 9', title: 'Art in Everyday Life', page: 54 }
+        ]},
+        { title: 'Chapter 4. Technology', units: [
+          { unit: 'Unit 10', title: 'Machines We Use', page: 60 },
+          { unit: 'Unit 11', title: 'Computers and the Internet', page: 66 },
+          { unit: 'Unit 12', title: 'Technology and the Future', page: 72 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 78 }
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════
+  //  I Love Reading 시리즈 (id 16, 17, 18)
+  // ══════════════════════════════════════════
+  16: {
+    intro: {
+      heading: 'I Love Reading 시리즈 특징',
+      summary: [
+        '2025 개정 교육과정을 완벽 반영한 중학 영어 독해 시리즈입니다. 교과서 연계 주제의 다양한 지문과 실전 독해 활동으로 내신과 수능을 동시에 준비할 수 있습니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '2025 개정 교육과정 완벽 반영',
+        '교과서 연계 주제로 내신 독해 실력 향상',
+        '논픽션·픽션·실용문 등 다양한 지문 유형 수록',
+        'MP3 제공으로 듣기와 읽기를 동시에 학습'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _ILR_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Lesson 1. All about Me', units: [
+          { unit: 'Unit 1', title: 'Who Am I?', page: 8 },
+          { unit: 'Unit 2', title: 'My Hobbies and Interests', page: 16 }
+        ]},
+        { title: 'Lesson 2. Think Wise, Stay Safe', units: [
+          { unit: 'Unit 3', title: 'Safety in Daily Life', page: 24 },
+          { unit: 'Unit 4', title: 'Making Good Decisions', page: 32 }
+        ]},
+        { title: 'Lesson 3. Wonderful Stories from School', units: [
+          { unit: 'Unit 5', title: 'School Life Stories', page: 40 },
+          { unit: 'Unit 6', title: 'Learning Together', page: 48 }
+        ]},
+        { title: 'Lesson 4. Make a Difference in Our Community', units: [
+          { unit: 'Unit 7', title: 'Community Volunteers', page: 56 },
+          { unit: 'Unit 8', title: 'Being a Good Citizen', page: 64 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List & Answer Key', page: 72 }
+      ]
+    }
+  },
+
+  17: {
+    intro: {
+      heading: 'I Love Reading 시리즈 특징',
+      summary: [
+        '2025 개정 교육과정을 반영한 I Love Reading Level 2는 다양한 유형의 지문과 심화 독해 전략으로 중학 2학년 수준의 독해 능력을 키웁니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '2025 개정 교육과정 완벽 반영',
+        '중학 2학년 수준에 맞는 심화 지문 및 독해 전략 제시',
+        '주제별 배경지식과 어휘를 동시에 확장',
+        'MP3 제공으로 정확한 발음과 듣기 능력 향상'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _ILR_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Lesson 1. Technology in Our Lives', units: [
+          { unit: 'Unit 1', title: 'Digital World', page: 8 },
+          { unit: 'Unit 2', title: 'Smart Devices Around Us', page: 16 }
+        ]},
+        { title: 'Lesson 2. Nature and Environment', units: [
+          { unit: 'Unit 3', title: 'Our Planet in Danger', page: 24 },
+          { unit: 'Unit 4', title: 'Going Green', page: 32 }
+        ]},
+        { title: 'Lesson 3. Culture and Tradition', units: [
+          { unit: 'Unit 5', title: 'World Festivals', page: 40 },
+          { unit: 'Unit 6', title: 'Cultural Differences', page: 48 }
+        ]},
+        { title: 'Lesson 4. Dreams and Future', units: [
+          { unit: 'Unit 7', title: 'My Future Career', page: 56 },
+          { unit: 'Unit 8', title: 'Setting Goals', page: 64 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List & Answer Key', page: 72 }
+      ]
+    }
+  },
+
+  18: {
+    intro: {
+      heading: 'I Love Reading 시리즈 특징',
+      summary: [
+        '2025 개정 교육과정을 반영한 I Love Reading Level 3는 실전 수능 수준의 지문과 독해 전략으로 중학 3학년 및 예비 고1 학습자의 최고 등급을 목표로 합니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '2025 개정 교육과정 완벽 반영',
+        '수능 영어 유형과 연계된 고난도 지문 수록',
+        '비판적 사고력과 논리적 읽기 능력을 키우는 독해 전략',
+        'MP3 제공으로 리스닝과 독해를 동시에 준비'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _ILR_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Lesson 1. Global Issues', units: [
+          { unit: 'Unit 1', title: 'Climate Change', page: 8 },
+          { unit: 'Unit 2', title: 'Global Health', page: 16 }
+        ]},
+        { title: 'Lesson 2. Science & Art', units: [
+          { unit: 'Unit 3', title: 'Science and Innovation', page: 24 },
+          { unit: 'Unit 4', title: 'Art and Creativity', page: 32 }
+        ]},
+        { title: 'Lesson 3. Media & Society', units: [
+          { unit: 'Unit 5', title: 'Social Media Influence', page: 40 },
+          { unit: 'Unit 6', title: 'Media Literacy', page: 48 }
+        ]},
+        { title: 'Lesson 4. Future Careers', units: [
+          { unit: 'Unit 7', title: 'Jobs of the Future', page: 56 },
+          { unit: 'Unit 8', title: 'Preparing for Tomorrow', page: 64 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List & Answer Key', page: 72 }
+      ]
+    }
+  },
+
+  // ══════════════════════════════════════════
+  //  Booster Voca 시리즈 (id 6, 7, 8)
+  // ══════════════════════════════════════════
+  6: {
+    intro: {
+      heading: 'Booster Voca 시리즈 특징',
+      summary: [
+        '50일로 끝내는 중등 필수 영단어 프로그램입니다. 최신 교육과정을 반영한 핵심 어휘를 예문과 함께 학습하고, 반복 훈련과 테스트를 통해 내신·수능 대비 어휘 실력을 완성합니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '중학 내신 필수 어휘 1,000개를 50일 완성 플랜으로 학습',
+        '최신 교육과정 및 교과서 빈출 어휘 완벽 반영',
+        '예문과 삽화로 어휘의 쓰임과 뉘앙스를 명확히 이해',
+        '누적 복습 테스트로 장기 기억 강화'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _BOOSTER_VOCA_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Day 01–05', units: [
+          { unit: 'Day 01', title: '기초 생활 어휘', page: 8 },
+          { unit: 'Day 02', title: '학교·학습 어휘', page: 14 },
+          { unit: 'Day 03', title: '가족·관계 어휘', page: 20 },
+          { unit: 'Day 04', title: '자연·환경 어휘', page: 26 },
+          { unit: 'Day 05', title: 'Review Test 1', page: 32 }
+        ]},
+        { title: 'Day 06–10', units: [
+          { unit: 'Day 06', title: '신체·건강 어휘', page: 36 },
+          { unit: 'Day 07', title: '음식·식사 어휘', page: 42 },
+          { unit: 'Day 08', title: '여행·교통 어휘', page: 48 },
+          { unit: 'Day 09', title: '직업·사회 어휘', page: 54 },
+          { unit: 'Day 10', title: 'Review Test 2', page: 60 }
+        ]},
+        { title: 'Day 11–20', units: [
+          { unit: 'Day 11–15', title: '감정·성격 / 시간·날씨 외', page: 64 },
+          { unit: 'Day 16–20', title: '문화·예술 / 스포츠 외', page: 90 }
+        ]},
+        { title: 'Day 21–50', units: [
+          { unit: 'Day 21–30', title: '과학·기술 / 경제·사회 어휘', page: 116 },
+          { unit: 'Day 31–40', title: '내신 빈출 동사·형용사', page: 156 },
+          { unit: 'Day 41–50', title: '수능 기초 어휘 완성', page: 196 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Index', page: 236 }
+      ]
+    }
+  },
+
+  7: {
+    intro: {
+      heading: 'Booster Voca 시리즈 특징',
+      summary: [
+        'Booster Voca 실력은 50일로 끝내는 중등 심화 어휘 프로그램입니다. 1,200개의 고급 어휘를 문맥 속에서 학습하고, 실전 문제 풀이로 내신과 수능 어휘력을 한 단계 높입니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '중학~예비 고1 수준의 심화 어휘 1,200개 수록',
+        '문맥 기반 어휘 학습으로 문장에서 바로 활용',
+        '내신·수능 빈출 어휘를 우선순위별로 정리',
+        '단계별 Review Test로 학습 성취도 점검'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _BOOSTER_VOCA_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Day 01–10', units: [
+          { unit: 'Day 01–05', title: '학문·사고 어휘', page: 8 },
+          { unit: 'Day 06–10', title: '사회·제도 어휘', page: 36 }
+        ]},
+        { title: 'Day 11–20', units: [
+          { unit: 'Day 11–15', title: '과학·기술 어휘', page: 64 },
+          { unit: 'Day 16–20', title: '문화·예술 어휘', page: 92 }
+        ]},
+        { title: 'Day 21–50', units: [
+          { unit: 'Day 21–30', title: '경제·환경·의료 어휘', page: 120 },
+          { unit: 'Day 31–50', title: '수능 핵심 어휘 완성', page: 168 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Index', page: 236 }
+      ]
+    }
+  },
+
+  8: {
+    intro: {
+      heading: 'Booster Voca 시리즈 특징',
+      summary: [
+        'Booster Voca 완성은 수능 기초까지 완성하는 최고 수준의 중학 어휘 교재입니다. 1,200개의 고급 어휘를 통해 고등 영어 학습의 탄탄한 기반을 마련합니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '수능 필수 어휘를 선제적으로 학습하는 최고 수준 교재',
+        '고난도 어휘를 예문·파생어와 함께 심층 학습',
+        '어휘 추론 전략으로 낯선 단어도 스스로 해결하는 능력 배양',
+        '최종 모의 어휘 테스트로 수능 실전 완벽 대비'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: _BOOSTER_VOCA_STRUCTURE,
+      introImage: ''
+    },
+    toc: {
+      extras: [],
+      chapters: [
+        { title: 'Day 01–10', units: [
+          { unit: 'Day 01–05', title: '추상 개념·철학 어휘', page: 8 },
+          { unit: 'Day 06–10', title: '학술·연구 어휘', page: 36 }
+        ]},
+        { title: 'Day 11–20', units: [
+          { unit: 'Day 11–15', title: '정치·외교 어휘', page: 64 },
+          { unit: 'Day 16–20', title: '경제·금융 어휘', page: 92 }
+        ]},
+        { title: 'Day 21–50', units: [
+          { unit: 'Day 21–30', title: '수능 빈출 다의어·숙어', page: 120 },
+          { unit: 'Day 31–50', title: '수능 1등급 어휘 완성', page: 168 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Index', page: 236 }
+      ]
+    }
   }
 };
 
-// ── 도서 소개 fallback ──
-const INTRO_FALLBACK = {
-  heading: '도서 소개',
-  summary: ['이 교재는 학습 단계와 목적에 맞춰 체계적으로 구성된 YBM 교재입니다.'],
-  featuresTitle: '[책의 특징]',
-  features: [
-    '단계별 학습 구성',
-    '핵심 개념과 예문 정리',
-    '다양한 유형의 연습 문제 제공'
-  ],
-  structureTitle: '[책의 구성]',
-  structure: [
-    { title: '학습 준비', description: '학습 목표와 핵심 개념을 확인합니다.' },
-    { title: '본문 학습', description: '교재의 주요 학습 내용을 단계적으로 익힙니다.' },
-    { title: '확인 학습', description: '문제를 통해 학습 내용을 점검합니다.' }
-  ],
-  introImage: null
-};
+// ── 도서 소개 fallback (교재별 데이터 없을 때) ──
+function getDefaultIntro(book) {
+  return {
+    heading: `${book.title} 교재 특징`,
+    summary: [
+      `『${book.title}』은 학습 단계와 목적에 맞춰 체계적으로 구성된 YBM 교재입니다. 핵심 개념과 다양한 활동을 통해 학습 내용을 자연스럽게 익힐 수 있습니다.`
+    ],
+    featuresTitle: '[책의 특징]',
+    features: [
+      '단계별 학습 흐름에 맞춘 체계적인 구성',
+      '핵심 개념과 예문을 쉽고 명확하게 정리',
+      '다양한 유형의 문제와 활동으로 학습 내용 확인'
+    ],
+    structureTitle: '[책의 구성]',
+    structure: [
+      { title: '학습 준비', description: '단원 학습에 필요한 핵심 내용을 확인합니다.' },
+      { title: '본문 학습', description: '교재의 주요 개념과 지문을 단계적으로 학습합니다.' },
+      { title: '확인 학습', description: '문제와 활동을 통해 학습 내용을 점검합니다.' }
+    ],
+    introImage: book.detailImage || book.introImage || book.descriptionImage || ''
+  };
+}
 
 // ── 도서 소개 템플릿 렌더 ──
 function renderBookIntro(intro) {
-  const i = intro || INTRO_FALLBACK;
+  const i = intro || {};
   const summary = (i.summary || []).map(s => `<p class="book-intro-summary">${s}</p>`).join('');
   const features = (i.features || []).map(f => `<li>${f}</li>`).join('');
   const structure = (i.structure || []).map(s => `
@@ -976,16 +1516,10 @@ function renderBookToc(toc) {
   return extras + chapters + appendix;
 }
 
-// ── 탭 패널 래퍼 (교재별 전용 데이터 → 없으면 fallback) ──
+// ── 탭 패널 래퍼 (교재별 전용 데이터 → 없으면 동적 fallback) ──
 function renderBookIntroPanel(book) {
   const content = BOOK_DETAIL_CONTENT[book.id];
-  if (content && content.intro) return renderBookIntro(content.intro);
-  // 레거시: Phonics NOW 1 전용 소개 이미지 유지
-  if (book.id === 1) {
-    return `<img src="images/phonics-now-1-detail.jpg" alt="Phonics NOW 1 도서 소개"
-              style="width:100%;max-width:860px;display:block;margin:0 auto;border-radius:8px;">`;
-  }
-  return renderBookIntro(null);
+  return renderBookIntro(content ? content.intro : getDefaultIntro(book));
 }
 function renderBookTocPanel(book) {
   const content = BOOK_DETAIL_CONTENT[book.id];
