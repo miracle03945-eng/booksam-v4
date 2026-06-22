@@ -831,6 +831,150 @@ function checkPendingMaterial() {
     .forEach(k => localStorage.removeItem(k));
 }
 
+// ── 도서 상세 콘텐츠 데이터 (도서 소개 / 목차 템플릿) ──
+const BOOK_DETAIL_CONTENT = {
+  20: {
+    intro: {
+      heading: 'Benchmark Reading 시리즈 특징',
+      summary: [
+        '세계적인 교육 출판사 Benchmark Education과 YBM이 공동 개발한 초등 영어 리딩 프로그램입니다. 과학·사회·문화 등 다양한 주제의 논픽션·픽션 지문으로 영어 독해 능력과 배경지식을 동시에 키웁니다.'
+      ],
+      featuresTitle: '[책의 특징]',
+      features: [
+        '세계 표준 Benchmark Education 리딩 프로그램 기반',
+        '20 words 수준의 짧고 명확한 지문으로 초등 입문자 최적화',
+        '논픽션·픽션 균형 있는 지문 구성으로 읽기 흥미 유발',
+        '다양한 독후 활동(어휘·이해력·쓰기)으로 완전 학습'
+      ],
+      structureTitle: '[책의 구성]',
+      structure: [
+        { title: 'Build Background',     description: '배경지식을 활성화하고 읽기 전 준비를 합니다.' },
+        { title: 'Read the Passage',     description: '주제별 지문을 읽으며 내용을 파악합니다.' },
+        { title: 'Check Understanding',  description: '독해 이해도를 확인하는 문제를 풀어봅니다.' },
+        { title: 'Vocabulary & Writing', description: '핵심 어휘와 간단한 쓰기 활동으로 마무리합니다.' }
+      ],
+      introImage: 'images/detail/benchmark-reading-1-1-intro.jpg'
+    },
+    toc: {
+      extras: [
+        { title: 'Scope and Sequence', page: 4 }
+      ],
+      chapters: [
+        { title: 'Chapter 1. School Days', units: [
+          { unit: 'Unit 1', title: 'My Book', page: 6 },
+          { unit: 'Unit 2', title: 'Ready for School', page: 12 },
+          { unit: 'Unit 3', title: 'I Can Do Many Things', page: 18 }
+        ]},
+        { title: 'Chapter 2. Friends', units: [
+          { unit: 'Unit 4', title: 'At My Home', page: 24 },
+          { unit: 'Unit 5', title: 'Fun with Friends', page: 30 },
+          { unit: 'Unit 6', title: 'Doing Things Together', page: 36 }
+        ]},
+        { title: 'Chapter 3. Rules', units: [
+          { unit: 'Unit 7', title: 'Everyday Activities', page: 42 },
+          { unit: 'Unit 8', title: 'Families Have', page: 48 },
+          { unit: 'Unit 9', title: 'Rules at School', page: 54 }
+        ]},
+        { title: 'Chapter 4. Animals', units: [
+          { unit: 'Unit 10', title: 'Who Is in the Tree?', page: 60 },
+          { unit: 'Unit 11', title: 'At the Pond', page: 66 },
+          { unit: 'Unit 12', title: 'How Animals Move', page: 72 }
+        ]}
+      ],
+      appendix: [
+        { title: 'Word List', page: 78 }
+      ]
+    }
+  }
+};
+
+// ── 도서 소개 fallback ──
+const INTRO_FALLBACK = {
+  heading: '도서 소개',
+  summary: ['이 교재는 학습 단계와 목적에 맞춰 체계적으로 구성된 YBM 교재입니다.'],
+  featuresTitle: '[책의 특징]',
+  features: [
+    '단계별 학습 구성',
+    '핵심 개념과 예문 정리',
+    '다양한 유형의 연습 문제 제공'
+  ],
+  structureTitle: '[책의 구성]',
+  structure: [
+    { title: '학습 준비', description: '학습 목표와 핵심 개념을 확인합니다.' },
+    { title: '본문 학습', description: '교재의 주요 학습 내용을 단계적으로 익힙니다.' },
+    { title: '확인 학습', description: '문제를 통해 학습 내용을 점검합니다.' }
+  ],
+  introImage: null
+};
+
+// ── 도서 소개 템플릿 렌더 ──
+function renderBookIntro(intro) {
+  const i = intro || INTRO_FALLBACK;
+  const summary = (i.summary || []).map(s => `<p class="book-intro-summary">${s}</p>`).join('');
+  const features = (i.features || []).map(f => `<li>${f}</li>`).join('');
+  const structure = (i.structure || []).map(s => `
+    <div class="book-structure-item">
+      <strong>${s.title}</strong>
+      <span>${s.description}</span>
+    </div>`).join('');
+  let imageBlock = '';
+  if (i.introImage) {
+    imageBlock = `
+      <div class="book-intro-image">
+        <img src="${i.introImage}" alt="${i.heading} 교재 소개 이미지"
+             onerror="this.parentNode.innerHTML='&lt;p class=\\'book-intro-image-ph\\'&gt;상세 소개 이미지 준비 중입니다.&lt;/p&gt;'">
+      </div>`;
+  }
+  return `
+    <h3 class="book-intro-heading">${i.heading}</h3>
+    ${summary}
+    ${features ? `<p class="book-feature-title">${i.featuresTitle || '[책의 특징]'}</p>
+      <ul class="book-feature-list">${features}</ul>` : ''}
+    ${structure ? `<p class="book-structure-title">${i.structureTitle || '[책의 구성]'}</p>${structure}` : ''}
+    ${imageBlock}`;
+}
+
+// ── 목차 템플릿 렌더 ──
+function renderBookToc(toc) {
+  const hasData = toc && ((toc.chapters || []).length || (toc.extras || []).length || (toc.appendix || []).length);
+  if (!hasData) {
+    return `<p class="toc-empty">등록된 목차 정보가 없습니다.</p>`;
+  }
+  const extras = (toc.extras || []).map(e =>
+    `<div class="toc-extra-row"><span>${e.title}</span><span>${e.page}</span></div>`).join('');
+  const chapters = (toc.chapters || []).map(ch => `
+    <div class="toc-chapter">
+      <h4>${ch.title}</h4>
+      <ul>
+        ${(ch.units || []).map(u => `
+          <li>
+            <span class="unit-no">${u.unit}</span>
+            <span class="unit-title">${u.title}</span>
+            <span class="unit-page">${u.page}</span>
+          </li>`).join('')}
+      </ul>
+    </div>`).join('');
+  const appendix = (toc.appendix || []).map(a =>
+    `<div class="toc-appendix-row"><span>${a.title}</span><span>${a.page}</span></div>`).join('');
+  return extras + chapters + appendix;
+}
+
+// ── 탭 패널 래퍼 (교재별 전용 데이터 → 없으면 fallback) ──
+function renderBookIntroPanel(book) {
+  const content = BOOK_DETAIL_CONTENT[book.id];
+  if (content && content.intro) return renderBookIntro(content.intro);
+  // 레거시: Phonics NOW 1 전용 소개 이미지 유지
+  if (book.id === 1) {
+    return `<img src="images/phonics-now-1-detail.jpg" alt="Phonics NOW 1 도서 소개"
+              style="width:100%;max-width:860px;display:block;margin:0 auto;border-radius:8px;">`;
+  }
+  return renderBookIntro(null);
+}
+function renderBookTocPanel(book) {
+  const content = BOOK_DETAIL_CONTENT[book.id];
+  return renderBookToc(content ? content.toc : null);
+}
+
 // ── 메인 렌더링 ──
 const id   = parseInt(getParam('id'));
 const book = BOOKS.find(b => b.id === id);
@@ -968,31 +1112,11 @@ if (!book) {
       <button class="detail-tab active" data-tab="tab-intro">도서 소개</button>
       <button class="detail-tab" data-tab="tab-contents">목차</button>
     </div>
-    <div id="tab-intro" class="tab-panel active tab-content">
-      ${book.id === 1 ? `
-        <img src="images/phonics-now-1-detail.jpg"
-             alt="Phonics NOW 1 도서 소개"
-             style="width:100%;max-width:860px;display:block;margin:0 auto;border-radius:8px;">
-      ` : `
-        <h3 style="font-size:16px;font-weight:800;margin-bottom:14px;">도서 소개</h3>
-        <p>『${book.title}』은 ${info.label} 학생들을 위한 <strong>${book.area}</strong> 집중 학습 교재입니다.</p><br>
-        <p>체계적인 단계별 학습 구성으로 기초부터 심화까지 자연스럽게 실력을 높일 수 있습니다.</p><br>
-        <h4 style="font-weight:700;margin-bottom:10px;">📌 이 책의 특징</h4>
-        <ul style="padding-left:20px;line-height:2.2;">
-          <li>단계별 학습으로 자연스러운 실력 향상</li>
-          <li>핵심 개념과 예문을 한눈에 정리</li>
-          <li>다양한 유형의 연습 문제 수록</li>
-          <li>QR코드를 통한 음원 및 해설 영상 제공</li>
-        </ul>
-      `}
+    <div id="tab-intro" class="tab-panel active tab-content book-intro-section">
+      ${renderBookIntroPanel(book)}
     </div>
-    <div id="tab-contents" class="tab-panel tab-content">
-      <h3 style="font-size:16px;font-weight:800;margin-bottom:14px;">목차</h3>
-      ${[1,2,3,4,5,6,7,8].map(i=>`
-        <div style="display:flex;justify-content:space-between;padding:11px 14px;background:${i%2?'var(--bg)':'white'};border-radius:4px;font-size:13px;">
-          <span><strong>Chapter ${i}.</strong> ${book.area} 학습 ${i}단계</span>
-          <span style="color:var(--muted);">${i*14}p</span>
-        </div>`).join('')}
+    <div id="tab-contents" class="tab-panel tab-content book-toc-section">
+      ${renderBookTocPanel(book)}
     </div>
     `;
   document.getElementById('detailGrid').after(tabArea);
