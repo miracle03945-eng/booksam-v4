@@ -2395,3 +2395,17 @@ span.gnb-link{cursor:default;}
   .sm-filter-block:first-child{flex:none;width:100%;}
   .sm-series-grid{grid-template-columns:1fr;}
 }
+
+/* ── 플로팅 배너 ── */
+.floating-banner-overlay{position:fixed;right:0;top:0;width:100%;height:100%;background:transparent;pointer-events:none;z-index:9997;}
+.floating-banner-overlay.show .floating-banner{pointer-events:auto;animation:slideInRight .3s ease-out;}
+.floating-banner{position:fixed;right:-400px;top:50%;transform:translateY(-50%);width:320px;max-height:90vh;background:white;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;z-index:9998;pointer-events:none;transition:right .3s ease-out;}
+.floating-banner.hidden{display:none;}
+.floating-banner-img{width:100%;height:auto;display:block;}
+.floating-banner-close{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(0,0,0,.7);border:none;border-radius:50%;color:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s;}
+.floating-banner-close:hover{background:rgba(0,0,0,.9);}
+@keyframes slideInRight{from{right:-400px;}to{right:20px;}}
+@media(max-width:768px){
+  .floating-banner{width:280px;right:-350px;}
+  @keyframes slideInRight{from{right:-350px;}to{right:12px;}}
+}
