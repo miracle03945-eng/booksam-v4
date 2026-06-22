@@ -1202,5 +1202,36 @@ function closeDailyModal() {
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeDailyModal(); });
 </script>
 
+<!-- 플로팅 배너 -->
+<div class="floating-banner-overlay" id="floatingBannerOverlay">
+  <div class="floating-banner" id="floatingBanner">
+    <img src="images/floating-banner-english-speech.jpg" alt="2026 YBM ENGLISH SPEECH CONTEST" class="floating-banner-img">
+    <button class="floating-banner-close" onclick="closeFloatingBanner()">✕</button>
+  </div>
+</div>
+
+<script>
+function closeFloatingBanner() {
+  const banner = document.getElementById('floatingBanner');
+  const overlay = document.getElementById('floatingBannerOverlay');
+  banner.classList.add('hidden');
+  localStorage.setItem('floatingBannerClosed', 'true');
+}
+
+function initFloatingBanner() {
+  const overlay = document.getElementById('floatingBannerOverlay');
+  const isClosed = localStorage.getItem('floatingBannerClosed') === 'true';
+  if (!isClosed) {
+    setTimeout(() => {
+      overlay.classList.add('show');
+    }, 1000);
+  } else {
+    document.getElementById('floatingBanner').classList.add('hidden');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initFloatingBanner);
+</script>
+
 </body>
 </html>
