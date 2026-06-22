@@ -1203,11 +1203,9 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeDailyModal
 </script>
 
 <!-- 플로팅 배너 -->
-<div class="floating-banner-overlay" id="floatingBannerOverlay">
-  <div class="floating-banner" id="floatingBanner">
+<div class="floating-banner" id="floatingBanner">
     <img src="images/floating-banner-english-speech.jpg.png" alt="2026 YBM ENGLISH SPEECH CONTEST" class="floating-banner-img">
     <button class="floating-banner-close" onclick="closeFloatingBanner()">✕</button>
-  </div>
 </div>
 
 <script>
@@ -1215,13 +1213,6 @@ function closeFloatingBanner() {
   document.getElementById('floatingBanner').classList.add('hidden');
 }
 
-function initFloatingBanner() {
-  setTimeout(() => {
-    document.getElementById('floatingBannerOverlay').classList.add('show');
-  }, 1000);
-}
-
-document.addEventListener('DOMContentLoaded', initFloatingBanner);
 </script>
 
 </body>
