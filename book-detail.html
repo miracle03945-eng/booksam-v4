@@ -382,6 +382,23 @@
 // ── 로그인 상태 ──
 const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
+// ── 공유하기 ──
+function shareBook() {
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      url: url
+    }).catch(err => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('교재 링크가 복사되었습니다.');
+    }).catch(() => {
+      showToast('복사에 실패했습니다.');
+    });
+  }
+}
+
 // ── 제공 서비스 데이터 ──
 const services = [
   { id:'mp3-stream',    title:'MP3 바로 듣기',    type:'streaming', loginRequired:false },
@@ -1037,7 +1054,7 @@ if (!book) {
         <div class="detail-cover-wrap">${coverContent}</div>
         <div class="detail-cover-btns">
           <button class="cover-btn" onclick="showToast('미리보기 서비스 준비 중입니다.')">미리보기</button>
-          <button class="cover-btn" onclick="showToast('크게보기 서비스 준비 중입니다.')">크게보기</button>
+          <button class="cover-btn" onclick="shareBook()">공유하기</button>
         </div>
       </div>
 
