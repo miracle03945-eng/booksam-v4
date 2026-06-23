@@ -1649,11 +1649,13 @@ if (!book) {
               `;
             } else {
               return `
+                <button class="btn-detail-cart" title="장바구니 담기"
+                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
                 <div class="buy-popup-wrap">
-                  <button class="btn-detail-buy btn-buy-stores" onclick="toggleBuyPopup(event,${book.id})">
+                  <button class="btn-detail-buy btn-buy-stores" onmouseenter="showBuyPopup()" onmouseleave="scheduleBuyPopupHide()">
                     구매하기
                   </button>
-                  <div class="buy-store-popup" id="buyStorePopup">
+                  <div class="buy-store-popup" id="buyStorePopup" onmouseenter="cancelBuyPopupHide()" onmouseleave="scheduleBuyPopupHide()">
                     <button class="buy-store-item" onclick="goBuyStore('kyobo',${book.id})">
                       <span class="buy-store-logo kyobo">KYOBO</span>
                       <span class="buy-store-name">교보문고</span>
@@ -1668,8 +1670,6 @@ if (!book) {
                     </button>
                   </div>
                 </div>
-                <button class="btn-detail-cart" title="장바구니 담기"
-                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
               `;
             }
           })()}
@@ -1801,14 +1801,18 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePurchaseInfoModalBtn(); closeDistributorModalBtn(); hideBuyPopup(); }
 });
 
-// ── 구매처 팝업 ──
-function toggleBuyPopup(e, id) {
-  e.stopPropagation();
+// ── 구매처 팝업 (hover) ──
+let _buyHideTimer = null;
+function showBuyPopup() {
+  clearTimeout(_buyHideTimer);
   const popup = document.getElementById('buyStorePopup');
-  if (!popup) return;
-  const isOpen = popup.classList.contains('open');
-  hideBuyPopup();
-  if (!isOpen) popup.classList.add('open');
+  if (popup) popup.classList.add('open');
+}
+function scheduleBuyPopupHide() {
+  _buyHideTimer = setTimeout(hideBuyPopup, 150);
+}
+function cancelBuyPopupHide() {
+  clearTimeout(_buyHideTimer);
 }
 function hideBuyPopup() {
   const popup = document.getElementById('buyStorePopup');
@@ -1824,7 +1828,6 @@ function goBuyStore(store, id) {
   hideBuyPopup();
   window.open(url, '_blank');
 }
-document.addEventListener('click', () => hideBuyPopup());
 </script>
 </body>
 </html>

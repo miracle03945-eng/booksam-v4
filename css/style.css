@@ -1529,8 +1529,8 @@ span.gnb-link{cursor:default;}
 .btn-buy-distributor{background:#6d4c41;}
 .btn-buy-distributor:hover{background:#4e342e;}
 /* 구매처 팝업 */
-.buy-popup-wrap{position:relative;flex:0 0 auto;}
-.btn-buy-stores{flex:none;padding:14px 28px;}
+.buy-popup-wrap{position:relative;flex:1;}
+.btn-buy-stores{width:100%;}
 .buy-store-popup{display:none;position:absolute;bottom:calc(100% + 8px);left:0;background:#2c2c2c;border-radius:12px;padding:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);z-index:200;min-width:220px;}
 .buy-store-popup.open{display:flex;gap:8px;}
 .buy-store-popup::after{content:'';position:absolute;bottom:-7px;left:28px;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #2c2c2c;}
