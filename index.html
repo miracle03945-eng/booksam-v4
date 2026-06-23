@@ -357,7 +357,6 @@
           autocomplete="off" oninput="acRender()" onkeydown="acKeydown(event)">
         <button class="search-btn" onclick="document.getElementById('searchInput').value.trim()?doSearch():openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
       </div>
-      <ul id="acList" style="display:none;position:fixed;background:#fff;border:1px solid #ddd;border-radius:10px;max-height:300px;overflow-y:auto;margin:0;padding:0;list-style:none;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,.13);"></ul>
     </div>
     </div>
     <div class="header-util-links">
@@ -1062,37 +1061,44 @@ document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==
 
 // 자동완성
 let acIdx = -1;
+const acList = document.createElement('ul');
+acList.id = 'acList';
+acList.style.cssText = 'display:none;position:fixed;background:#fff;border:1px solid #ddd;border-radius:10px;max-height:300px;overflow-y:auto;margin:0;padding:0;list-style:none;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,.15);';
+document.body.appendChild(acList);
+
+function acPosition(){
+  const rect = document.getElementById('searchInput').getBoundingClientRect();
+  acList.style.top = (rect.bottom + 4) + 'px';
+  acList.style.left = rect.left + 'px';
+  acList.style.width = rect.width + 'px';
+}
 function acRender(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const list = document.getElementById('acList');
   if(!q || typeof BOOKS==='undefined'){ acHide(); return; }
   const matched = BOOKS.filter(b=>b.title.toLowerCase().includes(q)).slice(0,20);
   if(!matched.length){ acHide(); return; }
-  list.innerHTML = matched.map((b,i)=>{
+  acList.innerHTML = matched.map((b,i)=>{
     const hl = b.title.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<strong style="color:var(--red)">${m}</strong>`);
     return `<li data-i="${i}" style="padding:9px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:10px;" onmousedown="acSelect(${b.id})" onmouseover="acHighlight(${i})">${b.img?`<img src="${b.img}" style="width:28px;height:36px;object-fit:cover;border-radius:3px;flex-shrink:0;" onerror="this.style.display='none'">`:''}<span>${hl}</span></li>`;
   }).join('');
   acIdx = -1;
-  const rect = document.getElementById('searchInput').closest('.search-wrap').getBoundingClientRect();
-  list.style.top = (rect.bottom + 6) + 'px';
-  list.style.left = rect.left + 'px';
-  list.style.width = rect.width + 'px';
-  list.style.display = 'block';
+  acPosition();
+  acList.style.display = 'block';
 }
-function acHide(){ document.getElementById('acList').style.display='none'; acIdx=-1; }
+function acHide(){ acList.style.display='none'; acIdx=-1; }
 function acSelect(id){ acHide(); location.href=`book-detail.html?id=${id}`; }
 function acHighlight(i){
   acIdx=i;
-  document.querySelectorAll('#acList li').forEach((el,j)=>el.style.background=j===i?'#f5f5f5':'#fff');
+  acList.querySelectorAll('li').forEach((el,j)=>el.style.background=j===i?'#f5f5f5':'#fff');
 }
 function acKeydown(e){
-  const items = document.querySelectorAll('#acList li');
+  const items = acList.querySelectorAll('li');
   if(!items.length) return;
   if(e.key==='ArrowDown'){ e.preventDefault(); acIdx=Math.min(acIdx+1,items.length-1); acHighlight(acIdx); }
   else if(e.key==='ArrowUp'){ e.preventDefault(); acIdx=Math.max(acIdx-1,0); acHighlight(acIdx); }
   else if(e.key==='Escape'){ acHide(); }
 }
-document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrap')) acHide(); });
+document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrap') && e.target!==acList && !acList.contains(e.target)) acHide(); });
 
 // ─── Hero Slider ───
 (function(){
