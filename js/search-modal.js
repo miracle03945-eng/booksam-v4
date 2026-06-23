@@ -85,27 +85,15 @@ function smInjectHTML() {
   <div class="sm-panel">
     <div class="sm-header">
       <div class="sm-tabs">
-        <button class="sm-tab-btn sm-tab-name active" data-tab="name" onclick="smSwitchTab('name')">교재명 검색</button>
-        <button class="sm-tab-btn sm-tab-cond" data-tab="cond" onclick="smSwitchTab('cond')">조건 검색</button>
+        <button class="sm-tab-btn sm-tab-cond active" data-tab="cond" onclick="smSwitchTab('cond')">조건 검색</button>
         <button class="sm-tab-btn sm-tab-series" data-tab="series" onclick="smSwitchTab('series')">시리즈 검색</button>
       </div>
       <button class="sm-close-btn" onclick="closeSearchModal()">✕</button>
     </div>
     <div class="sm-body">
 
-      <!-- ① 교재명 검색 -->
-      <div class="sm-content active" id="sm-name">
-        <div class="sm-name-bar">
-          <span class="sm-name-icon">${svgSearch}</span>
-          <input id="smNameInput" class="sm-name-input" type="text" placeholder="교재명을 입력해주세요" onkeydown="if(event.key==='Enter')smSearchByName()">
-          <button class="sm-name-btn" onclick="smSearchByName()">검색</button>
-        </div>
-        <div class="sm-result-info">검색하신 내용에 적합한 교재 총 <strong id="smNameCount" class="sm-red">0</strong>권이 검색되었습니다.</div>
-        <div class="sm-results-grid" id="smNameResults"></div>
-      </div>
-
-      <!-- ② 조건 검색 -->
-      <div class="sm-content" id="sm-cond">
+      <!-- ① 조건 검색 -->
+      <div class="sm-content active" id="sm-cond">
         <div class="sm-filter-area">
           <div class="sm-filter-block">
             <div class="sm-filter-label">이용대상</div>
@@ -144,8 +132,7 @@ function smInjectHTML() {
 function openSearchModal() {
   document.getElementById('smOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  smSwitchTab('name');
-  setTimeout(() => { const inp = document.getElementById('smNameInput'); if (inp) inp.focus(); }, 120);
+  smSwitchTab('cond');
 }
 
 function closeSearchModal() {
