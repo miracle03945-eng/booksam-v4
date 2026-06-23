@@ -1641,11 +1641,29 @@ if (!book) {
                 </button>
               `;
             } else if (book.type === '교과서') {
-              const label = book.buyLabel || '교보문고에서 구매하기';
+              const priceStr = book.price ? ` (${fmtPrice(book.price)}원)` : '';
               return `
-                <button class="btn-detail-buy btn-buy-external" onclick="goKyobo(${book.id})">
-                  ${label} &nbsp;↗
-                </button>
+                <button class="btn-detail-cart" title="장바구니 담기"
+                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
+                <div class="buy-popup-wrap">
+                  <button class="btn-detail-buy btn-buy-stores" onmouseenter="showBuyPopup()" onmouseleave="scheduleBuyPopupHide()">
+                    구매하기${priceStr}
+                  </button>
+                  <div class="buy-store-popup" id="buyStorePopup" onmouseenter="cancelBuyPopupHide()" onmouseleave="scheduleBuyPopupHide()">
+                    <button class="buy-store-item" onclick="goBuyStore('kyobo',${book.id})">
+                      <span class="buy-store-logo kyobo">KYOBO</span>
+                      <span class="buy-store-name">교보문고</span>
+                    </button>
+                    <button class="buy-store-item" onclick="goBuyStore('yes24',${book.id})">
+                      <span class="buy-store-logo yes24">YES<sup>24</sup></span>
+                      <span class="buy-store-name">YES24</span>
+                    </button>
+                    <button class="buy-store-item" onclick="goBuyStore('aladin',${book.id})">
+                      <span class="buy-store-logo aladin">✦</span>
+                      <span class="buy-store-name">알라딘</span>
+                    </button>
+                  </div>
+                </div>
               `;
             } else {
               return `
