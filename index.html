@@ -351,10 +351,12 @@
 
     <div class="search-series-group">
     <div class="header-search">
-      <div class="search-wrap">
+      <div class="search-wrap" style="position:relative;">
         <input type="text" class="search-input" id="searchInput"
-          placeholder="교재명을 입력해주세요.  ex)booster, 부스터">
+          placeholder="교재명을 입력해주세요.  ex)booster, 부스터"
+          autocomplete="off" oninput="acRender()" onkeydown="acKeydown(event)">
         <button class="search-btn" onclick="document.getElementById('searchInput').value.trim()?doSearch():openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+        <ul id="acList" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 8px 8px;max-height:280px;overflow-y:auto;margin:0;padding:0;list-style:none;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.12);"></ul>
       </div>
     </div>
     </div>
@@ -1052,10 +1054,41 @@ function doSearch(){
   const q = document.getElementById('searchInput').value;
   const catEl = document.getElementById('searchCat');
   const cat = catEl ? catEl.value : '';
+  acHide();
   const params = new URLSearchParams({q,...(cat&&{cat})});
   location.href = `books.html?${params}`;
 }
 document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+
+// 자동완성
+let acIdx = -1;
+function acRender(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const list = document.getElementById('acList');
+  if(!q || typeof BOOKS==='undefined'){ acHide(); return; }
+  const matched = BOOKS.filter(b=>b.title.toLowerCase().includes(q)).slice(0,20);
+  if(!matched.length){ acHide(); return; }
+  list.innerHTML = matched.map((b,i)=>{
+    const hl = b.title.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<strong style="color:var(--red)">${m}</strong>`);
+    return `<li data-i="${i}" style="padding:9px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:10px;" onmousedown="acSelect(${b.id})" onmouseover="acHighlight(${i})">${b.img?`<img src="${b.img}" style="width:28px;height:36px;object-fit:cover;border-radius:3px;flex-shrink:0;" onerror="this.style.display='none'">`:''}<span>${hl}</span></li>`;
+  }).join('');
+  acIdx = -1;
+  list.style.display = 'block';
+}
+function acHide(){ document.getElementById('acList').style.display='none'; acIdx=-1; }
+function acSelect(id){ acHide(); location.href=`book-detail.html?id=${id}`; }
+function acHighlight(i){
+  acIdx=i;
+  document.querySelectorAll('#acList li').forEach((el,j)=>el.style.background=j===i?'#f5f5f5':'#fff');
+}
+function acKeydown(e){
+  const items = document.querySelectorAll('#acList li');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){ e.preventDefault(); acIdx=Math.min(acIdx+1,items.length-1); acHighlight(acIdx); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); acIdx=Math.max(acIdx-1,0); acHighlight(acIdx); }
+  else if(e.key==='Escape'){ acHide(); }
+}
+document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrap')) acHide(); });
 
 // ─── Hero Slider ───
 (function(){
