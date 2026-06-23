@@ -1640,12 +1640,36 @@ if (!book) {
                   구매처 확인하기
                 </button>
               `;
-            } else {
+            } else if (book.type === '교과서') {
               const label = book.buyLabel || '교보문고에서 구매하기';
               return `
                 <button class="btn-detail-buy btn-buy-external" onclick="goKyobo(${book.id})">
                   ${label} &nbsp;↗
                 </button>
+              `;
+            } else {
+              return `
+                <div class="buy-popup-wrap">
+                  <button class="btn-detail-buy btn-buy-stores" onclick="toggleBuyPopup(event,${book.id})">
+                    구매하기
+                  </button>
+                  <div class="buy-store-popup" id="buyStorePopup">
+                    <button class="buy-store-item" onclick="goBuyStore('kyobo',${book.id})">
+                      <span class="buy-store-logo kyobo">KYOBO</span>
+                      <span class="buy-store-name">교보문고</span>
+                    </button>
+                    <button class="buy-store-item" onclick="goBuyStore('yes24',${book.id})">
+                      <span class="buy-store-logo yes24">YES<sup>24</sup></span>
+                      <span class="buy-store-name">YES24</span>
+                    </button>
+                    <button class="buy-store-item" onclick="goBuyStore('aladin',${book.id})">
+                      <span class="buy-store-logo aladin">✦</span>
+                      <span class="buy-store-name">알라딘</span>
+                    </button>
+                  </div>
+                </div>
+                <button class="btn-detail-cart" title="장바구니 담기"
+                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
               `;
             }
           })()}
@@ -1774,8 +1798,33 @@ function closeDistributorModal(e) {
   if (e.target === document.getElementById('distributorOverlay')) closeDistributorModalBtn();
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePurchaseInfoModalBtn(); closeDistributorModalBtn(); }
+  if (e.key === 'Escape') { closePurchaseInfoModalBtn(); closeDistributorModalBtn(); hideBuyPopup(); }
 });
+
+// ── 구매처 팝업 ──
+function toggleBuyPopup(e, id) {
+  e.stopPropagation();
+  const popup = document.getElementById('buyStorePopup');
+  if (!popup) return;
+  const isOpen = popup.classList.contains('open');
+  hideBuyPopup();
+  if (!isOpen) popup.classList.add('open');
+}
+function hideBuyPopup() {
+  const popup = document.getElementById('buyStorePopup');
+  if (popup) popup.classList.remove('open');
+}
+function goBuyStore(store, id) {
+  const book = BOOKS.find(b => b.id === id);
+  if (!book) return;
+  let url;
+  if (store === 'kyobo') url = book.kyoboUrl || 'https://search.kyobobook.co.kr/search?keyword=' + encodeURIComponent(book.title);
+  else if (store === 'yes24') url = 'https://www.yes24.com/Product/Search?domain=ALL&query=' + encodeURIComponent(book.title);
+  else if (store === 'aladin') url = 'https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=' + encodeURIComponent(book.title);
+  hideBuyPopup();
+  window.open(url, '_blank');
+}
+document.addEventListener('click', () => hideBuyPopup());
 </script>
 </body>
 </html>

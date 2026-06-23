@@ -1528,6 +1528,19 @@ span.gnb-link{cursor:default;}
 .btn-buy-external:hover{background:var(--navy);}
 .btn-buy-distributor{background:#6d4c41;}
 .btn-buy-distributor:hover{background:#4e342e;}
+/* 구매처 팝업 */
+.buy-popup-wrap{position:relative;flex:0 0 auto;}
+.btn-buy-stores{flex:none;padding:14px 28px;}
+.buy-store-popup{display:none;position:absolute;bottom:calc(100% + 8px);left:0;background:#2c2c2c;border-radius:12px;padding:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);z-index:200;min-width:220px;}
+.buy-store-popup.open{display:flex;gap:8px;}
+.buy-store-popup::after{content:'';position:absolute;bottom:-7px;left:28px;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #2c2c2c;}
+.buy-store-item{display:flex;flex-direction:column;align-items:center;gap:5px;background:#3a3a3a;border:none;border-radius:8px;padding:10px 14px;cursor:pointer;transition:background .15s;flex:1;min-width:60px;}
+.buy-store-item:hover{background:#555;}
+.buy-store-logo{font-size:13px;font-weight:900;color:white;line-height:1.2;}
+.buy-store-logo.kyobo{color:#ff6b00;}
+.buy-store-logo.yes24{color:#ff2f64;}
+.buy-store-logo.aladin{color:#8bc34a;}
+.buy-store-name{font-size:11px;color:#ccc;white-space:nowrap;}
 .btn-detail-cart{background:white;border:1.5px solid var(--red);border-radius:8px;padding:0 var(--sp-4);font-size:20px;cursor:pointer;transition:all .15s;flex-shrink:0;color:var(--red);}
 .btn-detail-cart:hover{background:var(--red);color:white;}
 .btn-purchase-info{width:32px;height:32px;border-radius:50%;border:1.5px solid #ccc;background:white;color:#888;font-size:14px;font-weight:800;cursor:pointer;flex-shrink:0;align-self:center;transition:all .15s;}
