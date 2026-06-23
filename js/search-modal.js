@@ -4,12 +4,14 @@
 
 // 노출할 시리즈 고정 목록
 const SM_SERIES_LIST = [
-  { name: 'Phonics NOW',         cat: 'elementary', match: 'Phonics NOW' },
-  { name: 'Benchmark Reading',   cat: 'elementary', match: 'Benchmark Reading' },
-  { name: 'I Love Reading',      cat: 'middle',     match: 'I Love Reading' },
-  { name: 'I Love Grammar',      cat: 'middle',     match: 'I Love Grammar' },
-  { name: '문제로 풀자 중학영문법', cat: 'middle',     match: '문제로 풀자 중학영문법' },
-  { name: 'Grammar Sharp',       cat: 'high',       match: 'Grammar Sharp' },
+  { name: 'Phonics NOW',         cat: 'elementary', match: 'Phonics NOW',         desc: '알파벳부터 문장까지 술술, 탄탄한 영어 읽기의 첫걸음! 파닉스를 체계적이고 재미있게 배울 수 있도록 설계된 5단계 시리즈' },
+  { name: 'Benchmark Reading',   cat: 'elementary', match: 'Benchmark Reading',   desc: '미국 초등 교과서 기반의 단계별 영어 독해 학습서. 풍부한 논픽션·픽션 지문으로 리딩 실력을 체계적으로 향상' },
+  { name: 'I Love Reading',      cat: 'middle',     match: 'I Love Reading',      desc: '중학 교과 연계 독해 시리즈. 다양한 주제의 지문과 핵심 문법 포인트로 독해 기초부터 실전까지 완성' },
+  { name: 'I Love Grammar',      cat: 'middle',     match: 'I Love Grammar',      desc: '중학 필수 문법을 쉽고 빠르게! 핵심 문법 규칙을 명확한 설명과 풍부한 연습 문제로 완벽 정리' },
+  { name: '문제로 풀자 중학영문법', cat: 'middle',     match: '문제로 풀자 중학영문법', desc: '최신 개정 교육 과정을 완벽 반영한 최다 문항 수의 중등 문법 학습서 레벨 1, 2, 3' },
+  { name: 'Grammar Sharp',       cat: 'high',       match: 'Grammar Sharp',       desc: '고등 영어 문법의 핵심을 날카롭게! 수능·내신 대비 필수 문법 개념 정리와 실전 문제로 고득점 완성' },
+  { name: 'Booster Voca',        cat: 'middle',     match: 'Booster Voca',        desc: '중등 필수 어휘를 체계적으로! 기본·실력·완성 3단계 구성으로 내신과 수능 어휘를 한 번에 완성' },
+  { name: 'Reading Prime',       cat: 'high',       match: 'Reading Prime',       desc: '최신 경향을 반영한 6단계 중고등 독해 필독서 시리즈. 수능 유형 지문으로 독해력·사고력을 동시에 강화' },
 ];
 
 // 조건 검색용 카테고리 목록 (하위 호환)
@@ -207,9 +209,12 @@ function smRenderSeriesGrid(cat) {
       <div class="sm-series-card" onclick="location.href='books.html?series=${encodeURIComponent(s.name)}'">
         <div class="sm-series-imgs">${imgs || '<div class="sm-series-no-img">📚</div>'}</div>
         <div class="sm-series-info">
-          ${label ? `<span class="sm-series-badge">${label}</span>` : ''}
+          <div class="sm-series-top">
+            ${label ? `<span class="sm-series-badge">${label}</span>` : ''}
+            <span class="sm-series-count">${matched.length}권</span>
+          </div>
           <div class="sm-series-name">${s.name}</div>
-          <div class="sm-series-count">${matched.length}권</div>
+          ${s.desc ? `<div class="sm-series-desc">${s.desc}</div>` : ''}
         </div>
       </div>`;
   }).join('');
