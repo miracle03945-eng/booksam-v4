@@ -350,14 +350,14 @@
     </div>
 
     <div class="search-series-group">
-    <div class="header-search">
-      <div class="search-wrap" style="position:relative;">
+    <div class="header-search" style="position:relative;">
+      <div class="search-wrap">
         <input type="text" class="search-input" id="searchInput"
           placeholder="교재명을 입력해주세요.  ex)booster, 부스터"
           autocomplete="off" oninput="acRender()" onkeydown="acKeydown(event)">
         <button class="search-btn" onclick="document.getElementById('searchInput').value.trim()?doSearch():openSearchModal()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-        <ul id="acList" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 8px 8px;max-height:280px;overflow-y:auto;margin:0;padding:0;list-style:none;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.12);"></ul>
       </div>
+      <ul id="acList" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:10px;max-height:300px;overflow-y:auto;margin:0;padding:0;list-style:none;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.13);"></ul>
     </div>
     </div>
     <div class="header-util-links">
