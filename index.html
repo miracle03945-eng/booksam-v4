@@ -1050,7 +1050,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFinderM
 // 검색
 function doSearch(){
   const q = document.getElementById('searchInput').value;
-  const cat = document.getElementById('searchCat').value;
+  const catEl = document.getElementById('searchCat');
+  const cat = catEl ? catEl.value : '';
   const params = new URLSearchParams({q,...(cat&&{cat})});
   location.href = `books.html?${params}`;
 }
