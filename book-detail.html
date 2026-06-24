@@ -1621,11 +1621,11 @@ if (!book) {
             const saleType = book.sale || 'external';
             if (saleType === 'direct') {
               return `
+                <button class="btn-detail-cart" title="장바구니 담기"
+                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
                 <button class="btn-detail-buy" onclick="buyNow(${book.id})">
                   구매하기 &nbsp; ${fmtPrice(book.price)}원
                 </button>
-                <button class="btn-detail-cart" title="장바구니 담기"
-                  onclick="addToCart(${book.id}); showToast('장바구니에 담겼습니다.')">🛒</button>
               `;
             } else if (saleType === 'distributor') {
               return `
