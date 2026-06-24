@@ -819,6 +819,18 @@ document.addEventListener('DOMContentLoaded', () => {
       inner.appendChild(col);
     });
 
+    // 교과서 그룹 하위 sub-link 강제 제거 (경로 이동 후에도 항상 적용)
+    inner.querySelectorAll('.mega-group-title').forEach(titleEl => {
+      if (titleEl.textContent.trim() === '교과서') {
+        let next = titleEl.nextElementSibling;
+        while (next && next.classList.contains('mega-sub-link')) {
+          const toRemove = next;
+          next = next.nextElementSibling;
+          toRemove.remove();
+        }
+      }
+    });
+
     // 하단 배너
     const footer = document.createElement('div');
     footer.className = 'mega-footer';
